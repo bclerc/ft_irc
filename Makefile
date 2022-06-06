@@ -4,8 +4,10 @@ PROJECT_NAME = ft_irc
 SOURCES_FOLDER = ./srcs
 INCLUDES_FOLDER = includes/
 
-SOURCES_FILES = ./srcs/main.cpp \
-				./srcs/Server.cpp
+SOURCES_FILES = srcs/main.cpp \
+				srcs/User/User.cpp \
+				srcs/Command/CommandManager.cpp \
+				srcs/Server.cpp
 
 OBJECTS_FILES_FT = $(patsubst $(SOURCES_FOLDER)%.cpp, $(OBJECTS_FOLDER)%_ft.o, $(SOURCES_FILES))
 
@@ -16,6 +18,7 @@ INCLUDES_FLAGS = -I $(INCLUDES_FOLDER)
 CC = clang++
 CFLAGS = #-Wall -Wextra -Werror -std=c++98
 
+all: $(EXEC_NAME_FT)
 
 $(EXEC_NAME_FT): $(OBJECTS_FILES_FT)
 	@$(CC) $(CFLAGS) $(INCLUDES_FLAGS) $(OBJECTS_FILES_FT) -o $(EXEC_NAME_FT) -D TESTED_NAMESPACE=ft

@@ -1,7 +1,9 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
  
+# include "../srcs/User/User.hpp"
 # include <iostream>
+# include <cstring>
 # include <netinet/in.h>
 # include <unistd.h>
 # include <arpa/inet.h>
@@ -11,7 +13,7 @@
 # include <vector>
 
 
-class Client;
+class User;
 class Channel;
 
 class Server {
@@ -37,11 +39,9 @@ class Server {
 		socklen_t _addrlen;
 		struct sockaddr_in _address;
 
-		std::vector<int> _clients;
-	//	std::vector<Channel> 		_channels;
-	//	std::map<std::string, int> 	_clients;
+		std::vector<User> _users;
 		
-		void	_copy_fd(std::vector<int> & clients, fd_set & readfds);
+		void	_copy_fd(std::vector<User> & users, fd_set & readfds);
 
 		Server (void);
 	

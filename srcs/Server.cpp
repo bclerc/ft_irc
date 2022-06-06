@@ -1,13 +1,13 @@
 #include "../includes/Server.hpp"
 
-void Server::_copy_fd(std::vector<int> & clients, fd_set & readfds)
+void Server::_copy_fd(std::vector<User> & clients, fd_set & readfds)
 {
-	typedef std::vector<int>::iterator iterator;
+	typedef std::vector<User>::iterator iterator;
 	int sd;
 
-	for (iterator it = clients.begin(); it != clients.end(); it++)
+	for (iterator it = _users.begin(); it != _users.end(); it++)
 	{
-		sd = *it;
+		sd = it->getFd();
 		if (sd > 0)
 			FD_SET(sd, &readfds);
 		if (sd > _max_sd)
@@ -63,7 +63,7 @@ Server::~Server(void)
 void Server::start(void)
 {
 
-	typedef std::vector<int>::iterator iterator;
+	typedef std::vector<User>::iterator iterator;
 
 	fd_set	readfds;
 	char buffer[1025];
@@ -72,28 +72,32 @@ void Server::start(void)
 	int		valread;
 	int		sd;
 
-	log("Starting server on port " +  _server_port);
 	if (bind(_master_socket, (struct  sockaddr *)&_address, sizeof(_address)) < 0)
 	{
 		perror ("Bind error");
 		exit(1);
 	}
+
 	log("Listening ...");
+
 	if (listen(_master_socket, 5) < 0)
 	{
 		perror("Listen error");
 		exit(1);
 	}
+
 	log("Waiting for connections ...");
+
 	_addrlen = sizeof(_address);
-	char *message = "ECHO Daemon v1.0 \r\n";
+	char *message = "Coucou \r\n";
+
 	while (1)
 	{
 		std::memset(&buffer, 0x00, strlen(buffer));
 		FD_ZERO(&readfds);
 		FD_SET(_master_socket, &readfds);
 		_max_sd = _master_socket;
-		_copy_fd(_clients, readfds);
+		_copy_fd(_users, readfds);
 		activity = select(_max_sd + 1, &readfds, 0, 0, 0);
 		if (activity < 0)
 		{
@@ -107,29 +111,27 @@ void Server::start(void)
 				perror("accept error");
 				exit(1);
 			}
+			_users.push_back(User(new_socket));
 			std::cout << "[ " << new_socket << "] Connected" << std::endl;
 			if (send (new_socket, message, strlen(message), 0) < 0)
 				perror("send error");
-			_clients.push_back(new_socket);
-			log("New client added to list");	
 		}
 
-		for (iterator it = _clients.begin(); it != _clients.end(); it++)
+		for (iterator it = _users.begin(); it != _users.end(); it++)
 		{
-			sd = *it;
-
+			sd = it->getFd();
 			if (FD_ISSET(sd, &readfds))
 			{
 				if ((valread = read(sd, buffer, 1024)) == 0)
 				{
 					getpeername(sd, (struct sockaddr*)&_address, &_addrlen);
-					std::cout << "[ " << sd << "] Disconnected" << std::endl;
+					std::cout << "[ " << sd << " ] Disconnected" << std::endl;
 					close(sd);
 				}
 				else
 				{
-						buffer[valread] = '\0';
-					std::cout << "[ " << sd << "] (" << valread << ")" << buffer << std::endl;
+					buffer[valread] = '\0';
+					std::cout << "[ " << sd << " | " << it->getNick() << " ] (" << valread << ") " << buffer << std::endl;
 				}
 			}
 		}
