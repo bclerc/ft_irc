@@ -1,14 +1,14 @@
 #include "User.hpp"
 
+
 User::User(int & fd) : _fd(fd), _status(Status::UNREGISTER)
 {
 
 	return ;
 }
 
-User::User(void)
+User::User(void) : _fd(-1), _status(Status::UNREGISTER)
 {
-
 	return ;
 }
 
@@ -25,6 +25,17 @@ User & User::operator=(User const & rhs)
     _nick = rhs._nick;
     _status = rhs._status;
 	return *this;
+}
+
+std::string & User::getBuffer()
+{
+    return _buffer;
+}
+
+void    User::send(std::string const & request)
+{
+    _buffer += (request + "\n\r");
+    return ;
 }
 
 void    User::setNick(std::string const & nick)

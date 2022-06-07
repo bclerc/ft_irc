@@ -13,7 +13,8 @@ OBJECTS_FILES_FT = $(patsubst $(SOURCES_FOLDER)%.cpp, $(OBJECTS_FOLDER)%_ft.o, $
 
 OBJECTS_FOLDER = ./objs/
 
-INCLUDES_FLAGS = -I $(INCLUDES_FOLDER)
+INCLUDES_FLAGS = -I $(INCLUDES_FOLDER) 
+
 
 CC = clang++
 CFLAGS = #-Wall -Wextra -Werror -std=c++98
@@ -26,11 +27,7 @@ $(EXEC_NAME_FT): $(OBJECTS_FILES_FT)
 
 $(OBJECTS_FOLDER)%_ft.o: $(SOURCES_FOLDER)/%.cpp
 	@mkdir -p $(OBJECTS_FOLDER)
-	@$(CC) $(CFLAGS) $(INCLUDES_FLAGS) -c $< -o $@ -D TESTED_NAMESPACE=ft
-
-	@mkdir -p $(OBJECTS_FOLDER)
-	@$(CC) $(CFLAGS) $(INCLUDES_FLAGS) -c $< -o $@ -D TESTED_NAMESPACE=std
-	@echo "Compiling $< \r"
+	@$(CC) $(CFLAGS) $(INCLUDES_FLAGS) -I srcs/User/User.hpp  -I srcs/Command/CommandManager.hpp -c $< -o $@ -D TESTED_NAMESPACE=ft
 
 clean:
 	@rm -rf $(OBJECTS_FOLDER)

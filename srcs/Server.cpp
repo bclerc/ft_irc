@@ -131,12 +131,24 @@ void Server::start(void)
 				else
 				{
 					buffer[valread] = '\0';
-					std::cout << "[ " << sd << " | " << it->getNick() << " ] (" << valread << ") " << buffer << std::endl;
+					CommandManager cmd(&(*it), buffer);
 				}
 			}
 		}
+		send_all();
 	}
 	return;
+}
+
+void Server::send_all()
+{
+	typedef std::vector<User>::iterator iterator;
+
+	for (iterator it = _users.begin(); it != _users.end(); it++)
+	{
+		write(it->getFd(), it->getBuffer().c_str(), it->getBuffer().size());
+		it->getBuffer().clear();
+	}
 }
 
 void Server::log(std::string const message) const

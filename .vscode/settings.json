@@ -66,6 +66,13 @@
 		"algorithm": "cpp",
 		"functional": "cpp",
 		"iterator": "cpp",
-		"utility": "cpp"
+		"utility": "cpp",
+		"*.tcc": "cpp",
+		"deque": "cpp",
+		"memory_resource": "cpp",
+		"numeric": "cpp",
+		"random": "cpp",
+		"fstream": "cpp",
+		"ranges": "cpp"
 	}
 }

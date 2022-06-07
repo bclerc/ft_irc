@@ -2,6 +2,8 @@
 # define SERVER_HPP
  
 # include "../srcs/User/User.hpp"
+# include "../srcs/Command/CommandManager.hpp"
+
 # include <iostream>
 # include <cstring>
 # include <netinet/in.h>
@@ -13,8 +15,8 @@
 # include <vector>
 
 
-class User;
 class Channel;
+class User;
 
 class Server {
 
@@ -28,7 +30,8 @@ class Server {
 
 		void	start(void);
 		void	log (std::string const message) const;
-
+		void	send_all(void);
+	
 	private:
 		int 		_server_port;
 		std::string _server_name;
