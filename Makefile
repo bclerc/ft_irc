@@ -7,6 +7,7 @@ INCLUDES_FOLDER = includes/
 SOURCES_FILES = srcs/main.cpp \
 				srcs/User/User.cpp \
 				srcs/Command/CommandManager.cpp \
+				srcs/Command/cmds/NICK.cpp \
 				srcs/Server.cpp
 
 OBJECTS_FILES_FT = $(patsubst $(SOURCES_FOLDER)%.cpp, $(OBJECTS_FOLDER)%_ft.o, $(SOURCES_FILES))

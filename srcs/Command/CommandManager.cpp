@@ -10,6 +10,9 @@ CommandManager::CommandManager(User * sender, char *request) : sender(sender)
     char * pch;
     char *test;
     std::vector<std::string> args;
+	
+	
+	_cmd_registre["NICK"] = nickCommand;
 
     // Code de test, Absolument pas le code final, c'est degue, c'est normal
     pch = strtok(request, "\n\r");
@@ -22,11 +25,9 @@ CommandManager::CommandManager(User * sender, char *request) : sender(sender)
             test = strtok (NULL, " ");
         }
 
-        if (args[0] == "NICK")
-        {
-            sender->setNick(args[1]);
-            sender->send(("Your Nick is now: ") + args[1]);
-        }
+		iterator cmd_it = _cmd_registre.find(args[0]);
+		if (cmd_it != _cmd_registre.end())
+			(*cmd_it->second)(*this, args);
 
         sender->log(pch);
         pch = strtok (NULL, "\n\r");
@@ -39,6 +40,11 @@ CommandManager::CommandManager(CommandManager & cpy)
 {
     *this = cpy;
     return ;
+}
+
+User & CommandManager::getSender()
+{
+	return *sender;
 }
 
 CommandManager::~CommandManager(void)
