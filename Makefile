@@ -17,7 +17,7 @@ INCLUDES_FLAGS = -I $(INCLUDES_FOLDER)
 
 
 CC = clang++
-CFLAGS = #-Wall -Wextra -Werror -std=c++98
+CFLAGS = -g3 #-Wall -Wextra -Werror -std=c++98
 
 all: $(EXEC_NAME_FT)
 

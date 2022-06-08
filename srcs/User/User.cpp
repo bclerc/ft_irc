@@ -1,13 +1,13 @@
+
 #include "User.hpp"
 
-
-User::User(int & fd) : _fd(fd), _status(Status::UNREGISTER)
+User::User(int & fd) : _fd(fd), _status(UNREGISTER)
 {
 
 	return ;
 }
 
-User::User(void) : _fd(-1), _status(Status::UNREGISTER)
+User::User(void) : _fd(-1), _status(UNREGISTER)
 {
 	return ;
 }
@@ -44,6 +44,11 @@ void    User::setNick(std::string const & nick)
     return ;
 }
 
+void User::setStatus(Status status)
+{
+	_status = status;
+}
+
 const   int User::getFd() const
 {
     return _fd;
@@ -57,6 +62,14 @@ const  std::string & User::getNick() const
 {
     return _nick;
 }
+
+void	User::log(std::string const message) const
+{
+	std::cout << "[";
+	if (!_nick.empty())
+		std::cout << _nick << " ";
+	std::cout << "(" << _fd << ")] " << message << std::endl;
+}	
 
 User::~User(void)
 {

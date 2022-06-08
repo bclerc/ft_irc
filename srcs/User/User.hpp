@@ -7,12 +7,14 @@
 
 class User {
 
-	enum class Status {
-		UNREGISTER = 0,
-		REGISTER = 1,
-	};
-
 	public:
+
+		enum Status {
+			UNREGISTER,
+			REGISTER,
+			DISCONNECT,
+		};
+
 		User (void);
 		User(int & fd);
 		User(User const & cpy);
@@ -21,8 +23,10 @@ class User {
 		User & operator=(User const & rhs);
 
 		void	setNick(std::string const & nick);
-		void	send(std::string const & request);
+		void	setStatus(Status status);
 
+		void	send(std::string const & request);
+		void	log(std::string const message) const;
 		const int			getFd() const;
 		const Status	&	getStatus() const;
 		const std::string & getNick() const;

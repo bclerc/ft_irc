@@ -28,7 +28,7 @@ CommandManager::CommandManager(User * sender, char *request) : sender(sender)
             sender->send(("Your Nick is now: ") + args[1]);
         }
 
-        std::cout << "[" << sender->getFd() << " | " << sender->getNick() << "] execute: " << pch << std::endl;
+        sender->log(pch);
         pch = strtok (NULL, "\n\r");
         args.clear();
     }

@@ -21,6 +21,7 @@ class User;
 class Server {
 
 	public:
+		typedef std::vector<User>::iterator iterator;
 
 		Server(int port, std::string const & name, std::string const & password);
 		Server(Server & cpy);
@@ -33,6 +34,7 @@ class Server {
 		void	send_all(void);
 	
 	private:
+
 		int 		_server_port;
 		std::string _server_name;
 		std::string _server_password;
@@ -44,8 +46,12 @@ class Server {
 
 		std::vector<User> _users;
 		
-		void	_copy_fd(std::vector<User> & users, fd_set & readfds);
 
+		void	_run(fd_set & readfds);
+		void 	_accept_connection(fd_set & readfds);
+		void	_copy_fd(std::vector<User> & users, fd_set & readfds);
+		void 	_get_requests(fd_set & readfds);
+		void	_remove_disconnect();
 		Server (void);
 	
 

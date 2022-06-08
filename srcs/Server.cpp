@@ -1,4 +1,89 @@
 #include "../includes/Server.hpp"
+void Server::_accept_connection(fd_set & readfds)
+{
+	int		new_socket;
+
+	if (FD_ISSET(_master_socket, &readfds))
+	{
+
+		log("Incoming connection");
+		if ((new_socket = accept(_master_socket, (struct sockaddr *)&_address, &_addrlen)) < 0)
+		{
+			perror("accept error");
+			exit(1);
+		}
+		User new_user(new_socket);
+		_users.push_back(new_user);
+		new_user.send("Hello");
+		new_user.log("Connected");
+	}
+}
+
+void Server::_get_requests(fd_set & readfds)
+{
+	char	buffer[1024];
+	int		valread, sd;
+
+	
+	std::memset(&buffer, 0x00, 1024);
+	for (iterator it = _users.begin(); it != _users.end(); it++)
+	{
+		sd = it->getFd();
+		if (FD_ISSET(sd, &readfds))
+		{
+			if ((valread = read(sd, buffer, 1024)) == 0)
+			{
+				getpeername(sd, (struct sockaddr*)&_address, &_addrlen);
+				close(sd);
+				it->log("Disconnected");
+				it->setStatus(User::DISCONNECT);
+			}
+			else
+			{
+				buffer[valread] = '\0';
+				CommandManager cmd(&(*it), buffer);
+			}
+		}
+	}
+}
+
+void Server::_run(fd_set & readfds)
+{
+	int activity;
+
+	while (1)
+	{
+		FD_ZERO(&readfds);
+		FD_SET(_master_socket, &readfds);
+		_max_sd = _master_socket;
+		_copy_fd(_users, readfds);
+		activity = select(_max_sd + 1, &readfds, 0, 0, 0);
+		if (activity < 0)
+		{
+			perror("Select error");
+		}
+		_accept_connection(readfds);
+		_get_requests(readfds);
+		send_all();
+		_remove_disconnect();
+	}
+}
+
+void Server::_remove_disconnect()
+{
+	iterator it = _users.begin();
+
+	while (it != _users.end())
+	{
+		if ((*it).getStatus() == User::DISCONNECT)
+		{
+			_users.erase(it);
+			it = _users.begin();
+			continue;
+		}
+		it++;
+	}
+}
 
 void Server::_copy_fd(std::vector<User> & clients, fd_set & readfds)
 {
@@ -24,17 +109,14 @@ Server::Server(int port, std::string const & name, std::string const & password)
 		perror("Error socket: ");
 		exit(1);
 	}
-
 	if (setsockopt(_master_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&_opt, sizeof(_opt)) < 0)
 	{
 		perror("Error setsockopt: ");
 		exit(1);
 	}
-
 	_address.sin_family = AF_INET;
 	_address.sin_addr.s_addr = INADDR_ANY;
 	_address.sin_port = htons(_server_port);
-
 	return ;
 }
 
@@ -62,88 +144,27 @@ Server::~Server(void)
 
 void Server::start(void)
 {
-
-	typedef std::vector<User>::iterator iterator;
-
 	fd_set	readfds;
-	char buffer[1025];
-	int		activity;
-	int		new_socket;
-	int		valread;
-	int		sd;
 
-	if (bind(_master_socket, (struct  sockaddr *)&_address, sizeof(_address)) < 0)
+	if (bind(_master_socket, (struct  sockaddr *)& _address, sizeof(_address)) < 0)
 	{
 		perror ("Bind error");
 		exit(1);
 	}
-
-	log("Listening ...");
-
+	_addrlen = sizeof(_address);
+	log(std::string("Listening on port ") + std::to_string(_server_port));
 	if (listen(_master_socket, 5) < 0)
 	{
 		perror("Listen error");
 		exit(1);
 	}
-
-	log("Waiting for connections ...");
-
-	_addrlen = sizeof(_address);
-	char *message = "Coucou \r\n";
-
-	while (1)
-	{
-		std::memset(&buffer, 0x00, strlen(buffer));
-		FD_ZERO(&readfds);
-		FD_SET(_master_socket, &readfds);
-		_max_sd = _master_socket;
-		_copy_fd(_users, readfds);
-		activity = select(_max_sd + 1, &readfds, 0, 0, 0);
-		if (activity < 0)
-		{
-			perror("Select error");
-		}
-
-		if (FD_ISSET(_master_socket, &readfds))
-		{
-			if ((new_socket = accept(_master_socket, (struct sockaddr *)&_address, &_addrlen)) < 0)
-			{
-				perror("accept error");
-				exit(1);
-			}
-			_users.push_back(User(new_socket));
-			std::cout << "[ " << new_socket << "] Connected" << std::endl;
-			if (send (new_socket, message, strlen(message), 0) < 0)
-				perror("send error");
-		}
-
-		for (iterator it = _users.begin(); it != _users.end(); it++)
-		{
-			sd = it->getFd();
-			if (FD_ISSET(sd, &readfds))
-			{
-				if ((valread = read(sd, buffer, 1024)) == 0)
-				{
-					getpeername(sd, (struct sockaddr*)&_address, &_addrlen);
-					std::cout << "[ " << sd << " ] Disconnected" << std::endl;
-					close(sd);
-				}
-				else
-				{
-					buffer[valread] = '\0';
-					CommandManager cmd(&(*it), buffer);
-				}
-			}
-		}
-		send_all();
-	}
+	log("Waiting connections");
+	_run(readfds);
 	return;
 }
 
 void Server::send_all()
 {
-	typedef std::vector<User>::iterator iterator;
-
 	for (iterator it = _users.begin(); it != _users.end(); it++)
 	{
 		write(it->getFd(), it->getBuffer().c_str(), it->getBuffer().size());
@@ -153,5 +174,5 @@ void Server::send_all()
 
 void Server::log(std::string const message) const
 {
-	std::cout << _server_name << ": " << message << std::endl;
+	std::cout << "[" << _server_name << "] " << message << std::endl;
 }
