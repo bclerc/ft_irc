@@ -3,8 +3,6 @@
 # include "../../includes/Server.hpp"
 # include <iostream>
  
-
-
 class User {
 
 	public:
