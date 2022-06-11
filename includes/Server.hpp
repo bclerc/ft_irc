@@ -1,8 +1,8 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
  
-# include "../srcs/User/User.hpp"
 # include "../srcs/Command/CommandManager.hpp"
+# include "../srcs/User/User.hpp"
 
 # include <iostream>
 # include <cstring>
@@ -14,10 +14,8 @@
 # include <map>
 # include <vector>
 
-
-class Channel;
 class User;
-
+class CommandManager;
 class Server {
 
 	public:
@@ -39,7 +37,6 @@ class Server {
 		std::string _server_name;
 		std::string _server_password;
 
-
 		int _master_socket, _new_socket, _activity, _opt, _max_sd;
 		socklen_t _addrlen;
 		struct sockaddr_in _address;
@@ -50,7 +47,7 @@ class Server {
 		void	_run(fd_set & readfds);
 		void 	_accept_connection(fd_set & readfds);
 		void	_copy_fd(std::vector<User> & users, fd_set & readfds);
-		void 	_get_requests(fd_set & readfds);
+		void 	_get_requests(fd_set & readfds, CommandManager & commandManager);
 		void	_remove_disconnect();
 		Server (void);
 	

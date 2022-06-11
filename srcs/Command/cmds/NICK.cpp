@@ -1,11 +1,9 @@
 # include "../CommandManager.hpp"
 
-void nickCommand(CommandManager & command, std::vector<std::string> & args)
+void nickCommand(CommandManager::Command & command)
 {
-	User & sender = command.getSender();
 
-	sender.setNick(args[1]);
-	sender.log(("Change nickname to ") + args[1]);
-	sender.send("{RI");
+	command.sender->setNick(command.args[1]);
+	command.sender->log(("Change nickname to ") + command.args[1]);
 	return ;
 }

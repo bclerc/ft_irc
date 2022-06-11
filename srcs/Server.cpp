@@ -19,15 +19,15 @@ void Server::_accept_connection(fd_set & readfds)
 	}
 }
 
-void Server::_get_requests(fd_set & readfds)
+void Server::_get_requests(fd_set & readfds, CommandManager & commandManager)
 {
 	char	buffer[1024];
 	int		valread, sd;
 
 	
-	std::memset(&buffer, 0x00, 1024);
 	for (iterator it = _users.begin(); it != _users.end(); it++)
 	{
+		std::memset(&buffer, 0x00, 1024);
 		sd = it->getFd();
 		if (FD_ISSET(sd, &readfds))
 		{
@@ -41,7 +41,7 @@ void Server::_get_requests(fd_set & readfds)
 			else
 			{
 				buffer[valread] = '\0';
-				CommandManager cmd(&(*it), buffer);
+				commandManager.execCommand(&(*it), buffer);
 			}
 		}
 	}
@@ -49,6 +49,7 @@ void Server::_get_requests(fd_set & readfds)
 
 void Server::_run(fd_set & readfds)
 {
+	CommandManager commandManager;
 	int activity;
 
 	while (1)
@@ -63,7 +64,7 @@ void Server::_run(fd_set & readfds)
 			perror("Select error");
 		}
 		_accept_connection(readfds);
-		_get_requests(readfds);
+		_get_requests(readfds, commandManager);
 		send_all();
 		_remove_disconnect();
 	}

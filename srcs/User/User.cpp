@@ -38,7 +38,7 @@ void    User::send(std::string const & request)
     return ;
 }
 
-void    User::setNick(std::string const & nick)
+void    User::setNick(std::string const nick)
 {
     _nick = nick;
     return ;

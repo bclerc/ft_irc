@@ -20,7 +20,7 @@ class User {
 
 		User & operator=(User const & rhs);
 
-		void	setNick(std::string const & nick);
+		void	setNick(std::string const nick);
 		void	setStatus(Status status);
 
 		void	send(std::string const & request);

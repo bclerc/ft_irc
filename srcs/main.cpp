@@ -6,7 +6,7 @@
 /*   By: bclerc <bclerc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 03:41:19 by bclerc            #+#    #+#             */
-/*   Updated: 2022/06/03 08:03:48 by bclerc           ###   ########.fr       */
+/*   Updated: 2022/06/11 01:28:14 by bclerc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int main(int argc, char **argv)
 {
+
 	if (argc < 2)
 	{
 		std::cout << "Usage: ./ircserv <port> <password>" << std::endl;
