@@ -34,7 +34,7 @@ std::string & User::getBuffer()
 
 void    User::send(std::string const & request)
 {
-    _buffer += (request + "\n\r");
+    _buffer += (request + "\n");
     return ;
 }
 

@@ -40,6 +40,7 @@ class CommandManager {
 
 };
 
-void	nickCommand(CommandManager::Command & comvvmand);
+void	nickCommand(CommandManager::Command & command);
+void    pingCommand(CommandManager::Command & command);
 
 #endif

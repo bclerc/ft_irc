@@ -3,6 +3,8 @@
 void CommandManager::_register_cmds()
 {
 	_cmd_registre["NICK"] = nickCommand;
+	_cmd_registre["PING"] = pingCommand;
+
 }
 
 void CommandManager::_execute(Command & command)
@@ -54,16 +56,14 @@ void CommandManager::execCommand(User * sender, char *request)
     size_t pos;
 
     command.sender = sender;
-    while ((pos = req.find("\r")) != std::string::npos) 
+    while ((pos = req.find("\n")) != std::string::npos) 
     {
-        line = req.substr(0, pos);
+        line = req.substr(0, pos - 1);
         sender->log(line);
         _build_args(command.args, line);
         _execute(command);
         req.erase(0, pos + 1);
     }
-    std::cout << "Sender name: " << sender->getNick() << std::endl;
-
 }
 
 CommandManager::~CommandManager(void)
