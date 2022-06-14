@@ -76,7 +76,8 @@ void Server::_remove_disconnect()
 
 	while (it != _users.end())
 	{
-		if ((*it).getStatus() == User::DISCONNECT)
+		if ((*it).getStatus() == User::DISCONNECT
+			&& (*it).getBuffer().empty())
 		{
 			_users.erase(it);
 			it = _users.begin();
@@ -123,6 +124,7 @@ Server::Server(int port, std::string const & name, std::string const & password)
 
 Server::Server(void)
 {
+
 	return ;
 }
 
@@ -134,7 +136,18 @@ Server::Server(Server & cpy)
 
 Server & Server::operator=(Server const & rhs)
 {
-	(void)rhs;
+	
+	_server_password	= rhs._server_password;
+	_master_socket 		= rhs._master_socket;
+	_server_port 		= rhs._server_port;
+	_new_socket			= rhs._new_socket;
+	_activity			= rhs._activity;
+	_addrlen			= rhs._addrlen;
+	_address			= rhs._address;
+	_max_sd				= rhs._max_sd;
+	_users				= rhs._users;
+	_opt				= rhs._opt;
+	
 	return *this;
 }
 
@@ -146,7 +159,6 @@ Server::~Server(void)
 void Server::start(void)
 {
 	fd_set	readfds;
-
 	if (bind(_master_socket, (struct  sockaddr *)& _address, sizeof(_address)) < 0)
 	{
 		perror ("Bind error");
@@ -171,6 +183,20 @@ void Server::send_all()
 		write(it->getFd(), it->getBuffer().c_str(), it->getBuffer().size());
 		it->getBuffer().clear();
 	}
+}
+
+const std::vector<User> & Server::getUsers() const { return (_users); }
+const std::string & Server::getPass() const { return (_server_password); }
+
+
+bool	Server::isUser(std::string const & name) const
+{
+	for (const_iterator it = _users.begin(); it != _users.end(); it++)
+	{
+		if ((*it).getNick() == name)
+			return true;
+	}
+	return false;
 }
 
 void Server::log(std::string const message) const

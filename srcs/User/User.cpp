@@ -35,6 +35,7 @@ std::string & User::getBuffer()
 void    User::send(std::string const & request)
 {
     _buffer += (request + "\n");
+    log(("From server: " + request));
     return ;
 }
 
@@ -58,6 +59,7 @@ const   User::Status & User::getStatus() const {
     return _status;
 }
 
+
 const  std::string & User::getNick() const
 {
     return _nick;
@@ -70,7 +72,12 @@ void	User::log(std::string const message) const
 		std::cout << _nick << " ";
 	std::cout << "(" << _fd << ")] " << message << std::endl;
 }	
-
+void User::kick(std::string const & reason)
+{
+    _buffer.clear();
+    send(reason);
+    setStatus(DISCONNECT);
+}
 User::~User(void)
 {
     return ;

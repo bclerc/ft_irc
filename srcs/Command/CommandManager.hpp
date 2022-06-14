@@ -6,9 +6,12 @@
 # include <map>
 # include <vector>
 
+# include "rfc/replies.hpp"
 # include "../User/User.hpp"
+# include "../../includes/Server.hpp"
 
 class User;
+class Server;
 
 class CommandManager {
 
@@ -42,5 +45,7 @@ class CommandManager {
 
 void	nickCommand(CommandManager::Command & command);
 void    pingCommand(CommandManager::Command & command);
+void    passCommand(CommandManager::Command & command);
+
 
 #endif

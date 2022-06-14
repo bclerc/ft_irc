@@ -16,11 +16,16 @@
 
 class User;
 class CommandManager;
+
+typedef std::vector<User>::iterator iterator;
+typedef std::vector<User>::const_iterator const_iterator;
+
+
 class Server {
 
 	public:
-		typedef std::vector<User>::iterator iterator;
 
+		Server (void);
 		Server(int port, std::string const & name, std::string const & password);
 		Server(Server & cpy);
 		~Server (void);
@@ -30,7 +35,10 @@ class Server {
 		void	start(void);
 		void	log (std::string const message) const;
 		void	send_all(void);
-	
+
+		const std::string & getPass() const; 
+		const std::vector<User> & getUsers() const;
+		bool	isUser(std::string const & name) const;
 	private:
 
 		int 		_server_port;
@@ -49,9 +57,10 @@ class Server {
 		void	_copy_fd(std::vector<User> & users, fd_set & readfds);
 		void 	_get_requests(fd_set & readfds, CommandManager & commandManager);
 		void	_remove_disconnect();
-		Server (void);
 	
 
 };
+
+extern Server server;
 
 #endif	

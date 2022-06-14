@@ -9,9 +9,10 @@ class User {
 
 		enum Status {
 			UNREGISTER,
+			UNREGISTER_PASS,
 			REGISTER,
 			DISCONNECT,
-		};
+	};
 
 		User (void);
 		User(int & fd);
@@ -20,14 +21,15 @@ class User {
 
 		User & operator=(User const & rhs);
 
+		void	kick (std::string const & reason);
 		void	setNick(std::string const nick);
 		void	setStatus(Status status);
-
 		void	send(std::string const & request);
 		void	log(std::string const message) const;
 		const int			getFd() const;
 		const Status	&	getStatus() const;
 		const std::string & getNick() const;
+
 
 		std::string & getBuffer();
 
