@@ -4,8 +4,8 @@ void CommandManager::_register_cmds()
 {
 	_cmd_registre["PASS"] = passCommand;
 	_cmd_registre["NICK"] = nickCommand;
+    _cmd_registre["USER"] = userCommand;
 	_cmd_registre["PING"] = pingCommand;
-
 }
 
 void CommandManager::_execute(Command & command)

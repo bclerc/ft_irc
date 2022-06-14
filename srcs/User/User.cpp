@@ -24,6 +24,11 @@ User & User::operator=(User const & rhs)
     _fd = rhs._fd;
     _nick = rhs._nick;
     _status = rhs._status;
+    _username = rhs._username;
+    _hostname = rhs._hostname;
+    _servername = rhs._servername;
+    _realname = rhs._realname;
+    _buffer = rhs._buffer;
 	return *this;
 }
 
@@ -49,6 +54,32 @@ void User::setStatus(Status status)
 {
 	_status = status;
 }
+
+void User::setUserName(std::string const username)
+{
+    _username = username;
+}
+
+void User::setHostName(std::string const hostname)
+{
+    _hostname = hostname;
+}
+
+void User::setServerName(std::string const servername)
+{
+    _servername = servername;
+}
+
+void User::setRealName(std::string const realname)
+{
+    _realname = realname;
+}
+
+const std::string & User::getUserName() const { return _username; }
+const std::string & User::getHostName() const { return _hostname; }
+const std::string & User::getServerName() const { return _servername; }
+const std::string & User::getRealname() const { return _realname; };
+
 
 const   int User::getFd() const
 {
