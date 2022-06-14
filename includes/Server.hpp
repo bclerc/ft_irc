@@ -13,6 +13,7 @@
 # include <poll.h>
 # include <map>
 # include <vector>
+# include <errno.h>
 
 class User;
 class CommandManager;

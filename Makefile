@@ -22,23 +22,23 @@ INCLUDES_FLAGS = -I $(INCLUDES_FOLDER)
 
 
 CC = clang++
-CFLAGS = -fsanitize=address #-Wall -Wextra -Werror -std=c++98
+CFLAGS =  -g3 #-Wall -Wextra -Werror
 
 all: $(EXEC_NAME_FT)
 
 $(EXEC_NAME_FT): $(OBJECTS_FILES_FT)
-	@$(CC) $(CFLAGS) $(INCLUDES_FLAGS) $(OBJECTS_FILES_FT) -o $(EXEC_NAME_FT) -D TESTED_NAMESPACE=ft
+	$(CC) $(CFLAGS) $(INCLUDES_FLAGS) $(OBJECTS_FILES_FT) -o $(EXEC_NAME_FT) -D TESTED_NAMESPACE=ft
 
 
 $(OBJECTS_FOLDER)%_ft.o: $(SOURCES_FOLDER)/%.cpp
 	@mkdir -p $(OBJECTS_FOLDER)
-	@$(CC) $(CFLAGS) $(INCLUDES_FLAGS) -I srcs/User/User.hpp  -I srcs/Command/CommandManager.hpp -c $< -o $@ -D TESTED_NAMESPACE=ft
+	$(CC) $(CFLAGS) $(INCLUDES_FLAGS) -I srcs/User/User.hpp  -I srcs/Command/CommandManager.hpp -c $< -o $@ -D TESTED_NAMESPACE=ft
 
 clean:
 	@rm -rf $(OBJECTS_FOLDER)
 
 fclean: clean
-	@rm -f $(EXEC_NAME_FT)
+	@rm -rf $(EXEC_NAME_FT)
 	@echo "clean"
 
 re: fclean all

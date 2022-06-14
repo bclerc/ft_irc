@@ -1,0 +1,9 @@
+{
+    "name": "C++ Launch",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${workspaceFolder}/ircserv",
+    "args": ["4545", "lol"],
+    "environment": [{ "name": "config", "value": "Debug" }],
+    "cwd": "${workspaceFolder}"
+  }

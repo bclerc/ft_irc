@@ -10,7 +10,7 @@ void Server::_accept_connection(fd_set & readfds)
 		if ((new_socket = accept(_master_socket, (struct sockaddr *)&_address, &_addrlen)) < 0)
 		{
 			perror("accept error");
-			exit(1);
+			_exit(1);
 		}
 		User new_user(new_socket);
 		_users.push_back(new_user);
@@ -109,12 +109,12 @@ Server::Server(int port, std::string const & name, std::string const & password)
 	if ((_master_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
 	{
 		perror("Error socket: ");
-		exit(1);
+		_exit(1);
 	}
 	if (setsockopt(_master_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&_opt, sizeof(_opt)) < 0)
 	{
 		perror("Error setsockopt: ");
-		exit(1);
+		_exit(1);
 	}
 	_address.sin_family = AF_INET;
 	_address.sin_addr.s_addr = INADDR_ANY;
@@ -162,14 +162,14 @@ void Server::start(void)
 	if (bind(_master_socket, (struct  sockaddr *)& _address, sizeof(_address)) < 0)
 	{
 		perror ("Bind error");
-		exit(1);
+		_exit(1);
 	}
 	_addrlen = sizeof(_address);
 	log(std::string("Listening on port ") + std::to_string(_server_port));
 	if (listen(_master_socket, 5) < 0)
 	{
 		perror("Listen error");
-		exit(1);
+		_exit(1);
 	}
 	log("Waiting connections");
 	_run(readfds);

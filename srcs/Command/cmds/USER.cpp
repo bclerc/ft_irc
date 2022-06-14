@@ -6,22 +6,22 @@ void userCommand(CommandManager::Command & command)
     std::vector<User>::iterator it;
     std::string realname;
 
-    if (command.args.size() < 5)
+    if (command.size < 5)
     {
         sender.send(ERR_NEEDMOREPARAMS("USER"));
         return ;
     }
-    if (sender.getStatus() >= User::Status::REGISTER)
+    if (sender.getStatus() >= User::REGISTER)
     {
         sender.send(ERR_ALREADYREGISTRED());
         return ;
     }
 
     //Need no change this
-    sender.setUserName(command.args[1]);
-    sender.setHostName(command.args[2]);
-    sender.setServerName(command.args[3]);
-    sender.setRealName("No realname");
+    sender.setUserName(command.args[0]);
+    sender.setHostName(command.args[1]);
+    sender.setServerName(command.args[2]);
+    sender.setRealName(command.trailer);
 
     // Confirm to IRSSI client successful client registration
     sender.send(RPL_WELCOME(sender.getNick(), sender.getUserName(), sender.getServerName()));

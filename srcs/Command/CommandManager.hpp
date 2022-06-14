@@ -19,6 +19,9 @@ class CommandManager {
 
         typedef struct Command {
             User *                      sender;
+            int                         size;
+            std::string                 command;
+            std::string                 trailer;
             std::vector<std::string>    args;
         }              Command;
 
@@ -36,7 +39,8 @@ class CommandManager {
 		std::map<std::string, CommandFunc>	_cmd_registre;
 
         void    _register_cmds();
-        void    _build_args(std::vector<std::string> & args, std::string & request);
+        void    _build_args(Command & command, std::string & request);
+        bool    _ignore(std::string & request);
         void    _execute(Command  & command);
 
 

@@ -10,11 +10,11 @@ void CommandManager::_register_cmds()
 
 void CommandManager::_execute(Command & command)
 {
-    iterator cmd_it = _cmd_registre.find(command.args[0]);
+    iterator cmd_it = _cmd_registre.find(command.command);
 
     if (cmd_it != _cmd_registre.end())
     {
-        if (command.args[0] != "PASS"
+        if (command.command != "PASS"
             && command.sender->getStatus() == User::UNREGISTER)
         {
             command.sender->kick(ERR_CLOSINGLINK("", "", "No register"));
@@ -29,18 +29,34 @@ void CommandManager::_execute(Command & command)
 }
 
 
-void CommandManager::_build_args(std::vector<std::string> & args, std::string & request)
+void CommandManager::_build_args(Command & command, std::string & request)
 {
     size_t pos;
+    bool   trailer;
+    int    size = 0;
+    
     std::string tmp;
 
+    // I think this function is vraiment degueulasse.
     while ((pos = request.find(" ")) != std::string::npos) 
     {
         tmp = request.substr(0, pos);
-        args.push_back(tmp);
+        if (tmp[0] == ':')
+            trailer = true;
+        if (!size)
+            command.command = tmp;
+        else if (trailer)
+            command.trailer += tmp + " ";
+        else
+            command.args.push_back(tmp);
         request.erase(0, pos + 1);
+        size++;
     }
-    args.push_back(request.substr(0, pos));
+    if (trailer)
+        command.trailer += request.substr(0, pos);
+    else
+        command.args.push_back(request.substr(0, pos));
+    command.size = size + 1;
     request.clear();
     return ;
 }
@@ -56,6 +72,11 @@ CommandManager::CommandManager(CommandManager & cpy)
 {
     *this = cpy;
     return ;
+}
+
+bool CommandManager::_ignore(std::string & request)
+{
+
 }
 
 void CommandManager::execCommand(User * sender, char *request)
@@ -75,7 +96,7 @@ void CommandManager::execCommand(User * sender, char *request)
         }
         line = req.substr(0, pos - 1);
         sender->log(line);
-        _build_args(command.args, line);
+        _build_args(command, line);
         _execute(command);
         req.erase(0, pos + 1);
     }

@@ -12,7 +12,7 @@ class User {
 			UNREGISTER_PASS,
 			REGISTER,
 			DISCONNECT,
-	};
+		};
 
 		User (void);
 		User(int & fd);

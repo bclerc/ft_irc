@@ -2,16 +2,16 @@
 
 void nickCommand(CommandManager::Command & command)
 {
-	if (command.args.size() < 2)
+	if (command.size < 2)
 	{
 		command.sender->send(ERR_NONICKNAMEGIVEN());
 		return ;
 	}
-	if (server.isUser(command.args[1]))
+	if (server.isUser(command.args[0]))
 	{
-		command.sender->send(ERR_NICKNAMEINUSE(command.args[1]));
+		command.sender->send(ERR_NICKNAMEINUSE(command.args[0]));
 		return;
 	} 
-	command.sender->setNick(command.args[1]);
+	command.sender->setNick(command.args[0]);
 	return ;
 }
