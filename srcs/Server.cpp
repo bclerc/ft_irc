@@ -208,6 +208,7 @@ void	Server::shutdown(void)
 {
 	log("\nShutdown IRC serv by SIGINT");
 	close(_master_socket);
+	_master_socket = -1;
 	_users.clear();
 	exit(0);
 }

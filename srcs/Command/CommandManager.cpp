@@ -78,16 +78,25 @@ CommandManager::CommandManager(CommandManager & cpy)
     return ;
 }
 
-bool CommandManager::_ignore(std::string & request)
+bool CommandManager::_ignore(std::string & request, const size_t & pos)
 {
+    std::vector<string>::iterator it;
+    std::vector<string> cmd({"CAP", "WHOIS", "MODE"}); // Mode a faire
+
+    for (it = cmd.begin(); it != cmd.end(); it++)
+    {
+        if ((*it) == request.substr(0, (*it).size()))
+        {
+            request.erase(0, pos + 1);
+            return true;
+        }
+    }
     return false;
 }
 
 /**
 * @todo execCommand
 * Reverifier pour le \r\n psk c'est louche la
-* Une function qui skip les commandes a ignorer
-* Un container des commmmandes a ignorer 
 */
 void CommandManager::execCommand(User * sender, char *request)
 {
@@ -99,11 +108,8 @@ void CommandManager::execCommand(User * sender, char *request)
     command.sender = sender;
     while ((pos = req.find("\n")) != std::string::npos) 
     {
-        if (req.substr(0, 3) == "CAP")
-        {
-            req.erase(0, pos + 1);
+        if (_ignore(req, pos))
             continue;
-        }
         line = req.substr(0, pos - 1);
         sender->log(line);
         _build_args(command, line);

@@ -130,6 +130,5 @@ void	User::log(std::string const message) const
 User::~User(void)
 {
     _buffer.clear();
-    close(_fd);
     return ;
 }

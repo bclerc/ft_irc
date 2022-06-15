@@ -40,7 +40,7 @@ class CommandManager {
 
         void    _register_cmds();
         void    _build_args(Command & command, std::string & request);
-        bool    _ignore(std::string & request);
+        bool    _ignore(std::string & request, const size_t & pos);
         void    _execute(Command  & command);
 
 
