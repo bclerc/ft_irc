@@ -204,6 +204,14 @@ bool	Server::isUser(std::string const & name) const
 	return false;
 }
 
+void	Server::shutdown(void) 
+{
+	log("\nShutdown IRC serv by SIGINT");
+	close(_master_socket);
+	_users.clear();
+	exit(0);
+}
+
 /**
 * @todo log
 * Afficher l'heure d'execution

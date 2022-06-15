@@ -34,12 +34,14 @@ class Server {
 		Server & operator=(Server const & rhs);
 
 		void	start(void);
+		void    shutdown(void);
 		void	log (std::string const message) const;
 		void	send_all(void);
 
 		const std::string & getPass() const; 
 		const std::vector<User> & getUsers() const;
 		bool	isUser(std::string const & name) const;
+		
 	private:
 
 		int 		_server_port;

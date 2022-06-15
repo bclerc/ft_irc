@@ -80,7 +80,7 @@ CommandManager::CommandManager(CommandManager & cpy)
 
 bool CommandManager::_ignore(std::string & request)
 {
-
+    return false;
 }
 
 /**
