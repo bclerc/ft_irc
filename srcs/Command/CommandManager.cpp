@@ -28,7 +28,11 @@ void CommandManager::_execute(Command & command)
     command.args.clear();
 }
 
-
+/**
+* @todo _build_args
+* Un meilleur parsing, plus "efficace" car la je pense que je peux faire mieux quand meme
+* 
+*/
 void CommandManager::_build_args(Command & command, std::string & request)
 {
     size_t pos;
@@ -79,6 +83,12 @@ bool CommandManager::_ignore(std::string & request)
 
 }
 
+/**
+* @todo execCommand
+* Reverifier pour le \r\n psk c'est louche la
+* Une function qui skip les commandes a ignorer
+* Un container des commmmandes a ignorer 
+*/
 void CommandManager::execCommand(User * sender, char *request)
 {
     Command command;

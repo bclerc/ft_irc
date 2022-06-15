@@ -1,4 +1,9 @@
 #include "../includes/Server.hpp"
+
+/**
+* @todo _accept_connection
+* Ajouter une limite de connection simultanee
+*/
 void Server::_accept_connection(fd_set & readfds)
 {
 	int		new_socket;
@@ -14,8 +19,6 @@ void Server::_accept_connection(fd_set & readfds)
 		}
 		User new_user(new_socket);
 		_users.push_back(new_user);
-		new_user.send("Hello");
-		new_user.log("Connected");
 	}
 }
 
@@ -60,9 +63,7 @@ void Server::_run(fd_set & readfds)
 		_copy_fd(_users, readfds);
 		activity = select(_max_sd + 1, &readfds, 0, 0, 0);
 		if (activity < 0)
-		{
 			perror("Select error");
-		}
 		_accept_connection(readfds);
 		_get_requests(readfds, commandManager);
 		send_all();
@@ -70,6 +71,10 @@ void Server::_run(fd_set & readfds)
 	}
 }
 
+/**
+* @todo _remove_disconnect 
+* Confirmer au client la deconnection
+*/
 void Server::_remove_disconnect()
 {
 	iterator it = _users.begin();
@@ -199,6 +204,11 @@ bool	Server::isUser(std::string const & name) const
 	return false;
 }
 
+/**
+* @todo log
+* Afficher l'heure d'execution
+* Une function renvoi l'heure actuelle en format [(d/m :) h/m]
+*/
 void Server::log(std::string const message) const
 {
 	std::cout << "[" << _server_name << "] " << message << std::endl;

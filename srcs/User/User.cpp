@@ -32,10 +32,6 @@ User & User::operator=(User const & rhs)
 	return *this;
 }
 
-std::string & User::getBuffer()
-{
-    return _buffer;
-}
 
 void    User::send(std::string const & request)
 {
@@ -44,7 +40,23 @@ void    User::send(std::string const & request)
     return ;
 }
 
-void    User::setNick(std::string const nick)
+/**
+* @todo kick
+* Pas bonne utilisation, reverifier comment kick a un user
+*/
+void User::kick(std::string const & reason)
+{
+    _buffer.clear();
+    send(reason);
+    setStatus(DISCONNECT);
+}
+
+/**
+* @todo setNick
+* Confirmer le changement de nick au server directement dans le setNick ou pas. Tel est la question
+* Je pense que oui. A reflechir.
+*/
+void User::setNick(std::string const nick)
 {
     _nick = nick;
     return ;
@@ -53,48 +65,59 @@ void    User::setNick(std::string const nick)
 void User::setStatus(Status status)
 {
 	_status = status;
+	return ;
 }
 
 void User::setUserName(std::string const username)
 {
     _username = username;
+	return ;
 }
 
 void User::setHostName(std::string const hostname)
 {
     _hostname = hostname;
+	return ;
 }
 
 void User::setServerName(std::string const servername)
 {
     _servername = servername;
+	return ;
 }
 
 void User::setRealName(std::string const realname)
-{
-    _realname = realname;
+{ 
+	_realname = realname; 
+	return ;
 }
 
-const std::string & User::getUserName() const { return _username; }
-const std::string & User::getHostName() const { return _hostname; }
-const std::string & User::getServerName() const { return _servername; }
-const std::string & User::getRealname() const { return _realname; };
+const std::string & User::getUserName() const
+{ return _username; }
 
+const std::string & User::getHostName() const
+{ return _hostname; }
 
-const   int User::getFd() const
-{
-    return _fd;
-}
+const std::string & User::getServerName() const
+{ return _servername; }
 
-const   User::Status & User::getStatus() const {
-    return _status;
-}
+const std::string & User::getRealname() const
+{ return _realname; };
 
+const   User::Status & User::getStatus() const 
+{ return _status; }
+
+std::string & User::getBuffer()
+{ return _buffer; }
+
+const   int & User::getFd() const
+ { return _fd; }
 
 const  std::string & User::getNick() const
-{
-    return _nick;
-}
+{ return _nick; }
+
+bool	User::isRegister(void) const 
+{ return (_status == REGISTER); }
 
 void	User::log(std::string const message) const
 {
@@ -102,13 +125,8 @@ void	User::log(std::string const message) const
 	if (!_nick.empty())
 		std::cout << _nick << " ";
 	std::cout << "(" << _fd << ")] " << message << std::endl;
-}	
-void User::kick(std::string const & reason)
-{
-    _buffer.clear();
-    send(reason);
-    setStatus(DISCONNECT);
 }
+
 User::~User(void)
 {
     return ;

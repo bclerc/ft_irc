@@ -1,5 +1,13 @@
 # include "replies.hpp"
 
+/**
+* @todo
+* Changer le caractere "*" par un userprefix
+* Un user prefix
+* et je ne sais d'autres reponses de la rfc
+* et peut-etre mettre les noms en minuscule 
+*/
+
 // RPL
 string RPL_WELCOME (string nick, string user, string host)
 { return ("001 * Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host); }

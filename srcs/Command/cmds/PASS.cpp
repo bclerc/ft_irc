@@ -2,13 +2,12 @@
 
 void passCommand(CommandManager::Command & command)
 {
-    std::cout << "Size: " << command.size << std::endl;
     if (command.size < 2)
     {
         command.sender->send(ERR_NEEDMOREPARAMS("PASS"));
         return ;
     }
-    if (command.sender->getStatus() >= User::REGISTER)
+    if (command.sender->isRegister())
     {
         command.sender->send(ERR_ALREADYREGISTRED());
         return ;
@@ -17,5 +16,6 @@ void passCommand(CommandManager::Command & command)
         command.sender->setStatus(User::UNREGISTER_PASS);
     else 
         command.sender->kick(ERR_CLOSINGLINK("", "", "Bad password"));
+ 
     return ;
 }

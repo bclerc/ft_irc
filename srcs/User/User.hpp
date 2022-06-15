@@ -21,26 +21,27 @@ class User {
 
 		User & operator=(User const & rhs);
 
-		void	kick (std::string const & reason);
 		void	setNick(std::string const nick);
 		void	setUserName(std::string const username);
 		void	setHostName(std::string const hostname);
 		void	setServerName(std::string const servername);
 		void	setRealName(std::string const realname);
 		void	setStatus(Status status);
+		void	kick (std::string const & reason);
 		void	send(std::string const & request);
 		void	log(std::string const message) const;
 
-		const int			getFd() const;
-		const Status	&	getStatus() const;
-		const std::string & getNick() const;
-		const std::string & getUserName() const;
-		const std::string & getHostName() const;
-		const std::string & getServerName() const;
-		const std::string & getRealname() const;
-
-
-		std::string & getBuffer();
+		const int			& getFd() const;
+		const Status		& getStatus() const;
+		const std::string 	& getNick() const;
+		const std::string 	& getUserName() const;
+		const std::string 	& getHostName() const;
+		const std::string 	& getServerName() const;
+		const std::string 	& getRealname() const;
+		std::string			& getBuffer();
+		
+		bool isRegister(void) const;
+		
 
 	private:
 		int _fd;
