@@ -41,6 +41,7 @@ class User {
 		std::string			& getBuffer();
 		
 		bool isRegister(void) const;
+		bool isConnected(void) const;
 		
 
 	private:

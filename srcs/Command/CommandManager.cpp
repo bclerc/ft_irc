@@ -81,13 +81,14 @@ CommandManager::CommandManager(CommandManager & cpy)
 bool CommandManager::_ignore(std::string & request, const size_t & pos)
 {
     std::vector<string>::iterator it;
-    std::vector<string> cmd({"CAP", "WHOIS", "MODE"}); // Mode a faire
+    std::vector<string> cmd({"CAP", "WHOIS", "MODE"}); // MODE a faire
 
     for (it = cmd.begin(); it != cmd.end(); it++)
     {
         if ((*it) == request.substr(0, (*it).size()))
         {
             request.erase(0, pos + 1);
+            server.log("Ignoring command: " + *it);
             return true;
         }
     }

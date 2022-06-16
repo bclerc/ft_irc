@@ -119,6 +119,9 @@ const  std::string & User::getNick() const
 bool	User::isRegister(void) const 
 { return (_status == REGISTER); }
 
+bool User::isConnected(void) const
+{ return (_status != DISCONNECT); }
+
 void	User::log(std::string const message) const
 {
 	std::cout << "[";

@@ -41,7 +41,7 @@ void Server::_get_requests(fd_set & readfds, CommandManager & commandManager)
 				it->log("Disconnected");
 				it->setStatus(User::DISCONNECT);
 			}
-			else
+			else if (it->isConnected())
 			{
 				buffer[valread] = '\0';
 				commandManager.execCommand(&(*it), buffer);
@@ -81,9 +81,9 @@ void Server::_remove_disconnect()
 
 	while (it != _users.end())
 	{
-		if ((*it).getStatus() == User::DISCONNECT
-			&& (*it).getBuffer().empty())
+		if ((*it).getStatus() == User::DISCONNECT)
 		{
+			close((*it).getFd());
 			_users.erase(it);
 			it = _users.begin();
 			continue;
@@ -220,5 +220,5 @@ void	Server::shutdown(void)
 */
 void Server::log(std::string const message) const
 {
-	std::cout << "[" << _server_name << "] " << message << std::endl;
+	std::cout << "[Server][Info] " << message << std::endl;
 }
