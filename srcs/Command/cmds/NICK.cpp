@@ -17,7 +17,7 @@ void nickCommand(CommandManager::Command & command)
 		command.sender->send(ERR_NICKNAMEINUSE(command.args[0]));
 		return;
 	}
-
+	command.sender->send(":* NICK " + command.args[0]);
 	command.sender->setNick(command.args[0]);
 	return ;
 }

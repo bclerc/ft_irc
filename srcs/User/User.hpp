@@ -38,6 +38,8 @@ class User {
 		const std::string 	& getHostName() const;
 		const std::string 	& getServerName() const;
 		const std::string 	& getRealname() const;
+		const std::string 	getPrefix() const;
+
 		std::string			& getBuffer();
 		
 		bool isRegister(void) const;

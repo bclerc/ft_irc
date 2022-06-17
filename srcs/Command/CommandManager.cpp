@@ -6,6 +6,7 @@ void CommandManager::_register_cmds()
 	_cmd_registre["NICK"] = nickCommand;
     _cmd_registre["USER"] = userCommand;
 	_cmd_registre["PING"] = pingCommand;
+    _cmd_registre["QUIT"] = quitCommand;
 }
 
 void CommandManager::_execute(Command & command)
