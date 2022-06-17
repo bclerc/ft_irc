@@ -224,11 +224,6 @@ void	Server::shutdown(void)
 	exit(0);
 }
 
-/**
-* @todo log
-* Afficher l'heure d'execution
-* Une function renvoi l'heure actuelle en format [d/m:h/m]
-*/
 void Server::log(std::string const message) const
 {
 	time_t rawtime;

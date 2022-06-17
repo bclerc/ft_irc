@@ -2,7 +2,9 @@
 # define USER_HPP
 # include "../../includes/Server.hpp"
 # include <iostream>
- 
+
+class Channel;
+
 class User {
 
 	public:
@@ -27,6 +29,7 @@ class User {
 		void	setServerName(std::string const servername);
 		void	setRealName(std::string const realname);
 		void	setStatus(Status status);
+		void	setChannel(Channel & channel);
 		void	kick (std::string const & reason);
 		void	send(std::string const & request);
 		void	log(std::string const message) const;
@@ -41,7 +44,8 @@ class User {
 		const std::string 	getPrefix() const;
 
 		std::string			& getBuffer();
-		
+		Channel				& getChannel();
+
 		bool isRegister(void) const;
 		bool isConnected(void) const;
 		
@@ -58,6 +62,7 @@ class User {
 		std::string _realname;
 		std::string _buffer;
 
+		Channel	*	_current_channel;
 
 };
 

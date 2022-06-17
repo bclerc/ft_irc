@@ -3,6 +3,8 @@
  
 # include "../srcs/Command/CommandManager.hpp"
 # include "../srcs/User/User.hpp"
+# include "../srcs/Channel/Channel.hpp"
+
 
 # include <iostream>
 # include <cstring>
@@ -17,12 +19,11 @@
 # include <time.h> 
 
 class User;
+class Channel;
 class CommandManager;
 
 typedef std::vector<User>::iterator iterator;
 typedef std::vector<User>::const_iterator const_iterator;
-
-
 class Server {
 
 	public:
@@ -55,13 +56,14 @@ class Server {
 		struct sockaddr_in _address;
 
 		std::vector<User> _users;
-		
+		std::vector<Channel> _channels;		
 
 		void	_run(fd_set & readfds);
 		void 	_accept_connection(fd_set & readfds);
 		void	_copy_fd(std::vector<User> & users, fd_set & readfds);
 		void 	_get_requests(fd_set & readfds, CommandManager & commandManager);
 		void	_remove_disconnect();
+
 	
 
 };
