@@ -113,6 +113,13 @@ std::string & User::getBuffer()
 const   int & User::getFd() const
  { return _fd; }
 
+const std::string User::getPrefix() const
+{
+    if (_nick.size())
+        return (getNick() + "!" + getUserName()+ "@"  + getServerName());
+     return ("*");
+}
+
 const  std::string & User::getNick() const
 { return _nick; }
 

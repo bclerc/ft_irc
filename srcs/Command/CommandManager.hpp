@@ -51,6 +51,7 @@ void	nickCommand(CommandManager::Command & command);
 void    pingCommand(CommandManager::Command & command);
 void    passCommand(CommandManager::Command & command);
 void    userCommand(CommandManager::Command & command);
+void    quitCommand(CommandManager::Command & command);
 
 
 

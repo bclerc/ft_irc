@@ -10,6 +10,7 @@ SOURCES_FILES = srcs/main.cpp \
 				srcs/Command/cmds/PASS.cpp \
 				srcs/Command/cmds/NICK.cpp \
 				srcs/Command/cmds/USER.cpp \
+				srcs/Command/cmds/QUIT.cpp \
 				srcs/Command/cmds/PING.cpp \
 				srcs/Command/rfc/replies.cpp \
 				srcs/Server.cpp
