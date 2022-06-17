@@ -7,7 +7,7 @@ void confirm_registration(CommandManager::Command & command, User & sender)
     sender.send(RPL_YOURHOST("IRC", "1.0"));
     sender.send(RPL_CREATED("0/0/0"));
     sender.send(RPL_MYINFO(sender.getHostName(), " ", " ", " "));
-    sender.setNick(sender.getNick()); // Va savoir pourquoi il fait reconfirmer a irssi le nick de l'user
+    sender.setNick(sender.getNick()); // Va savoir pourquoi il faut reconfirmer a irssi le nick de l'user
 }
 
 void set_param(CommandManager::Command & command, User & sender)
