@@ -220,5 +220,17 @@ void	Server::shutdown(void)
 */
 void Server::log(std::string const message) const
 {
-	std::cout << "[Server][Info] " << message << std::endl;
+	time_t rawtime;
+	struct tm * timeinfo;
+	char timer [18];
+
+	time (&rawtime);
+	timeinfo = localtime(&rawtime);
+	if (strftime(timer,18, "[(%d/%m :) %R]", timeinfo) == 0)
+	{
+		std::cout << "Error Time" << std::endl;
+		_exit(1);
+	}
+//	puts(timer);
+	std::cout << timer << " [Server][Info] " << message << std::endl;
 }
