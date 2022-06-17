@@ -185,7 +185,8 @@ void Server::send_all()
 {
 	for (iterator it = _users.begin(); it != _users.end(); it++)
 	{
-		write(it->getFd(), it->getBuffer().c_str(), it->getBuffer().size());
+		if (it->getBuffer().size())
+			write(it->getFd(), it->getBuffer().c_str(), it->getBuffer().length());
 		it->getBuffer().clear();
 	}
 }

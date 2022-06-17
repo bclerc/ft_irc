@@ -1,13 +1,13 @@
 
 #include "User.hpp"
 
-User::User(int & fd) : _fd(fd), _status(UNREGISTER)
+User::User(int & fd) : _fd(fd), _nick("*"),  _status(UNREGISTER)
 {
 
 	return ;
 }
 
-User::User(void) : _fd(-1), _status(UNREGISTER)
+User::User(void) : _fd(-1), _nick("*"), _status(UNREGISTER)
 {
 	return ;
 }
@@ -35,15 +35,11 @@ User & User::operator=(User const & rhs)
 
 void    User::send(std::string const & request)
 {
-    _buffer += (request + "\n");
-    log(("From server: " + request));
+    _buffer += (request + "\r\n");
+    log(" > " + request );
     return ;
 }
 
-/**
-* @todo kick
-* Pas bonne utilisation, reverifier comment kick a un user
-*/
 void User::kick(std::string const & reason)
 {
     _buffer.clear();
@@ -51,13 +47,9 @@ void User::kick(std::string const & reason)
     setStatus(DISCONNECT);
 }
 
-/**
-* @todo setNick
-* Confirmer le changement de nick au server directement dans le setNick ou pas. Tel est la question
-* Je pense que oui. A reflechir.
-*/
 void User::setNick(std::string const nick)
 {
+    send(":" + (isRegister() ? _nick : "*") + " NICK " + nick);
     _nick = nick;
     return ;
 }
