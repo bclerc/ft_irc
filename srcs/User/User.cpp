@@ -36,16 +36,17 @@ User & User::operator=(User const & rhs)
 void    User::send(std::string const & request)
 {
     _buffer += (request + "\r\n");
-    log(" > " + request );
+    log("> " + request );
     return ;
 }
 
 void User::kick(std::string const & reason)
 {
     _buffer.clear();
-    send(reason);
+    send(getPrefix() + " QUIT: " + reason);
     setStatus(DISCONNECT);
 }
+
 
 void User::setNick(std::string const nick)
 {
@@ -123,10 +124,7 @@ bool User::isConnected(void) const
 
 void	User::log(std::string const message) const
 {
-	std::cout << "[";
-	if (!_nick.empty())
-		std::cout << _nick << " ";
-	std::cout << "(" << _fd << ")] " << message << std::endl;
+	server.log("(" + std::to_string(_fd)+ ") " + _nick + ": "  + message);
 }
 
 User::~User(void)

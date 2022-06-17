@@ -38,6 +38,7 @@ class Server {
 		void    shutdown(void);
 		void	log (std::string const message) const;
 		void	send_all(void);
+		void	kickAll(std::string const & reason);
 
 		const std::string & getPass() const; 
 		const std::vector<User> & getUsers() const;

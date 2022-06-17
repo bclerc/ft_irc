@@ -205,9 +205,19 @@ bool	Server::isUser(std::string const & name) const
 	return false;
 }
 
+
+void	Server::kickAll(std::string const & reason)
+{
+    for (iterator it = _users.begin(); it != _users.end(); it++)
+		it->kick(reason);
+}
+
 void	Server::shutdown(void) 
 {
-	log("\nShutdown IRC serv by SIGINT");
+	log("\rShutdown IRC serv by SIGINT");
+	kickAll("Sopping server");
+	send_all();
+	_remove_disconnect();
 	close(_master_socket);
 	_master_socket = -1;
 	_users.clear();
