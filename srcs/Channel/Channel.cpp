@@ -1,6 +1,7 @@
 #include "Channel.hpp"
 
-Channel::Channel(std::string const & name) : _name(name)
+Channel::Channel(std::string const & name, User & owner)
+: _name(name), _owner(&owner)
 {
     return ;
 }
@@ -10,7 +11,7 @@ Channel::Channel(void)
     return ;
 }
 
-Channel::Channel(Channel & cpy)
+Channel::Channel(Channel const & cpy)
 {
     *this = cpy;
     return ;

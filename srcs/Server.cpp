@@ -212,6 +212,26 @@ void	Server::kickAll(std::string const & reason)
 		it->kick(reason);
 }
 
+Channel & Server::createChannel(std::string const & name, User & owner)
+{
+	std::pair<channel_iterator, bool> ret;
+
+	ret = _channels.insert(std::make_pair(name, Channel(name, owner)));
+	if (!ret.second)
+		throw std::exception();											// Refaire une exeption
+	return ((*ret.first).second);
+}
+
+Channel & Server::getChannel(std::string const & name)
+{
+	channel_iterator it;
+
+	it = _channels.find(name);
+	if (it == _channels.end())
+		throw std::exception();
+	return (it->second);
+}
+
 void	Server::shutdown(void) 
 {
 	log("\rShutdown IRC serv by SIGINT");

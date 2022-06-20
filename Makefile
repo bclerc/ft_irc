@@ -13,6 +13,7 @@ SOURCES_FILES = srcs/main.cpp \
 				srcs/Command/cmds/QUIT.cpp \
 				srcs/Command/cmds/PING.cpp \
 				srcs/Command/rfc/replies.cpp \
+				srcs/Channel/Channel.cpp \
 				srcs/Server.cpp
 
 OBJECTS_FILES_FT = $(patsubst $(SOURCES_FOLDER)%.cpp, $(OBJECTS_FOLDER)%_ft.o, $(SOURCES_FILES))

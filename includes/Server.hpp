@@ -24,6 +24,9 @@ class CommandManager;
 
 typedef std::vector<User>::iterator iterator;
 typedef std::vector<User>::const_iterator const_iterator;
+typedef std::map<std::string, Channel>::iterator channel_iterator;
+typedef std::map<std::string, Channel>::const_iterator const_channel_iterator;
+
 class Server {
 
 	public:
@@ -40,11 +43,15 @@ class Server {
 		void	log (std::string const message) const;
 		void	send_all(void);
 		void	kickAll(std::string const & reason);
-
-		const std::string & getPass() const; 
-		const std::vector<User> & getUsers() const;
+		
+		const std::string 		&	getPass() const; 
+		const std::vector<User> &	getUsers() const;
+	
 		bool	isUser(std::string const & name) const;
 		
+		Channel	& createChannel(std::string const & name, User & owner);
+		Channel & getChannel(std::string const & name);
+
 	private:
 
 		int 		_server_port;
@@ -56,7 +63,7 @@ class Server {
 		struct sockaddr_in _address;
 
 		std::vector<User> _users;
-		std::vector<Channel> _channels;		
+		std::map<std::string, Channel>  _channels;		
 
 		void	_run(fd_set & readfds);
 		void 	_accept_connection(fd_set & readfds);
