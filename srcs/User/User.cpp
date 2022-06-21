@@ -32,6 +32,7 @@ User & User::operator=(User const & rhs)
     _username = rhs._username;
     _hostname = rhs._hostname;
     _realname = rhs._realname;
+    _operator = rhs._operator;
     _servername = rhs._servername;
     _current_channel = rhs._current_channel;
 	return *this;
@@ -90,16 +91,13 @@ void User::setRealName(std::string const realname)
 	return ;
 }
 
-void User::setMode(const int & mode)
+void User::setOperator(bool value)
 {
-    _mode |= 1 << mode;
+    _operator = value;
 }
 
 void User::setChannel(Channel & channel)
 { _current_channel = &channel; }
-
-const int & User::getMode() const
-{ return _mode; }
 
 const std::string & User::getUserName() const
 { return _username; }
@@ -145,6 +143,9 @@ bool	User::isRegister(void) const
 bool User::isConnected(void) const
 { return (_status != DISCONNECT); }
 
+bool User::isOperator(void) const
+{ return (_operator); }
+
 void	User::log(std::string const message) const
 {
 	server.log("(" + std::to_string(_fd)+ ") " + _nick + ": "  + message);
@@ -154,4 +155,14 @@ User::~User(void)
 {
     _buffer.clear();
     return ;
+}
+
+bool User::operator==(const User & rhs)
+{
+    return (getFd() == rhs.getFd());
+}
+
+bool User::operator!=(const User & rhs)
+{
+    return (!(*this == rhs));
 }

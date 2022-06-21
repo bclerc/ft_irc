@@ -29,6 +29,10 @@ class User {
 		~User (void);
 
 		User & operator=(User const & rhs);
+		bool operator==(const User & rhs);
+		bool operator!=(const User & rhs);
+
+
 
 		void	setNick(std::string const nick);
 		void	setUserName(std::string const username);
@@ -36,14 +40,13 @@ class User {
 		void	setServerName(std::string const servername);
 		void	setRealName(std::string const realname);
 		void	setStatus(Status status);
-		void	setMode(const int & mode);
 		void	setChannel(Channel & channel);
+		void	setOperator(bool value);
 		void	kick (std::string const & reason);
 		void	send(std::string const & request);
 		void	log(std::string const message) const;
 
 		const int			& getFd() const;
-		const int			& getMode() const;
 		const Status		& getStatus() const;
 		const std::string 	& getNick() const;
 		const std::string 	& getUserName() const;
@@ -55,13 +58,16 @@ class User {
 		Channel				& getChannel();
 		std::string			& getBuffer();
 
-		bool isRegister(void) const;
-		bool isConnected(void) const;
+		bool isRegister(void)	const;
+		bool isConnected(void)	const;
+		bool isOperator(void)	const;
 		
 
 	private:
 		int _fd;
 		int _mode;
+		
+		bool _operator;
 
 		Status _status;
 
@@ -75,5 +81,6 @@ class User {
 		Channel	*	_current_channel;
 
 };
+
 
 #endif

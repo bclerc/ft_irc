@@ -20,5 +20,9 @@ string ERR_NONICKNAMEGIVEN (string nick);
 string ERR_ERRONEUSNICKNAME (string nick, string new_nick);
 string ERR_NICKNAMEINUSE (string nick, string new_nick);
 string ERR_NICKCOLLISION (string nick, string new_nick);
+string ERR_NOSUCHNICK (string nick, string target);
+string ERR_NOPRIVILEGES (string nick);
+string ERR_UMODEUNKNOWNFLAG (string nick);
+
 
 #endif

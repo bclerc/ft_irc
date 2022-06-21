@@ -42,3 +42,12 @@ string ERR_NICKNAMEINUSE (string nick, string new_nick)
 
 string ERR_NICKCOLLISION (string nick, string new_nick)
 { return ("436 "+ nick + " " + nick + " :Nickname collision KILL");}
+
+string ERR_NOSUCHNICK (string nick, string target)
+{ return ("401 "+ nick + " " + target + " :No such nick/channel"); }
+
+string ERR_NOPRIVILEGES (string nick)
+{ return ("481 " + nick + " :Permission Denied - You're not an IRC operator"); }
+
+string ERR_UMODEUNKNOWNFLAG (string nick)
+{ return ("501 " + nick + " :Unkown MODE flag"); }

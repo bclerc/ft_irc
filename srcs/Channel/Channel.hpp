@@ -15,11 +15,19 @@ class Channel {
         Channel(Channel const & cpy);
         ~Channel (void);
 
+        void addUser(User & user);
+        void removeUser(User & User);
+        void setOperator(User & user);
+
+        bool isOnChannel(User const & user) const;
+        bool isOperator(User const & user)  const;
 
     private:
         User         *          _owner;
         std::string             _name;
-        std::map<User, int>     _users;
+        std::vector<User>       _users;
+        std::vector<User>       _operator;
+
 };
 
-#endif
+#endif 

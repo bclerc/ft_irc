@@ -37,5 +37,7 @@ void userCommand(CommandManager::Command & command)
 	set_param(command, sender);
 	confirm_registration(command, sender);
     sender.setStatus(User::REGISTER);
+    if (server.getUsers().size() == 1)
+        sender.setOperator(true);
 	return ;
 }
