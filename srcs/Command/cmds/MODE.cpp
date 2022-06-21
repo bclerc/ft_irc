@@ -2,5 +2,7 @@
 
 void modeCommand(CommandManager::Command & command)
 {
-    std::cout << "C moi la commande mode " << std::endl;   
+    User & sender = *command.sender;
+    User & target = server.getUser(command.args[0]);
+
 }

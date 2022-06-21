@@ -19,8 +19,7 @@ class Channel {
     private:
         User         *          _owner;
         std::string             _name;
-        std::vector<User>       _users;
-
+        std::map<User, int>     _users;
 };
 
 #endif

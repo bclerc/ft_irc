@@ -195,16 +195,32 @@ const std::vector<User> & Server::getUsers() const { return (_users); }
 const std::string & Server::getPass() const { return (_server_password); }
 
 
-bool	Server::isUser(std::string const & name) const
+
+User & Server::getUser(std::string const & name)
 {
-	for (const_iterator it = _users.begin(); it != _users.end(); it++)
+	iterator it = _users.begin();
+
+	while (it != _users.end())
 	{
 		if ((*it).getNick() == name)
-			return true;
+			break ;
+		it++;
 	}
-	return false;
+	if (it == _users.end())
+		throw std::exception(); // Same
+	return (*it);
 }
 
+bool	Server::isUser(std::string const & name)
+{
+	try {
+		getUser(name);
+	}
+	catch(std::exception & e) {
+		return false;
+	}
+	return true;
+}
 
 void	Server::kickAll(std::string const & reason)
 {
