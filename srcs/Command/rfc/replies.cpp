@@ -38,7 +38,7 @@ string ERR_ERRONEUSNICKNAME (string nick, string new_snick)
 { return ("462 "+ nick + " " + nick + " :Erroneus nickname" ); }
 
 string ERR_NICKNAMEINUSE (string nick, string new_nick)
-{ return ("433 "+ nick + " " + nick + " :Nickname is already in use"); }
+{ return ("433 "+ nick + " " + new_nick + " :Nickname is already in use"); }
 
 string ERR_NICKCOLLISION (string nick, string new_nick)
 { return ("436 "+ nick + " " + nick + " :Nickname collision KILL");}

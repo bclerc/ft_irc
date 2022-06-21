@@ -32,7 +32,7 @@ void modeCommand(CommandManager::Command & command)
         sender.send(ERR_NOSUCHNICK(sender.getNick(), command.args[0]));
         return ;
     }
-    
+
     User & target = server.getUser(command.args[0]);
     const char * mode = command.args[1].c_str();
 
@@ -49,7 +49,7 @@ void modeCommand(CommandManager::Command & command)
             case 'o':
                 oper(sender, target, plus);
                 break;
-            case 'i':               // a gerer ?? 
+            case 'i':                           // a gerer ??
                 vanish(sender, target);
                 break;
             default:

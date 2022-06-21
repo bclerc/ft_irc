@@ -10,7 +10,6 @@ void Server::_accept_connection(fd_set & readfds)
 
 	if (FD_ISSET(_master_socket, &readfds))
 	{
-
 		log("Incoming connection");
 		if ((new_socket = accept(_master_socket, (struct sockaddr *)&_address, &_addrlen)) < 0)
 		{
@@ -79,6 +78,7 @@ void Server::_remove_disconnect()
 	{
 		if ((*it).getStatus() == User::DISCONNECT)
 		{
+			it->log("Disconnected");
 			close((*it).getFd());
 			_users.erase(it);
 			it = _users.begin();
@@ -136,8 +136,7 @@ Server::Server(Server & cpy)
 }
 
 Server & Server::operator=(Server const & rhs)
-{
-	
+{	
 	_server_password	= rhs._server_password;
 	_master_socket 		= rhs._master_socket;
 	_server_port 		= rhs._server_port;
@@ -148,7 +147,7 @@ Server & Server::operator=(Server const & rhs)
 	_max_sd				= rhs._max_sd;
 	_users				= rhs._users;
 	_opt				= rhs._opt;
-	
+
 	return *this;
 }
 
