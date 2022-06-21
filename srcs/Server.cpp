@@ -71,10 +71,6 @@ void Server::_run(fd_set & readfds)
 	}
 }
 
-/**
-* @todo _remove_disconnect 
-* Confirmer au client la deconnection
-*/
 void Server::_remove_disconnect()
 {
 	iterator it = _users.begin();
@@ -191,10 +187,11 @@ void Server::send_all()
 	}
 }
 
-const std::vector<User> & Server::getUsers() const { return (_users); }
-const std::string & Server::getPass() const { return (_server_password); }
+const std::string & Server::getPass() const
+{ return (_server_password); }
 
-
+const std::vector<User> & Server::getUsers() const
+{ return (_users); }
 
 User & Server::getUser(std::string const & name)
 {
