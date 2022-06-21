@@ -18,7 +18,7 @@ void oper(User & sender, User & target, int plus)
 
 void modeCommand(CommandManager::Command & command)
 {
-    int    plus = -1;
+    int    plus = 1;
 
     User & sender = *command.sender;
 
@@ -47,12 +47,10 @@ void modeCommand(CommandManager::Command & command)
                 plus = 0;
                 break ;
             case 'o':
-                if (plus > -1)
-                    oper(sender, target, plus);
+                oper(sender, target, plus);
                 break;
             case 'i':               // a gerer ?? 
-                if (plus > -1)
-                    vanish(sender, target);
+                vanish(sender, target);
                 break;
             default:
                 sender.send(ERR_UMODEUNKNOWNFLAG(sender.getNick()));
