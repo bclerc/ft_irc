@@ -3,6 +3,8 @@
  
 # include "../srcs/Command/CommandManager.hpp"
 # include "../srcs/User/User.hpp"
+# include "../srcs/Channel/Channel.hpp"
+
 
 # include <iostream>
 # include <cstring>
@@ -17,11 +19,13 @@
 # include <time.h> 
 
 class User;
+class Channel;
 class CommandManager;
 
 typedef std::vector<User>::iterator iterator;
 typedef std::vector<User>::const_iterator const_iterator;
-
+typedef std::map<std::string, Channel>::iterator channel_iterator;
+typedef std::map<std::string, Channel>::const_iterator const_channel_iterator;
 
 class Server {
 
@@ -38,11 +42,19 @@ class Server {
 		void    shutdown(void);
 		void	log (std::string const message) const;
 		void	send_all(void);
-
-		const std::string & getPass() const; 
-		const std::vector<User> & getUsers() const;
-		bool	isUser(std::string const & name) const;
+		void	kickAll(std::string const & reason);
 		
+		const std::string 		&	getPass() const; 
+		const std::vector<User> &	getUsers() const;
+		const std::map<std::string, Channel> & getChannelMap(void) const;
+
+		bool	isUser(std::string const & name);
+		
+		User & getUser(std::string const & name);
+
+		Channel	& createChannel(std::string const & name, User & owner);
+		Channel & getChannel(std::string const & name);
+
 	private:
 
 		int 		_server_port;
@@ -54,13 +66,14 @@ class Server {
 		struct sockaddr_in _address;
 
 		std::vector<User> _users;
-		
+		std::map<std::string, Channel>  _channels;		
 
 		void	_run(fd_set & readfds);
 		void 	_accept_connection(fd_set & readfds);
 		void	_copy_fd(std::vector<User> & users, fd_set & readfds);
 		void 	_get_requests(fd_set & readfds, CommandManager & commandManager);
 		void	_remove_disconnect();
+
 	
 
 };

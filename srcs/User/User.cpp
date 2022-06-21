@@ -1,14 +1,17 @@
 
 #include "User.hpp"
 
-User::User(int & fd) : _fd(fd), _status(UNREGISTER)
+User::User(int & fd)
+: _fd(fd), _nick("*"),  _status(UNREGISTER), _mode(0)
 {
-
+    _current_channel = NULL;
 	return ;
 }
 
-User::User(void) : _fd(-1), _status(UNREGISTER)
+User::User(void)
+: _fd(-1), _nick("*"), _status(UNREGISTER), _mode(0)
 {
+    _current_channel = NULL;
 	return ;
 }
 
@@ -23,41 +26,37 @@ User & User::operator=(User const & rhs)
 	(void)rhs;
     _fd = rhs._fd;
     _nick = rhs._nick;
+    _mode = rhs._mode;
+    _buffer = rhs._buffer;
     _status = rhs._status;
     _username = rhs._username;
     _hostname = rhs._hostname;
-    _servername = rhs._servername;
     _realname = rhs._realname;
-    _buffer = rhs._buffer;
+    _operator = rhs._operator;
+    _servername = rhs._servername;
+    _current_channel = rhs._current_channel;
 	return *this;
 }
 
 
 void    User::send(std::string const & request)
 {
-    _buffer += (request + "\n");
-    log(("From server: " + request));
+    _buffer += (request + "\r\n");
+    log("> " + request );
     return ;
 }
 
-/**
-* @todo kick
-* Pas bonne utilisation, reverifier comment kick a un user
-*/
 void User::kick(std::string const & reason)
 {
     _buffer.clear();
-    send(reason);
+    send(getPrefix() + " QUIT: " + reason);
     setStatus(DISCONNECT);
 }
 
-/**
-* @todo setNick
-* Confirmer le changement de nick au server directement dans le setNick ou pas. Tel est la question
-* Je pense que oui. A reflechir.
-*/
+
 void User::setNick(std::string const nick)
 {
+    send(":" + (isRegister() ? _nick : "*") + " NICK " + nick);
     _nick = nick;
     return ;
 }
@@ -92,6 +91,14 @@ void User::setRealName(std::string const realname)
 	return ;
 }
 
+void User::setOperator(bool value)
+{
+    _operator = value;
+}
+
+void User::setChannel(Channel & channel)
+{ _current_channel = &channel; }
+
 const std::string & User::getUserName() const
 { return _username; }
 
@@ -123,22 +130,39 @@ const std::string User::getPrefix() const
 const  std::string & User::getNick() const
 { return _nick; }
 
+Channel & User::getChannel(void)
+{
+    if (!_current_channel) 
+        throw std::exception();         //Pareil, creer une exception
+    return (*_current_channel);
+}
+
 bool	User::isRegister(void) const 
 { return (_status == REGISTER); }
 
 bool User::isConnected(void) const
 { return (_status != DISCONNECT); }
 
+bool User::isOperator(void) const
+{ return (_operator); }
+
 void	User::log(std::string const message) const
 {
-	std::cout << "[";
-	if (!_nick.empty())
-		std::cout << _nick << " ";
-	std::cout << "(" << _fd << ")] " << message << std::endl;
+	server.log("(" + std::to_string(_fd)+ ") " + _nick + ": "  + message);
 }
 
 User::~User(void)
 {
     _buffer.clear();
     return ;
+}
+
+bool User::operator==(const User & rhs)
+{
+    return (getFd() == rhs.getFd());
+}
+
+bool User::operator!=(const User & rhs)
+{
+    return (!(*this == rhs));
 }

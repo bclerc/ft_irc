@@ -6,6 +6,7 @@ void CommandManager::_register_cmds()
 	_cmd_registre["NICK"] = nickCommand;
     _cmd_registre["USER"] = userCommand;
 	_cmd_registre["PING"] = pingCommand;
+    _cmd_registre["MODE"] = modeCommand;
     _cmd_registre["QUIT"] = quitCommand;
 }
 
@@ -18,7 +19,7 @@ void CommandManager::_execute(Command & command)
         if (command.command != "PASS"
             && command.sender->getStatus() == User::UNREGISTER)
         {
-            command.sender->kick(ERR_CLOSINGLINK("", "", "No register"));
+            command.sender->kick(ERR_CLOSINGLINK(command.sender->getNick(), "", "", "No register"));
             return ;
         }
         if (command.sender->getStatus() != User::DISCONNECT)
@@ -82,7 +83,7 @@ CommandManager::CommandManager(CommandManager & cpy)
 bool CommandManager::_ignore(std::string & request, const size_t & pos)
 {
     std::vector<string>::iterator it;
-    std::vector<string> cmd({"CAP", "WHOIS", "MODE"}); // MODE a faire
+    std::vector<string> cmd({"CAP", "WHOIS"}); // MODE a faire
 
     for (it = cmd.begin(); it != cmd.end(); it++)
     {
