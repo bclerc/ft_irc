@@ -232,6 +232,9 @@ Channel & Server::getChannel(std::string const & name)
 	return (it->second);
 }
 
+const std::map<std::string, Channel> & Server::getChannelMap(void) const
+{ return _channels; }
+
 void	Server::shutdown(void) 
 {
 	log("\rShutdown IRC serv by SIGINT");

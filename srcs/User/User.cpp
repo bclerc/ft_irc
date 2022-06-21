@@ -1,14 +1,17 @@
 
 #include "User.hpp"
 
-User::User(int & fd) : _fd(fd), _nick("*"),  _status(UNREGISTER)
+User::User(int & fd)
+: _fd(fd), _nick("*"),  _status(UNREGISTER), _mode(0)
 {
-
+    _current_channel = NULL;
 	return ;
 }
 
-User::User(void) : _fd(-1), _nick("*"), _status(UNREGISTER)
+User::User(void)
+: _fd(-1), _nick("*"), _status(UNREGISTER), _mode(0)
 {
+    _current_channel = NULL;
 	return ;
 }
 
@@ -23,12 +26,14 @@ User & User::operator=(User const & rhs)
 	(void)rhs;
     _fd = rhs._fd;
     _nick = rhs._nick;
+    _mode = rhs._mode;
+    _buffer = rhs._buffer;
     _status = rhs._status;
     _username = rhs._username;
     _hostname = rhs._hostname;
-    _servername = rhs._servername;
     _realname = rhs._realname;
-    _buffer = rhs._buffer;
+    _servername = rhs._servername;
+    _current_channel = rhs._current_channel;
 	return *this;
 }
 
@@ -85,6 +90,17 @@ void User::setRealName(std::string const realname)
 	return ;
 }
 
+void User::setMode(const int & mode)
+{
+    _mode |= 1 << mode;
+}
+
+void User::setChannel(Channel & channel)
+{ _current_channel = &channel; }
+
+const int & User::getMode() const
+{ return _mode; }
+
 const std::string & User::getUserName() const
 { return _username; }
 
@@ -115,6 +131,13 @@ const std::string User::getPrefix() const
 
 const  std::string & User::getNick() const
 { return _nick; }
+
+Channel & User::getChannel(void)
+{
+    if (!_current_channel) 
+        throw std::exception();         //Pareil, creer une exception
+    return (*_current_channel);
+}
 
 bool	User::isRegister(void) const 
 { return (_status == REGISTER); }

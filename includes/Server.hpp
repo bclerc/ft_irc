@@ -46,7 +46,8 @@ class Server {
 		
 		const std::string 		&	getPass() const; 
 		const std::vector<User> &	getUsers() const;
-	
+		const std::map<std::string, Channel> & getChannelMap(void) const;
+
 		bool	isUser(std::string const & name) const;
 		
 		Channel	& createChannel(std::string const & name, User & owner);
