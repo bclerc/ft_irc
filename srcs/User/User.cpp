@@ -23,7 +23,6 @@ User::User(User const & cpy)
 
 User & User::operator=(User const & rhs)
 {
-	(void)rhs;
     _fd = rhs._fd;
     _nick = rhs._nick;
     _mode = rhs._mode;
@@ -121,11 +120,7 @@ const   int & User::getFd() const
  { return _fd; }
 
 const std::string User::getPrefix() const
-{
-    if (_nick.size())
-        return (getNick() + "!" + getUserName()+ "@"  + getServerName());
-     return ("*");
-}
+{ return (getNick() + "!" + getUserName()+ "@"  + getServerName()); }
 
 const  std::string & User::getNick() const
 { return _nick; }
