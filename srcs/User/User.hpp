@@ -32,7 +32,6 @@ class User {
 		bool operator!=(const User & rhs);
 
 
-
 		void	setNick(std::string const nick);
 		void	setUserName(std::string const username);
 		void	setHostName(std::string const hostname);
