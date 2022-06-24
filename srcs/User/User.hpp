@@ -22,7 +22,6 @@ class User {
 			DISCONNECT,
 		};
 
-
 		User (void);
 		User(int & fd);
 		User(User const & cpy);
@@ -31,7 +30,6 @@ class User {
 		User & operator=(User const & rhs);
 		bool operator==(const User & rhs);
 		bool operator!=(const User & rhs);
-
 
 
 		void	setNick(std::string const nick);
@@ -53,7 +51,7 @@ class User {
 		const std::string 	& getHostName() const;
 		const std::string 	& getServerName() const;
 		const std::string 	& getRealname() const;
-		const std::string 	getPrefix() const;
+		const std::string 	 getPrefix() const;
 		
 		Channel				& getChannel();
 		std::string			& getBuffer();

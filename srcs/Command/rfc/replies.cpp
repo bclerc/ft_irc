@@ -49,5 +49,11 @@ string ERR_NOSUCHNICK (string nick, string target)
 string ERR_NOPRIVILEGES (string nick)
 { return ("481 " + nick + " :Permission Denied - You're not an IRC operator"); }
 
-string ERR_UMODEUNKNOWNFLAG (string nick)
+string ERR_CHANOPRIVSNEEDED (string nick, string channel)
+{ return ("482 " + nick + " " + channel + " :Permission Denied - You're not an IRC operator"); }
+
+string ERR_NOSUCHCHANNEL (string nick, string channel)
+{ return ("403 " + nick + " " + channel + " :No such channel"); }
+
+string ERR_UMODEUNKNOWNFLAG (string nick, const char flag)
 { return ("501 " + nick + " :Unkown MODE flag"); }

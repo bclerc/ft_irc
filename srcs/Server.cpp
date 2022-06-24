@@ -218,6 +218,14 @@ bool	Server::isUser(std::string const & name)
 	return true;
 }
 
+bool Server::isChannel(std::string const & name)
+{
+	channel_iterator it;
+
+	it = _channels.find(name);
+	return (it != _channels.end());
+}
+
 void	Server::kickAll(std::string const & reason)
 {
     for (iterator it = _users.begin(); it != _users.end(); it++)

@@ -2,14 +2,14 @@
 #include "User.hpp"
 
 User::User(int & fd)
-: _fd(fd), _nick("*"),  _status(UNREGISTER), _mode(0)
+: _fd(fd), _nick("*"),  _status(UNREGISTER_PASS), _mode(0)
 {
     _current_channel = NULL;
 	return ;
 }
 
 User::User(void)
-: _fd(-1), _nick("*"), _status(UNREGISTER), _mode(0)
+: _fd(-1), _nick("*"), _status(UNREGISTER_PASS), _mode(0)
 {
     _current_channel = NULL;
 	return ;
@@ -23,21 +23,20 @@ User::User(User const & cpy)
 
 User & User::operator=(User const & rhs)
 {
-	(void)rhs;
-    _fd = rhs._fd;
-    _nick = rhs._nick;
-    _mode = rhs._mode;
-    _buffer = rhs._buffer;
-    _status = rhs._status;
-    _username = rhs._username;
-    _hostname = rhs._hostname;
-    _realname = rhs._realname;
-    _operator = rhs._operator;
-    _servername = rhs._servername;
-    _current_channel = rhs._current_channel;
+    _fd                 = rhs._fd;
+    _nick               = rhs._nick;
+    _mode               = rhs._mode;
+    _buffer             = rhs._buffer;
+    _status             = rhs._status;
+    _username           = rhs._username;
+    _hostname           = rhs._hostname;
+    _realname           = rhs._realname;
+    _operator           = rhs._operator;
+    _servername         = rhs._servername;
+    _current_channel    = rhs._current_channel;
+
 	return *this;
 }
-
 
 void    User::send(std::string const & request)
 {
@@ -52,7 +51,6 @@ void User::kick(std::string const & reason)
     send(getPrefix() + " QUIT: " + reason);
     setStatus(DISCONNECT);
 }
-
 
 void User::setNick(std::string const nick)
 {
@@ -121,11 +119,7 @@ const   int & User::getFd() const
  { return _fd; }
 
 const std::string User::getPrefix() const
-{
-    if (_nick.size())
-        return (getNick() + "!" + getUserName()+ "@"  + getServerName());
-     return ("*");
-}
+{ return (getNick() + "!" + getUserName()+ "@"  + getServerName()); }
 
 const  std::string & User::getNick() const
 { return _nick; }

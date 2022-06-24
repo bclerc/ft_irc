@@ -17,11 +17,12 @@ class Channel {
 
         void addUser(User & user);
         void removeUser(User & User);
-        void setOperator(User & user);
+        void setOperator(User & user, bool mode);
 
         bool isOnChannel(User const & user) const;
         bool isOperator(User const & user)  const;
 
+        const std::string & getName(void) const;
     private:
         User         *          _owner;
         std::string             _name;
