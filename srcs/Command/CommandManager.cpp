@@ -8,7 +8,7 @@ void CommandManager::_register_cmds()
 	_cmd_registre["PING"] = pingCommand;
     _cmd_registre["MODE"] = modeCommand;
     _cmd_registre["QUIT"] = quitCommand;
-    _cmd_registre["JOIN"] = quitCommand;
+    _cmd_registre["JOIN"] = joinCommand;
 }
 
 void CommandManager::_execute(Command & command)

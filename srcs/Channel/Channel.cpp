@@ -6,13 +6,6 @@ Channel::Channel(std::string const & name, User & owner)
     return ;
 }
 
-Channel::Channel(std::string const & name)
-: _name(name)
-{
-    return ;
-}
-
-
 Channel::Channel(void)
 {
     return ;
@@ -22,6 +15,11 @@ Channel::Channel(Channel const & cpy)
 {
     *this = cpy;
     return ;
+}
+
+void Channel::addUser(User & user)
+{
+	_users.push_back(user);
 }
 
 void Channel::setOperator(User & user, bool op)

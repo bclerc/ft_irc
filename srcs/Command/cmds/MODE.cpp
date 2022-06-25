@@ -101,7 +101,7 @@ void modeCommand(CommandManager::Command & command)
 {
 	User & sender = *command.sender;
 
-    if (command.size <= 2)
+	 if (command.size <= 2)
     {
         sender.send(ERR_NEEDMOREPARAMS(sender.getNick(), command.command));
         return ;

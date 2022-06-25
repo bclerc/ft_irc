@@ -13,6 +13,7 @@ SOURCES_FILES = srcs/main.cpp \
 				srcs/Command/cmds/QUIT.cpp \
 				srcs/Command/cmds/MODE.cpp \
 				srcs/Command/cmds/PING.cpp \
+				srcs/Command/cmds/JOIN.cpp \
 				srcs/Command/rfc/replies.cpp \
 				srcs/Channel/Channel.cpp \
 				srcs/Server.cpp
