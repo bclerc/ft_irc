@@ -11,6 +11,7 @@ class Channel {
     public:
 
         Channel (void);
+        Channel (std::string const & name);
         Channel (std::string const & name, User & owner);
         Channel(Channel const & cpy);
         ~Channel (void);

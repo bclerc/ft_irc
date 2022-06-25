@@ -6,6 +6,13 @@ Channel::Channel(std::string const & name, User & owner)
     return ;
 }
 
+Channel::Channel(std::string const & name)
+: _name(name)
+{
+    return ;
+}
+
+
 Channel::Channel(void)
 {
     return ;
