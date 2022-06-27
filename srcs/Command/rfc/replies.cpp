@@ -21,7 +21,8 @@ string RPL_CREATED (string nick, string date)
 string RPL_MYINFO (string nick, string servername, string version, string usermode, string channelmode)
 { return ("004 "+ nick + " " + servername + " " + version + " " + usermode + " " + channelmode); }
 
-//stirng RPL_TOPIC ()
+string RPL_TOPIC (string nick, string chan_name, string chan_topic)
+{ return ("332 " + nick + " " + chan_name + " " + chan_topic); }
 
 // ERR
 string ERR_CLOSINGLINK(string nick, string user, string host, string reason)
