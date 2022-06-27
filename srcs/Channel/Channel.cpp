@@ -40,6 +40,12 @@ void Channel::setOperator(User & user, bool op)
 	}
 }
 
+void Channel::sendAll(std::string const & message)
+{
+	for (iterator it = _users.begin(); it != _users.end(); it++)
+		it->send(":" + it->getNick() + " ");
+}
+
 bool Channel::isOperator(User const & user) const
 {
 	std::vector<User>::const_iterator it = _operator.begin();
