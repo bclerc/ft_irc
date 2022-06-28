@@ -63,6 +63,9 @@ const std::string & Channel::getName(void) const
 	return _name;
 }
 
+const std::vector<User> & Channel::getUsers() const
+{ return _users; }
+
 Channel::~Channel(void)
 {
     return ;

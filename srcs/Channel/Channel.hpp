@@ -24,6 +24,7 @@ class Channel {
         bool isOnChannel(User const & user) const;
         bool isOperator(User const & user)  const;
 
+        const std::vector<User> & getUsers() const;
         const std::string & getName(void) const;
     private:
         User         *          _owner;
