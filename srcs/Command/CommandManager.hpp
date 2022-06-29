@@ -54,7 +54,7 @@ void    userCommand(CommandManager::Command & command);
 void    quitCommand(CommandManager::Command & command);
 void    modeCommand(CommandManager::Command & command);
 void    joinCommand(CommandManager::Command & command);
-
+void    privmsgCommand(CommandManager::Command & command);
 
 
 

@@ -4,14 +4,14 @@ void joinCommand(CommandManager::Command & command)
 {
 	User & sender = *command.sender;
  	std::string name_User;
-	std::vector<std::string> chan;
+	std::vector<std::string> channel_list;
 	
 	Channel & new_channel = server.isChannel(command.args[0]) ?  server.getChannel(command.args[0]) : server.createChannel(command.args[0], *command.sender);	
-	chan.push_back(new_channel.getName());
+	channel_list.push_back(new_channel.getName());
 
-	std::vector<std::string>::iterator it_chan = chan.begin();
+	std::vector<std::string>::iterator it_chan = channel_list.begin();
 	
-	while (it_chan != chan.end())
+	while (it_chan != channel_list.end())
 	{
 		new_channel.addUser(*command.sender);
 		sender.send(":" + sender.getNick() + " JOIN :" + new_channel.getName());

@@ -43,6 +43,7 @@ class User {
 		void	kick (std::string const & reason);
 		void	send(std::string const & request);
 		void	log(std::string const message) const;
+		void	addChannelList(Channel &chanel);
 
 		const int			& getFd() const;
 		const Status		& getStatus() const;
@@ -52,14 +53,14 @@ class User {
 		const std::string 	& getServerName() const;
 		const std::string 	& getRealname() const;
 		const std::string 	 getPrefix() const;
-		
+
 		Channel				& getChannel();
 		std::string			& getBuffer();
 
 		bool isRegister(void)	const;
 		bool isConnected(void)	const;
 		bool isOperator(void)	const;
-		
+
 
 	private:
 		int _fd;
@@ -75,7 +76,7 @@ class User {
 		std::string _servername;
 		std::string _realname;
 		std::string _buffer;
-
+		
 		Channel	*	_current_channel;
 
 };
