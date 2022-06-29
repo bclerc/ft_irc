@@ -11,17 +11,21 @@ class Channel {
     public:
 
         Channel (void);
+        Channel (std::string const & name);
         Channel (std::string const & name, User & owner);
         Channel(Channel const & cpy);
+        Channel & operator=(Channel const & rhs);
         ~Channel (void);
 
         void addUser(User & user);
         void removeUser(User & User);
         void setOperator(User & user, bool mode);
+		void sendAll(std::string const & message);
 
         bool isOnChannel(User const & user) const;
         bool isOperator(User const & user)  const;
 
+        const std::vector<User> & getUsers() const;
         const std::string & getName(void) const;
     private:
         User         *          _owner;

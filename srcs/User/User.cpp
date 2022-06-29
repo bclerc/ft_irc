@@ -34,7 +34,7 @@ User & User::operator=(User const & rhs)
     _operator           = rhs._operator;
     _servername         = rhs._servername;
     _current_channel    = rhs._current_channel;
-
+    
 	return *this;
 }
 
