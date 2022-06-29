@@ -3,6 +3,7 @@
 Channel::Channel(std::string const & name, User & owner)
 : _name(name), _owner(&owner)
 {
+	setOperator(owner, true);
     return ;
 }
 
@@ -38,6 +39,15 @@ void Channel::setOperator(User & user, bool op)
 	} else {
 		_operator.push_back(user);
 	}
+}
+
+Channel & Channel::operator=(Channel const & rhs)
+{
+    _owner = rhs._owner;
+    _name = rhs._name;
+    _users = rhs._users;
+    _operator = rhs._operator;
+    return *this;
 }
 
 void Channel::sendAll(std::string const & message)

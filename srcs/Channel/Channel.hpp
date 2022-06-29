@@ -14,6 +14,7 @@ class Channel {
         Channel (std::string const & name);
         Channel (std::string const & name, User & owner);
         Channel(Channel const & cpy);
+        Channel & operator=(Channel const & rhs);
         ~Channel (void);
 
         void addUser(User & user);

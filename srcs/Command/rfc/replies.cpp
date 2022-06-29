@@ -21,8 +21,12 @@ string RPL_CREATED (string nick, string date)
 string RPL_MYINFO (string nick, string servername, string version, string usermode, string channelmode)
 { return ("004 "+ nick + " " + servername + " " + version + " " + usermode + " " + channelmode); }
 
-//string RPL_NAMREPLY (string nick, string chan_name)
-//{ return ("353 " + nick + " = " + chan_name + " :") }
+string RPL_NAMREPLY (string prefix, string nick, string chan_name, string user)
+{ return (":" + prefix + " 353 " + nick + " = " + chan_name + " :" + user); }
+
+string RPL_ENDOFNAMES (string prefix, string nick, string chan_name)
+{ return (":" + prefix + " 366 " + nick + " " + chan_name + " :End of NAMES list"); }
+
 
 // ERR
 string ERR_CLOSINGLINK(string nick, string user, string host, string reason)
