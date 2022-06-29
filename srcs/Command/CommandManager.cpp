@@ -2,6 +2,7 @@
 
 void CommandManager::_register_cmds()
 {
+    _cmd_registre["WHO"] = whoCommand;
 	_cmd_registre["PASS"] = passCommand;
 	_cmd_registre["NICK"] = nickCommand;
     _cmd_registre["USER"] = userCommand;

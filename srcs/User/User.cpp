@@ -45,6 +45,13 @@ void    User::send(std::string const & request)
     return ;
 }
 
+void   User::sendWithOut(std::string const & request, ITarget & out)
+{
+	(void)out;
+	send(request);
+	return ;
+}
+
 void User::kick(std::string const & reason)
 {
     _buffer.clear();

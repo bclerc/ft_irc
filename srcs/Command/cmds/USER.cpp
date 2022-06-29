@@ -39,9 +39,6 @@ void userCommand(CommandManager::Command & command)
     sender.setStatus(User::REGISTER);
 	// c pour debug ca
     if (server.getUsers().size() == 1)
-	{
         sender.setOperator(true);
-		server.createChannel("#lol", sender);
-	}
 	return ;
 }

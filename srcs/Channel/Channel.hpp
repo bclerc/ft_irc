@@ -21,17 +21,23 @@ class Channel : virtual public ITarget {
         void removeUser(User & User);
         void setOperator(User & user, bool mode);
 		void send(std::string const & message);
+		void sendWithOut(std::string const & message, ITarget & out);
 
         bool isOnChannel(User const & user) const;
         bool isOperator(User const & user)  const;
+        bool isOperator(User const * user)  const;
 
-        const std::vector<User> & getUsers() const;
+
+        const std::vector<User*> & getUsers() const;
         const std::string & getName(void) const;
     private:
+
+		typedef typename std::vector<User*>::iterator iterator;
+
         User         *          _owner;
         std::string             _name;
-        std::vector<User>       _users;
-        std::vector<User>       _operator;
+        std::vector<User*>       _users;
+        std::vector<User*>       _operator;
 
 };
 

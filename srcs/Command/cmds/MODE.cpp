@@ -30,8 +30,7 @@ void mode_channel(CommandManager::Command & command, User & sender)
 
 	if (command.size == 2)
 	{
-	//	sender.send(":" + sender.getPrefix() + " 324 " + sender.getName() + " " + command.args[0] + " +n");
-	//	sender.send(":" + sender.getPrefix() + " 315 " + sender.getName() + " " +  sender.getName() + " :End of /WHO list.");
+		sender.send(":" + sender.getPrefix() + " 324 " + sender.getName() + " " + command.args[0] + " +n");
 		return ;
 	}
 
