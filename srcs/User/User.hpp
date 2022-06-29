@@ -11,7 +11,7 @@
 
 class Channel;
 
-class User {
+class User : public ITarget {
 
 	public:
 
@@ -47,7 +47,7 @@ class User {
 
 		const int			& getFd() const;
 		const Status		& getStatus() const;
-		const std::string 	& getNick() const;
+		const std::string 	& getName() const;
 		const std::string 	& getUserName() const;
 		const std::string 	& getHostName() const;
 		const std::string 	& getServerName() const;

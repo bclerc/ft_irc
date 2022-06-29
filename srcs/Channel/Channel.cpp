@@ -50,10 +50,10 @@ Channel & Channel::operator=(Channel const & rhs)
     return *this;
 }
 
-void Channel::sendAll(std::string const & message)
+void Channel::send(std::string const & message)
 {
 	for (iterator it = _users.begin(); it != _users.end(); it++)
-		it->send(":" + it->getNick() + " ");
+		it->send(message);
 }
 
 bool Channel::isOperator(User const & user) const
@@ -62,7 +62,7 @@ bool Channel::isOperator(User const & user) const
 
 	for (; it != _operator.end(); it++)
 	{
-		if (it->getNick() == user.getNick())
+		if (it->getName() == user.getName())
 			return true;
 	}
 	return false;
@@ -78,5 +78,6 @@ const std::vector<User> & Channel::getUsers() const
 
 Channel::~Channel(void)
 {
+	delete this;
     return ;
 }

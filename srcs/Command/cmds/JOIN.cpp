@@ -14,20 +14,22 @@ void joinCommand(CommandManager::Command & command)
 	while (it_chan != channel_list.end())
 	{
 		new_channel.addUser(*command.sender);
-		sender.send(":" + sender.getNick() + " JOIN :" + new_channel.getName());
 
 	  	const_iterator it_user = new_channel.getUsers().begin();
+		name_User += "";
 	    while (it_user != new_channel.getUsers().end())
 	    {
-			name_User += " ";
 		    if (new_channel.isOperator(*it_user))
-		      name_User += "@" + it_user->getNick();
+		      name_User += "@" + it_user->getName();
 			else
-	    		name_User +="+" + it_user->getNick();
-	    	++it_user;
+				name_User +="+" + it_user->getName();
+	    	if (it_user + 1 != new_channel.getUsers().end())
+				name_User += " ";
+			++it_user;
 	    }
-	   sender.send(RPL_NAMREPLY(sender.getPrefix(), sender.getNick(), new_channel.getName(), name_User));
-	   sender.send(RPL_ENDOFNAMES(sender.getPrefix(), sender.getNick(), new_channel.getName()));
+	   	sender.send(RPL_NAMREPLY(sender.getPrefix(), sender.getName(), new_channel.getName(), name_User));
+	   	sender.send(RPL_ENDOFNAMES(sender.getPrefix(), sender.getName(), new_channel.getName()));
+		new_channel.send(":" + sender.getPrefix() + " JOIN :" + new_channel.getName());
 		++it_chan;
 	}
 }

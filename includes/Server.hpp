@@ -1,9 +1,11 @@
 #ifndef SERVER_HPP
 # define SERVER_HPP
  
+# include "ITarget.hpp"
 # include "../srcs/Command/CommandManager.hpp"
 # include "../srcs/User/User.hpp"
 # include "../srcs/Channel/Channel.hpp"
+
 
 
 # include <iostream>
@@ -24,8 +26,8 @@ class CommandManager;
 
 typedef std::vector<User>::iterator iterator;
 typedef std::vector<User>::const_iterator const_iterator;
-typedef std::map<std::string, Channel>::iterator channel_iterator;
-typedef std::map<std::string, Channel>::const_iterator const_channel_iterator;
+typedef std::map<std::string, Channel*>::iterator channel_iterator;
+typedef std::map<std::string, Channel*>::const_iterator const_channel_iterator;
 
 class Server {
 
@@ -46,7 +48,7 @@ class Server {
 		
 		const std::string 		&	getPass() const; 
 		const std::vector<User> &	getUsers() const;
-		const std::map<std::string, Channel> & getChannelMap(void) const;
+		const std::map<std::string, Channel*> & getChannelMap(void) const;
 
 		bool	isUser(std::string const & name);
 		bool	isChannel(std::string const & name);
@@ -55,6 +57,8 @@ class Server {
 
 		Channel	& createChannel(std::string const & name, User & owner);
 		Channel & getChannel(std::string const & name);
+		
+		ITarget & getTarget(std::string const & name);
 
 	private:
 
@@ -67,7 +71,7 @@ class Server {
 		struct sockaddr_in _address;
 
 		std::vector<User> _users;
-		std::map<std::string, Channel>  _channels;		
+		std::map<std::string, Channel *>  _channels;		
 
 		void	_run(fd_set & readfds);
 		void 	_accept_connection(fd_set & readfds);
@@ -75,8 +79,17 @@ class Server {
 		void 	_get_requests(fd_set & readfds, CommandManager & commandManager);
 		void	_remove_disconnect();
 
+	public:
 	
+		class UserNotFoundException : public std::exception {
+			public:
+				virtual const char * what() const throw();
+		};
 
+		class ChannelNotFoundException : public std::exception {
+			public:
+				virtual const char * what() const throw();
+		};
 };
 
 extern Server server;

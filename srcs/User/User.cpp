@@ -119,9 +119,9 @@ const   int & User::getFd() const
  { return _fd; }
 
 const std::string User::getPrefix() const
-{ return (getNick() + "!" + getUserName()+ "@"  + getServerName()); }
+{ return (getName() + "!" + getUserName()+ "@"  + getServerName()); }
 
-const  std::string & User::getNick() const
+const  std::string & User::getName() const
 { return _nick; }
 
 Channel & User::getChannel(void)

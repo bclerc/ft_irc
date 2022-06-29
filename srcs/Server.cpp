@@ -198,13 +198,11 @@ User & Server::getUser(std::string const & name)
 
 	while (it != _users.end())
 	{
-		if ((*it).getNick() == name)
-			break ;
+		if ((*it).getName() == name)
+			return (*it);
 		it++;
 	}
-	if (it == _users.end())
-		throw std::exception(); // Same
-	return (*it);
+	throw UserNotFoundException();
 }
 
 bool	Server::isUser(std::string const & name)
@@ -236,10 +234,10 @@ Channel & Server::createChannel(std::string const & name, User & owner)
 {
 	std::pair<channel_iterator, bool> ret;
 
-	ret = _channels.insert(std::make_pair(name, Channel(name, owner)));
+	ret = _channels.insert(std::make_pair(name, new Channel(name, owner)));
 	if (!ret.second)
 		throw std::exception();											// Refaire une exeption
-	return ((*ret.first).second);
+	return (*(*ret.first).second);
 }
 
 Channel & Server::getChannel(std::string const & name)
@@ -248,11 +246,18 @@ Channel & Server::getChannel(std::string const & name)
 
 	it = _channels.find(name);
 	if (it == _channels.end())
-		throw std::exception();
-	return (it->second);
+		throw ChannelNotFoundException();
+	return (*it->second);
 }
 
-const std::map<std::string, Channel> & Server::getChannelMap(void) const
+ITarget & Server::getTarget(std::string const & name)
+{
+	if ((const char)name[0] == '#')
+		return (getChannel(name));
+	return (getUser(name));
+}
+
+const std::map<std::string, Channel*> & Server::getChannelMap(void) const
 { return _channels; }
 
 void	Server::shutdown(void) 
@@ -264,6 +269,7 @@ void	Server::shutdown(void)
 	close(_master_socket);
 	_master_socket = -1;
 	_users.clear();
+	_channels.clear();
 	exit(0);
 }
 
@@ -282,3 +288,10 @@ void Server::log(std::string const message) const
 	}
 	std::cout << timer << "[Server][Info] " << message << std::endl;
 }
+
+
+const char * Server::UserNotFoundException::what() const throw()
+{ return ("User not found"); }
+
+const char * Server::ChannelNotFoundException::what() const throw()
+{ return ("Channel not found"); }

@@ -6,7 +6,7 @@
 
 class User;
 
-class Channel {
+class Channel : virtual public ITarget {
 
     public:
 
@@ -20,7 +20,7 @@ class Channel {
         void addUser(User & user);
         void removeUser(User & User);
         void setOperator(User & user, bool mode);
-		void sendAll(std::string const & message);
+		void send(std::string const & message);
 
         bool isOnChannel(User const & user) const;
         bool isOperator(User const & user)  const;
