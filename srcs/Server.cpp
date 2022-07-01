@@ -214,6 +214,11 @@ bool	Server::isUser(std::string const & name)
 	return true;
 }
 
+bool	Server::isUser(ITarget const & target)
+{
+	return (target.getName()[0] != '#');
+}
+
 bool Server::isChannel(std::string const & name)
 {
 	channel_iterator it;

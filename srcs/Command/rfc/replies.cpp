@@ -27,6 +27,11 @@ string RPL_NAMREPLY (string prefix, string nick, string chan_name, string user)
 string RPL_ENDOFNAMES (string prefix, string nick, string chan_name)
 { return (":" + prefix + " 366 " + nick + " " + chan_name + " :End of /NAMES list"); }
 
+string RPL_YOUROPER (string nick)
+{ return ("381 " + nick + " :You are now an IRC operator"); }
+
+string RPL_NOTONCHANNEL (string nick, string chan_name)
+{ return ("442 " + nick + " " + chan_name + " :You are not on that channel"); }
 
 // ERR
 string ERR_CLOSINGLINK(string nick, string user, string host, string reason)
@@ -64,3 +69,6 @@ string ERR_NOSUCHCHANNEL (string nick, string channel)
 
 string ERR_UMODEUNKNOWNFLAG (string nick, const char flag)
 { return ("501 " + nick + " :Unkown MODE flag"); }
+
+string ERR_PASSWDMISMATCH (string nick)
+{ return ("464 " + nick + " :Password incorrect"); }

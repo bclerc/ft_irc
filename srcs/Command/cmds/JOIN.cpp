@@ -7,6 +7,7 @@ void joinCommand(CommandManager::Command & command)
 	
 	Channel & new_channel = server.isChannel(command.args[0]) ?  server.getChannel(command.args[0]) : server.createChannel(command.args[0], *command.sender);	
 	new_channel.addUser(*command.sender);
+	sender.setChannel(&new_channel);
 
 	std::vector<User*>::const_iterator it_user = new_channel.getUsers().begin();
 	name_User += "";

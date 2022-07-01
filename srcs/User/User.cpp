@@ -55,13 +55,20 @@ void   User::sendWithOut(std::string const & request, ITarget & out)
 void User::kick(std::string const & reason)
 {
     _buffer.clear();
-    send(getPrefix() + " QUIT: " + reason);
-    setStatus(DISCONNECT);
+	ITarget * target = _current_channel != NULL ? (ITarget*)_current_channel : (ITarget*)this;
+    target->send(":" + getPrefix() + " QUIT :" + reason);
+    setStatus(User::DISCONNECT);
 }
 
 void User::setNick(std::string const nick)
 {
-    send(":" + (isRegister() ? _nick : "*") + " NICK " + nick);
+	ITarget *target;
+
+	if (isOnChannel())
+		target = _current_channel;
+	else
+		target = this;
+	target->send(":" + getName() + " NICK " + nick);
     _nick = nick;
     return ;
 }
@@ -103,6 +110,9 @@ void User::setOperator(bool value)
 
 void User::setChannel(Channel & channel)
 { _current_channel = &channel; }
+
+void User::setChannel(Channel * channel)
+{ _current_channel =  channel; }
 
 const std::string & User::getUserName() const
 { return _username; }
@@ -146,6 +156,13 @@ bool User::isConnected(void) const
 
 bool User::isOperator(void) const
 { return (_operator); }
+
+bool User::isOnChannel(void) const
+{
+	if (!_current_channel)
+		return false;
+	return true;
+}
 
 void	User::log(std::string const message) const
 {

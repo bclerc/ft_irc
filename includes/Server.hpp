@@ -51,6 +51,7 @@ class Server {
 		const std::map<std::string, Channel*> & getChannelMap(void) const;
 
 		bool	isUser(std::string const & name);
+		bool	isUser(ITarget const & target);
 		bool	isChannel(std::string const & name);
 		
 		User & getUser(std::string const & name);

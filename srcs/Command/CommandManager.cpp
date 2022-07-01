@@ -10,7 +10,10 @@ void CommandManager::_register_cmds()
     _cmd_registre["MODE"] = modeCommand;
     _cmd_registre["QUIT"] = quitCommand;
     _cmd_registre["JOIN"] = joinCommand;
+    _cmd_registre["PART"] = partCommand;
+	_cmd_registre["OPER"] = operCommand;
     _cmd_registre["PRIVMSG"] = privmsgCommand;
+
 
 }
 
