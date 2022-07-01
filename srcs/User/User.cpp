@@ -148,6 +148,9 @@ Channel & User::getChannel(void)
     return (*_current_channel);
 }
 
+Channel * User::getChannelPtr(void)
+{ return _current_channel; }
+
 bool	User::isRegister(void) const 
 { return (_status == REGISTER); }
 

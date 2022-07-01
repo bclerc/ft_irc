@@ -51,6 +51,7 @@ class User : public ITarget {
 		const std::string 	 getPrefix() const;
 
 		Channel				& getChannel();
+		Channel				* getChannelPtr();
 		std::string			& getBuffer();
 
 		bool isRegister(void)	const;
