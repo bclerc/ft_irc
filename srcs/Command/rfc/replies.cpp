@@ -64,3 +64,6 @@ string ERR_NOSUCHCHANNEL (string nick, string channel)
 
 string ERR_UMODEUNKNOWNFLAG (string nick, const char flag)
 { return ("501 " + nick + " :Unkown MODE flag"); }
+
+string ERR_CANNOTSENDTOCHAN (string nick, string channel)
+{ return ("404 " + nick + " " + channel + " :Cannot send to channel"); }
