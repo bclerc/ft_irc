@@ -10,11 +10,8 @@ void joinCommand(CommandManager::Command & command)
 		Channel & channel = server.isChannel(command.args[0]) ?  server.getChannel(command.args[0]) : server.createChannel(command.args[0], *command.sender);	
 		channel.addUser(*command.sender);
 		sender.setChannel(channel);
-		std::vector<User*>::const_iterator it_user = channel.getUsers().begin();
+		const_iterator it_user = channel.getUsers().begin();
 		name_User += "";
-		int counter = 0;
-
-
 		while (it_user != channel.getUsers().end())
 		{
 			if (channel.isOperator(*it_user))

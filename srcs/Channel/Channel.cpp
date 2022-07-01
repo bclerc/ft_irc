@@ -23,6 +23,18 @@ void Channel::addUser(User & user)
 	_users.push_back(&user);
 }
 
+void Channel::removeUser(User & User)
+{
+	for (iterator it = _users.begin(); it != _users.end(); ++it)
+	{
+		if (*it == &User)
+		{
+			_users.erase(it);
+			return ;
+		}
+	}
+}
+
 void Channel::setOperator(User & user, bool op)
 {
 	if (!op)
@@ -80,6 +92,17 @@ bool Channel::isOperator(User const * user) const
 	return false;
 }
 
+bool Channel::isOnChannel(User const & user) const
+{
+	std::vector<User*>::const_iterator it = _users.begin();
+
+	for (; it != _users.end(); it++)
+	{
+		if (*it == &user)
+			return true;
+	}
+	return false;
+}
 
 const std::string & Channel::getName(void) const
 {

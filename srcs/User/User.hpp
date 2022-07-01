@@ -33,6 +33,7 @@ class User : public ITarget {
 		void	setRealName(std::string const realname);
 		void	setStatus(Status status);
 		void	setChannel(Channel & channel);
+		void	setChannel(Channel * channel);
 		void	setOperator(bool value);
 		void	kick (std::string const & reason);
 		void	send(std::string const & request);
@@ -55,6 +56,7 @@ class User : public ITarget {
 		bool isRegister(void)	const;
 		bool isConnected(void)	const;
 		bool isOperator(void)	const;
+		bool isOnChannel(void)	const;
 
 
 	private:

@@ -28,6 +28,9 @@ string ERR_NOPRIVILEGES (string nick);
 string ERR_UMODEUNKNOWNFLAG (string nick, const char flag);
 string ERR_CHANOPRIVSNEEDED (string nick, string channel);
 string ERR_NOSUCHCHANNEL (string nick, string channel);
+string ERR_PASSWDMISMATCH (string nick);
+string RPL_YOUROPER (string nick);
+string RPL_NOTONCHANNEL (string nick, string chan_name);
 string ERR_CANNOTSENDTOCHAN (string nick, string channel);
 
 
