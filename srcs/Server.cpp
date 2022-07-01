@@ -16,8 +16,7 @@ void Server::_accept_connection(fd_set & readfds)
 			perror("accept error");
 			_exit(1);
 		}
-		User new_user(new_socket);
-		_users.push_back(new_user);
+		_users.push_back(new User(new_socket));
 	}
 }
 
@@ -30,20 +29,20 @@ void Server::_get_requests(fd_set & readfds, CommandManager & commandManager)
 	for (iterator it = _users.begin(); it != _users.end(); it++)
 	{
 		std::memset(&buffer, 0x00, 1024);
-		sd = it->getFd();
+		sd = (*it)->getFd();
 		if (FD_ISSET(sd, &readfds))
 		{
 			if ((valread = read(sd, buffer, 1024)) == 0)
 			{
 				getpeername(sd, (struct sockaddr*)&_address, &_addrlen);
 				close(sd);
-				it->log("Disconnected");
-				it->setStatus(User::DISCONNECT);
+				(*it)->log("Disconnected");
+				(*it)->setStatus(User::DISCONNECT);
 			}
-			else if (it->isConnected())
+			else if ((*it)->isConnected())
 			{
 				buffer[valread] = '\0';
-				commandManager.execCommand(&(*it), buffer);
+				commandManager.execCommand(*it, buffer);
 			}
 		}
 	}
@@ -76,10 +75,10 @@ void Server::_remove_disconnect()
 
 	while (it != _users.end())
 	{
-		if ((*it).getStatus() == User::DISCONNECT)
+		if ((*it)->getStatus() == User::DISCONNECT)
 		{
-			it->log("Disconnected");
-			close((*it).getFd());
+			(*it)->log("Disconnected");
+			close((*it)->getFd());
 			_users.erase(it);
 			it = _users.begin();
 			continue;
@@ -88,14 +87,13 @@ void Server::_remove_disconnect()
 	}
 }
 
-void Server::_copy_fd(std::vector<User> & clients, fd_set & readfds)
+void Server::_copy_fd(std::vector<User*> & clients, fd_set & readfds)
 {
-	typedef std::vector<User>::iterator iterator;
 	int sd;
 
 	for (iterator it = _users.begin(); it != _users.end(); it++)
 	{
-		sd = it->getFd();
+		sd = (*it)->getFd();
 		if (sd > 0)
 			FD_SET(sd, &readfds);
 		if (sd > _max_sd)
@@ -180,16 +178,16 @@ void Server::send_all()
 {
 	for (iterator it = _users.begin(); it != _users.end(); it++)
 	{
-		if (it->getBuffer().size())
-			write(it->getFd(), it->getBuffer().c_str(), it->getBuffer().length());
-		it->getBuffer().clear();
+		if ((*it)->getBuffer().size())
+			write((*it)->getFd(), (*it)->getBuffer().c_str(), (*it)->getBuffer().length());
+		(*it)->getBuffer().clear();
 	}
 }
 
 const std::string & Server::getPass() const
 { return (_server_password); }
 
-const std::vector<User> & Server::getUsers() const
+const std::vector<User*> & Server::getUsers() const
 { return (_users); }
 
 User & Server::getUser(std::string const & name)
@@ -198,13 +196,11 @@ User & Server::getUser(std::string const & name)
 
 	while (it != _users.end())
 	{
-		if ((*it).getNick() == name)
-			break ;
+		if ((*it)->getName() == name)
+			return (**it);
 		it++;
 	}
-	if (it == _users.end())
-		throw std::exception(); // Same
-	return (*it);
+	throw UserNotFoundException();
 }
 
 bool	Server::isUser(std::string const & name)
@@ -229,17 +225,17 @@ bool Server::isChannel(std::string const & name)
 void	Server::kickAll(std::string const & reason)
 {
     for (iterator it = _users.begin(); it != _users.end(); it++)
-		it->kick(reason);
+		(*it)->kick(reason);
 }
 
 Channel & Server::createChannel(std::string const & name, User & owner)
 {
 	std::pair<channel_iterator, bool> ret;
 
-	ret = _channels.insert(std::make_pair(name, Channel(name, owner)));
+	ret = _channels.insert(std::make_pair(name, new Channel(name, owner)));
 	if (!ret.second)
 		throw std::exception();											// Refaire une exeption
-	return ((*ret.first).second);
+	return (*(*ret.first).second);
 }
 
 Channel & Server::getChannel(std::string const & name)
@@ -248,11 +244,18 @@ Channel & Server::getChannel(std::string const & name)
 
 	it = _channels.find(name);
 	if (it == _channels.end())
-		throw std::exception();
-	return (it->second);
+		throw ChannelNotFoundException();
+	return (*it->second);
 }
 
-const std::map<std::string, Channel> & Server::getChannelMap(void) const
+ITarget & Server::getTarget(std::string const & name)
+{
+	if ((const char)name[0] == '#')
+		return (getChannel(name));
+	return (getUser(name));
+}
+
+const std::map<std::string, Channel*> & Server::getChannelMap(void) const
 { return _channels; }
 
 void	Server::shutdown(void) 
@@ -264,6 +267,7 @@ void	Server::shutdown(void)
 	close(_master_socket);
 	_master_socket = -1;
 	_users.clear();
+	_channels.clear();
 	exit(0);
 }
 
@@ -282,3 +286,10 @@ void Server::log(std::string const message) const
 	}
 	std::cout << timer << "[Server][Info] " << message << std::endl;
 }
+
+
+const char * Server::UserNotFoundException::what() const throw()
+{ return ("User not found"); }
+
+const char * Server::ChannelNotFoundException::what() const throw()
+{ return ("Channel not found"); }

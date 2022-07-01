@@ -25,7 +25,7 @@ string RPL_NAMREPLY (string prefix, string nick, string chan_name, string user)
 { return (":" + prefix + " 353 " + nick + " = " + chan_name + " :" + user); }
 
 string RPL_ENDOFNAMES (string prefix, string nick, string chan_name)
-{ return (":" + prefix + " 366 " + nick + " " + chan_name + " :End of NAMES list"); }
+{ return (":" + prefix + " 366 " + nick + " " + chan_name + " :End of /NAMES list"); }
 
 
 // ERR

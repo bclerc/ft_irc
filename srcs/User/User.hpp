@@ -3,15 +3,9 @@
 # include "../../includes/Server.hpp"
 # include <iostream>
 
-# define mode_invisible 1
-# define mode_receipt_notice 2;
-# define mode_receive_wallops 4;
-# define mode_operator 8
-
-
 class Channel;
 
-class User {
+class User : public ITarget {
 
 	public:
 
@@ -42,12 +36,13 @@ class User {
 		void	setOperator(bool value);
 		void	kick (std::string const & reason);
 		void	send(std::string const & request);
+		void	sendWithOut(std::string const & request, ITarget & out);
 		void	log(std::string const message) const;
 		void	addChannelList(Channel &chanel);
 
 		const int			& getFd() const;
 		const Status		& getStatus() const;
-		const std::string 	& getNick() const;
+		const std::string 	& getName() const;
 		const std::string 	& getUserName() const;
 		const std::string 	& getHostName() const;
 		const std::string 	& getServerName() const;
