@@ -72,3 +72,6 @@ string ERR_UMODEUNKNOWNFLAG (string nick, const char flag)
 
 string ERR_PASSWDMISMATCH (string nick)
 { return ("464 " + nick + " :Password incorrect"); }
+
+string ERR_CANNOTSENDTOCHAN (string nick, string channel)
+{ return ("404 " + nick + " " + channel + " :Cannot send to channel"); }

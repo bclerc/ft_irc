@@ -31,8 +31,7 @@ string ERR_NOSUCHCHANNEL (string nick, string channel);
 string ERR_PASSWDMISMATCH (string nick);
 string RPL_YOUROPER (string nick);
 string RPL_NOTONCHANNEL (string nick, string chan_name);
-
-
+string ERR_CANNOTSENDTOCHAN (string nick, string channel);
 
 
 
