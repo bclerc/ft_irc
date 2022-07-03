@@ -58,6 +58,7 @@ void    privmsgCommand(CommandManager::Command & command);
 void	whoCommand(CommandManager::Command & command);
 void	operCommand(CommandManager::Command & command);
 void 	partCommand(CommandManager::Command & command);
+void    kickCommand(CommandManager::Command & command);
 
 
 #endif

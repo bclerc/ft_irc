@@ -35,6 +35,18 @@ void Channel::removeUser(User & User)
 	}
 }
 
+void Channel::removeUser(std::string user)
+{
+	for (iterator it = _users.begin(); it != _users.end(); ++it)
+	{
+		if ((*it)->getName() == user)
+		{
+			_users.erase(it);
+			return ;
+		}
+	}
+}
+
 void Channel::setOperator(User & user, bool op)
 {
 	if (!op)

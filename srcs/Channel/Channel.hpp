@@ -19,6 +19,7 @@ class Channel : virtual public ITarget {
 
         void addUser(User & user);
         void removeUser(User & User);
+        void removeUser(std::string user);
         void setOperator(User & user, bool mode);
 		void send(std::string const & message);
 		void sendWithOut(std::string const & message, ITarget & out);

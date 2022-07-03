@@ -16,6 +16,7 @@ string RPL_NAMREPLY (string prefix, string nick, string chan_name, string user);
 string RPL_ENDOFNAMES (string prefix, string nick, string chan_name);
 string RPL_MOTDSTART (string nick);
 string RPL_ENDOFMOTD (string nick);
+string RPL_KICK (string nick);
 
 // ERR
 string ERR_CLOSINGLINK(string nick, string user, string host, string reason);
@@ -34,6 +35,8 @@ string ERR_PASSWDMISMATCH (string nick);
 string RPL_YOUROPER (string nick);
 string RPL_NOTONCHANNEL (string nick, string chan_name);
 string ERR_CANNOTSENDTOCHAN (string nick, string channel);
+string ERR_NOTONCHANNEL (string nick, string channel);
+string ERR_USERNOTINCHANNEL (string nick, string channel, string user);
 
 
 
