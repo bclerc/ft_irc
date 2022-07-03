@@ -2,13 +2,13 @@
 #include "User.hpp"
 
 User::User(int & fd)
-: _fd(fd), _nick("*"),  _status(UNREGISTER_PASS), _mode(0)
+: _fd(fd), _nick("*"),  _status(UNREGISTER), _mode(0)
 {
 	return ;
 }
 
 User::User(void)
-: _fd(-1), _nick("*"), _status(UNREGISTER_PASS), _mode(0)
+: _fd(-1), _nick("*"), _status(UNREGISTER), _mode(0)
 {
 	return ;
 }
@@ -47,7 +47,7 @@ void    User::sendToChannels(std::string const & request)
 {
     std::vector<Channel *>::iterator it;
     for (it = _current_channel.begin(); it != _current_channel.end(); it++)
-        (*it)->send(request);
+        (*it)->sendWithOut(request, *this);
 }
 
 void   User::sendWithOut(std::string const & request, ITarget & out)
@@ -61,9 +61,14 @@ void User::kick(std::string const & reason)
 {
     _buffer.clear();
     if (isOnChannel())
-        sendToChannels(":" + getPrefix() + " QUIT :" + reason);
-    else
-        this->send(":" + getPrefix() + " QUIT :" + reason);
+    {
+        for (std::vector<Channel *>::iterator it = _current_channel.begin(); it != _current_channel.end(); it++)
+        {
+            (*it)->sendWithOut(":" + getPrefix() + " QUIT :" + reason, *this);
+            (*it)->removeUser(*this);
+        }
+    }
+    this->send(":" + getPrefix() + " QUIT :" + reason);
     setStatus(User::DISCONNECT);
 }
 
@@ -71,8 +76,7 @@ void User::setNick(std::string const nick)
 {
 	if (isOnChannel())
         sendToChannels(":" + getName() + " NICK " + nick);
-	else
-	    this->send(":" + getName() + " NICK " + nick);
+	this->send(":" + getName() + " NICK " + nick);
     _nick = nick;
     return ;
 }
@@ -160,7 +164,7 @@ const  std::string & User::getName() const
 { return _nick; }
 
 bool	User::isRegister(void) const 
-{ return (_status == REGISTER); }
+{ return (_status > UNREGISTER_PASS); }
 
 bool User::isConnected(void) const
 { return (_status != DISCONNECT); }
@@ -186,6 +190,7 @@ bool User::isOnChannel(std::string const & channel) const
     }
     return false;
 }
+
 void	User::log(std::string const message) const
 {
 	server.log("(" + std::to_string(_fd)+ ") " + _nick + ": "  + message);

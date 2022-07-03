@@ -26,9 +26,9 @@ void CommandManager::_execute(Command & command)
     if (cmd_it != _cmd_registre.end())
     {
         if (command.command != "PASS"
-            && command.sender->getStatus() == User::UNREGISTER)
+            && command.sender->getStatus() < User::UNREGISTER_PASS)
         {
-            command.sender->kick(ERR_CLOSINGLINK(command.sender->getName(), "", "", "No register"));
+            command.sender->kick("Not register");
             return ;
         }
         if (command.sender->getStatus() != User::DISCONNECT)
@@ -86,7 +86,7 @@ CommandManager::CommandManager(CommandManager & cpy)
 bool CommandManager::_ignore(std::string & request, const size_t & pos)
 {
     std::vector<string>::iterator it;
-    std::vector<string> cmd({"CAP", "WHOIS"}); // MODE a faire
+    std::vector<string> cmd({"CAP", "WHOIS", "WHO"});
 
     for (it = cmd.begin(); it != cmd.end(); it++)
     {
