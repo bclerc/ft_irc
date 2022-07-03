@@ -13,7 +13,7 @@ void CommandManager::_register_cmds()
     _cmd_registre["PART"] = partCommand;
 	_cmd_registre["OPER"] = operCommand;
     _cmd_registre["PRIVMSG"] = privmsgCommand;
-
+    _cmd_registre["NOTICE"] = privmsgCommand;
 
 }
 
@@ -37,11 +37,6 @@ void CommandManager::_execute(Command & command)
     command.args.clear();
 }
 
-/**
-* @todo _build_args
-* Un meilleur parsing, plus "efficace" car la je pense que je peux faire mieux quand meme
-* 
-*/
 void CommandManager::_build_args(Command & command, std::string & request)
 {
     size_t pos;
@@ -62,7 +57,7 @@ void CommandManager::_build_args(Command & command, std::string & request)
 		if (!size)
 			command.command = tmp;
 		else if (trailer)
-			command.trailer += tmp + " ";
+			command.trailer += tmp + (pos == std::string::npos ? "" : " ");
 		else
 			command.args.push_back(tmp);
 		request.erase(0, pos == std::string::npos ? request.size() : pos + 1);
@@ -103,10 +98,6 @@ bool CommandManager::_ignore(std::string & request, const size_t & pos)
     return false;
 }
 
-/**
-* @todo execCommand
-* Reverifier pour le \r\n psk c'est louche la
-*/
 void CommandManager::execCommand(User * sender, char *request)
 {
     Command command;

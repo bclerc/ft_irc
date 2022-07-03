@@ -14,6 +14,8 @@ string RPL_MYINFO (string nick, string servername, string version, string usermo
 string RPL_TOPIC (string nick, string chan_name, string chan_topic);
 string RPL_NAMREPLY (string prefix, string nick, string chan_name, string user);
 string RPL_ENDOFNAMES (string prefix, string nick, string chan_name);
+string RPL_MOTDSTART (string nick);
+string RPL_ENDOFMOTD (string nick);
 
 // ERR
 string ERR_CLOSINGLINK(string nick, string user, string host, string reason);

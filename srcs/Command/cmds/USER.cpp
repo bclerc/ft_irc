@@ -5,9 +5,9 @@ void confirm_registration(CommandManager::Command & command, User & sender)
 	// Confirm to IRSSI client successful client registration based on IRC 2812
 	sender.send(RPL_WELCOME(sender.getName(), sender.getUserName(), sender.getServerName()));
     sender.send(RPL_YOURHOST(sender.getName(), "Arago", "1.20G"));
-    ///sender.send(RPL_CREATED("0/0/0"));
-    //sender.send(RPL_MYINFO(sender.getHostName(), " ", " ", " "));
-    //sender.setNick(sender.getName()); // Va savoir pourquoi il faut reconfirmer a irssi le nick de l'user
+    sender.send(RPL_MOTDSTART(sender.getName()));
+    sender.send(server.getMotd(sender));
+    sender.send(RPL_ENDOFMOTD(sender.getName()));
 }
 
 void set_param(CommandManager::Command & command, User & sender)

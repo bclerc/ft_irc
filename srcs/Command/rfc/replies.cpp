@@ -33,6 +33,13 @@ string RPL_YOUROPER (string nick)
 string RPL_NOTONCHANNEL (string nick, string chan_name)
 { return ("442 " + nick + " " + chan_name + " :You are not on that channel"); }
 
+string RPL_MOTDSTART (string nick)
+{ return ("375 " + nick + " :- Arago Message of the day -"); }
+
+string RPL_ENDOFMOTD (string nick)
+{ return ("376 " + nick + " :End of MOTD"); }
+
+
 // ERR
 string ERR_CLOSINGLINK(string nick, string user, string host, string reason)
 { return ("ERROR :Closing link: (" + user + "@" + host + ") [" + reason + "]"); }

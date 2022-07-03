@@ -5,7 +5,7 @@ void joinCommand(CommandManager::Command & command)
 	User & sender = *command.sender;
  	std::string name_User;
 	
-	if (command.size == 2)
+	if (command.size > 1)
 	{	
 		Channel & channel = server.isChannel(command.args[0]) ?  server.getChannel(command.args[0]) : server.createChannel(command.args[0], *command.sender);	
 		channel.addUser(*command.sender);
