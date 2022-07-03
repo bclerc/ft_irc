@@ -186,6 +186,7 @@ bool User::isOnChannel(std::string const & channel) const
     }
     return false;
 }
+
 void	User::log(std::string const message) const
 {
 	server.log("(" + std::to_string(_fd)+ ") " + _nick + ": "  + message);
