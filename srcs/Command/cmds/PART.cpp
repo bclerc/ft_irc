@@ -3,7 +3,7 @@
 void partCommand(CommandManager::Command & command)
 {
 	User & sender = *command.sender;
-
+	std::string	quitmsg = command.trailer.size() ? command.trailer : "Leaving";
 	if (command.args.size() < 1)
 	{
 		sender.send(ERR_NEEDMOREPARAMS(sender.getName(), command.command));
@@ -15,11 +15,11 @@ void partCommand(CommandManager::Command & command)
 
 		if (channel.isOnChannel(sender))
 		{
-			channel.send(":" + sender.getPrefix() + " PART " + channel.getName() + " :"  + command.trailer);
+			channel.send(":" + sender.getPrefix() + " PART " + channel.getName() + " :"  + quitmsg);
 			channel.removeUser(sender);
-			sender.setChannel(NULL);
+			sender.removeChannel(&channel);
 		} else
-			channel.send(RPL_NOTONCHANNEL(sender.getName(), channel.getName()));
+			sender.send(RPL_NOTONCHANNEL(sender.getName(), channel.getName()));
 	}
 	catch (Server::ChannelNotFoundException & e)
 	{

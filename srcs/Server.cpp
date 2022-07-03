@@ -260,6 +260,30 @@ ITarget & Server::getTarget(std::string const & name)
 	return (getUser(name));
 }
 
+const std::string Server::getMotd(User const & user) const
+{
+	std::string	buffer;
+
+	buffer.append("372 " + user.getName() + ":              ______                                   \n");
+	buffer.append("372 " + user.getName() + ":             /\\  _  \\                                  \n");
+	buffer.append("372 " + user.getName() + ":             \\ \\ \\L\\ \\  _ __    __       __     ___    \n");
+	buffer.append("372 " + user.getName() + ":              \\ \\  __ \\/\\`'__\\/'__`\\   /'_ `\\  / __`\\  \n");
+	buffer.append("372 " + user.getName() + ":               \\ \\ \\/\\ \\ \\ \\//\\ \\L\\.\\_/\\ \\L\\ \\/\\ \\L\\ \\ \n");
+	buffer.append("372 " + user.getName() + ":                \\ \\_\\ \\_\\ \\_\\\\ \\__/.\\_\\ \\____ \\ \\____/ \n");
+	buffer.append("372 " + user.getName() + ":                 \\/_/\\/_/\\/_/ \\/__/\\/_/\\/___L\\ \\/___/  \n");
+	buffer.append("372 " + user.getName() + ":                                         /\\____/       \n");
+	buffer.append("372 " + user.getName() + ":                                         \\_/__/        \n");
+	buffer.append("372 " + user.getName() + ":                                                        \n");			
+	buffer.append("372 " + user.getName() + ":                      ______   ____    ____       \n");
+	buffer.append("372 " + user.getName() + ":                     /\\__  _\\ /\\  _`\\ /\\  _`\\     \n");
+	buffer.append("372 " + user.getName() + ":                     \\/_/\\ \\/ \\ \\ \\L\\ \\ \\ \\/\\_\\   \n");
+	buffer.append("372 " + user.getName() + ":                        \\ \\ \\  \\ \\ ,  /\\ \\ \\/_/_  \n");
+	buffer.append("372 " + user.getName() + ":                         \\_\\ \\__\\ \\ \\\\ \\\\ \\ \\L\\ \\ \n");
+	buffer.append("372 " + user.getName() + ":                         /\\_____\\\\ \\_\\ \\_\\ \\____/ \n");
+	buffer.append("372 " + user.getName() + ":                         \\/_____/ \\/_/\\/ /\\/___/  \n");
+	return (buffer);
+}
+
 const std::map<std::string, Channel*> & Server::getChannelMap(void) const
 { return _channels; }
 

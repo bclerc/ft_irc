@@ -35,8 +35,10 @@ class User : public ITarget {
 		void	setChannel(Channel & channel);
 		void	setChannel(Channel * channel);
 		void	setOperator(bool value);
+		void	removeChannel(Channel * channel);
 		void	kick (std::string const & reason);
 		void	send(std::string const & request);
+		void	sendToChannels(std::string const & request);
 		void	sendWithOut(std::string const & request, ITarget & out);
 		void	log(std::string const message) const;
 		void	addChannelList(Channel &chanel);
@@ -50,14 +52,14 @@ class User : public ITarget {
 		const std::string 	& getRealname() const;
 		const std::string 	 getPrefix() const;
 
-		Channel				& getChannel();
-		Channel				* getChannelPtr();
 		std::string			& getBuffer();
 
 		bool isRegister(void)	const;
 		bool isConnected(void)	const;
 		bool isOperator(void)	const;
 		bool isOnChannel(void)	const;
+		bool isOnChannel(std::string const & Channel)	const;
+
 
 
 	private:
@@ -75,7 +77,7 @@ class User : public ITarget {
 		std::string _realname;
 		std::string _buffer;
 		
-		Channel	*	_current_channel;
+		std::vector<Channel	*>	_current_channel;
 
 };
 

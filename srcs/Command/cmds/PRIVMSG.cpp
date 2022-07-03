@@ -7,7 +7,7 @@ void privmsgCommand(CommandManager::Command & command)
 	try {
 		ITarget & target = server.getTarget(command.args[0]);
 	
-		if ((server.isChannel(target.getName()) && (command.command != "PRIVMSG" || sender.getChannel().getName() == target.getName()))
+		if ((server.isChannel(target.getName()) && (command.command != "PRIVMSG" || sender.isOnChannel(target.getName())))
 												|| server.isUser(target.getName()))
 			target.sendWithOut(":" + sender.getPrefix() + " " + command.command + " " + target.getName() + " :" + command.trailer, sender); 
 		else

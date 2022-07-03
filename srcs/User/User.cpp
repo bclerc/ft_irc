@@ -4,14 +4,12 @@
 User::User(int & fd)
 : _fd(fd), _nick("*"),  _status(UNREGISTER_PASS), _mode(0)
 {
-    _current_channel = NULL;
 	return ;
 }
 
 User::User(void)
 : _fd(-1), _nick("*"), _status(UNREGISTER_PASS), _mode(0)
 {
-    _current_channel = NULL;
 	return ;
 }
 
@@ -45,6 +43,13 @@ void    User::send(std::string const & request)
     return ;
 }
 
+void    User::sendToChannels(std::string const & request)
+{
+    std::vector<Channel *>::iterator it;
+    for (it = _current_channel.begin(); it != _current_channel.end(); it++)
+        (*it)->send(request);
+}
+
 void   User::sendWithOut(std::string const & request, ITarget & out)
 {
 	(void)out;
@@ -55,20 +60,19 @@ void   User::sendWithOut(std::string const & request, ITarget & out)
 void User::kick(std::string const & reason)
 {
     _buffer.clear();
-	ITarget * target = _current_channel != NULL ? (ITarget*)_current_channel : (ITarget*)this;
-    target->send(":" + getPrefix() + " QUIT :" + reason);
+    if (isOnChannel())
+        sendToChannels(":" + getPrefix() + " QUIT :" + reason);
+    else
+        this->send(":" + getPrefix() + " QUIT :" + reason);
     setStatus(User::DISCONNECT);
 }
 
 void User::setNick(std::string const nick)
 {
-	ITarget *target;
-
 	if (isOnChannel())
-		target = _current_channel;
+        sendToChannels(":" + getName() + " NICK " + nick);
 	else
-		target = this;
-	target->send(":" + getName() + " NICK " + nick);
+	    this->send(":" + getName() + " NICK " + nick);
     _nick = nick;
     return ;
 }
@@ -109,10 +113,24 @@ void User::setOperator(bool value)
 }
 
 void User::setChannel(Channel & channel)
-{ _current_channel = &channel; }
+{ _current_channel.push_back(&channel); }
 
 void User::setChannel(Channel * channel)
-{ _current_channel =  channel; }
+{ _current_channel.push_back(channel); }
+
+void User::removeChannel(Channel * channel)
+{
+    std::vector<Channel *>::iterator it;
+
+    for (it = _current_channel.begin(); it != _current_channel.end(); it++)
+    {
+        if (*it == channel)
+        {
+            _current_channel.erase(it);
+            break ;
+        }
+    }
+}
 
 const std::string & User::getUserName() const
 { return _username; }
@@ -141,16 +159,6 @@ const std::string User::getPrefix() const
 const  std::string & User::getName() const
 { return _nick; }
 
-Channel & User::getChannel(void)
-{
-    if (!_current_channel) 
-        throw std::exception();         //Pareil, creer une exception
-    return (*_current_channel);
-}
-
-Channel * User::getChannelPtr(void)
-{ return _current_channel; }
-
 bool	User::isRegister(void) const 
 { return (_status == REGISTER); }
 
@@ -162,11 +170,22 @@ bool User::isOperator(void) const
 
 bool User::isOnChannel(void) const
 {
-	if (!_current_channel)
+	if (!_current_channel.size())
 		return false;
 	return true;
 }
 
+bool User::isOnChannel(std::string const & channel) const
+{
+    std::vector<Channel *>::const_iterator it;
+
+    for (it = _current_channel.begin(); it != _current_channel.end(); it++)
+    {
+        if ((*it)->getName() == channel)
+            return true;
+    }
+    return false;
+}
 void	User::log(std::string const message) const
 {
 	server.log("(" + std::to_string(_fd)+ ") " + _nick + ": "  + message);

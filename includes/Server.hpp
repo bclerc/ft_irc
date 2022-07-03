@@ -46,8 +46,9 @@ class Server {
 		void	send_all(void);
 		void	kickAll(std::string const & reason);
 		
-		const std::string 		&	getPass() const; 
+		const std::string 		&	getPass() const;
 		const std::vector<User*> &	getUsers() const;
+		const std::string			getMotd(User const & user) const;
 		const std::map<std::string, Channel*> & getChannelMap(void) const;
 
 		bool	isUser(std::string const & name);
