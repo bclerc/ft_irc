@@ -47,7 +47,7 @@ void    User::sendToChannels(std::string const & request)
 {
     std::vector<Channel *>::iterator it;
     for (it = _current_channel.begin(); it != _current_channel.end(); it++)
-        (*it)->send(request);
+        (*it)->sendWithOut(request, *this);
 }
 
 void   User::sendWithOut(std::string const & request, ITarget & out)
@@ -61,9 +61,14 @@ void User::kick(std::string const & reason)
 {
     _buffer.clear();
     if (isOnChannel())
-        sendToChannels(":" + getPrefix() + " QUIT :" + reason);
-    else
-        this->send(":" + getPrefix() + " QUIT :" + reason);
+    {
+        for (std::vector<Channel *>::iterator it = _current_channel.begin(); it != _current_channel.end(); it++)
+        {
+            (*it)->sendWithOut(":" + getPrefix() + " QUIT :" + reason, *this);
+            (*it)->removeUser(*this);
+        }
+    }
+    this->send(":" + getPrefix() + " QUIT :" + reason);
     setStatus(User::DISCONNECT);
 }
 
@@ -71,8 +76,7 @@ void User::setNick(std::string const nick)
 {
 	if (isOnChannel())
         sendToChannels(":" + getName() + " NICK " + nick);
-	else
-	    this->send(":" + getName() + " NICK " + nick);
+	this->send(":" + getName() + " NICK " + nick);
     _nick = nick;
     return ;
 }

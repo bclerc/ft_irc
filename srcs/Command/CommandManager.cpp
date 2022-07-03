@@ -84,7 +84,7 @@ CommandManager::CommandManager(CommandManager & cpy)
 bool CommandManager::_ignore(std::string & request, const size_t & pos)
 {
     std::vector<string>::iterator it;
-    std::vector<string> cmd({"CAP", "WHOIS"}); // MODE a faire
+    std::vector<string> cmd({"CAP", "WHOIS", "WHO"});
 
     for (it = cmd.begin(); it != cmd.end(); it++)
     {
