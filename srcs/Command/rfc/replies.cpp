@@ -82,3 +82,11 @@ string ERR_PASSWDMISMATCH (string nick)
 
 string ERR_CANNOTSENDTOCHAN (string nick, string channel)
 { return ("404 " + nick + " " + channel + " :Cannot send to channel"); }
+
+string ERR_NOTONCHANNEL (string nick, string channel)
+{ return ("442 " + nick + " " + channel + " :You're not on that channel"); }
+
+string ERR_USERNOTINCHANNEL (string nick, string channel, string user)
+{ return ("441 " + nick + " " +user + " " + channel + " :They aren't on that channel"); }
+
+

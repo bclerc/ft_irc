@@ -14,6 +14,8 @@ void CommandManager::_register_cmds()
 	_cmd_registre["OPER"] = operCommand;
     _cmd_registre["PRIVMSG"] = privmsgCommand;
     _cmd_registre["NOTICE"] = privmsgCommand;
+    _cmd_registre["KICK"] = kickCommand;
+
 
 }
 
