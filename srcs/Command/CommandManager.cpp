@@ -24,9 +24,9 @@ void CommandManager::_execute(Command & command)
     if (cmd_it != _cmd_registre.end())
     {
         if (command.command != "PASS"
-            && command.sender->getStatus() == User::UNREGISTER)
+            && command.sender->getStatus() < User::UNREGISTER_PASS)
         {
-            command.sender->kick(ERR_CLOSINGLINK(command.sender->getName(), "", "", "No register"));
+            command.sender->kick("Not register");
             return ;
         }
         if (command.sender->getStatus() != User::DISCONNECT)

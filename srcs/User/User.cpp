@@ -2,13 +2,13 @@
 #include "User.hpp"
 
 User::User(int & fd)
-: _fd(fd), _nick("*"),  _status(UNREGISTER_PASS), _mode(0)
+: _fd(fd), _nick("*"),  _status(UNREGISTER), _mode(0)
 {
 	return ;
 }
 
 User::User(void)
-: _fd(-1), _nick("*"), _status(UNREGISTER_PASS), _mode(0)
+: _fd(-1), _nick("*"), _status(UNREGISTER), _mode(0)
 {
 	return ;
 }
@@ -164,7 +164,7 @@ const  std::string & User::getName() const
 { return _nick; }
 
 bool	User::isRegister(void) const 
-{ return (_status == REGISTER); }
+{ return (_status > UNREGISTER_PASS); }
 
 bool User::isConnected(void) const
 { return (_status != DISCONNECT); }
