@@ -48,9 +48,8 @@ void Channel::setOperator(User & user, bool op)
 			}
 		}
 		return ; 
-	} else {
+	} else
 		_operator.push_back(&user);
-	}
 }
 
 Channel & Channel::operator=(Channel const & rhs)

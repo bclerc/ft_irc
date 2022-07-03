@@ -2,6 +2,7 @@
 
 void pingCommand(CommandManager::Command & command)
 {
-	command.sender->send(("PONG " + command.args[0] + " :" + command.args[0]));
+	std::string ret = command.size > 1 ? (command.args[0] + " :" + command.args[0]) : "";
+	command.sender->send("PONG " + ret);
 	return ;
 }
