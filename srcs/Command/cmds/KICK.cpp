@@ -30,8 +30,8 @@ void kickCommand(CommandManager::Command & command)
 		sender.send(ERR_USERNOTINCHANNEL(sender.getName(), command.args[0], command.args[1]));
 		return;
 	}
+	channel.send(":" + sender.getPrefix() + " KICK " + command.args[0] + " " + command.args[1] +  " " + command.trailer);
 	channel.removeUser(command.args[1]);
 	sender.removeChannel(&channel);
-	channel.send(":" + sender.getPrefix() + " KICK " + command.args[0] + " " + command.args[1] +  " " + command.trailer);
 //	sender.send(":" + sender.getPrefix() + " KICK " + command.args[0] + " " + command.args[1] +  " " + command.trailer);
 }
