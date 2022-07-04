@@ -47,7 +47,7 @@ void channel_mode(CommandManager::Command const & command, User & sender)
 		else if (command.args[1] == "-o")
 			channel.setOperator(target, false);
 		else {
-			sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName(), command.args[1].c_str()[0]));
+			sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName()));
 			return ;
 		}
 		target.send(":" + sender.getName() + " MODE " + channel.getName() + " " + command.args[1] + " " + target.getName());
