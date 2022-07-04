@@ -131,6 +131,5 @@ const std::vector<User*> & Channel::getUsers() const
 
 Channel::~Channel(void)
 {
-	delete this;
     return ;
 }
