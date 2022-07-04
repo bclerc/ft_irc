@@ -1,6 +1,5 @@
 # include "../CommandManager.hpp"
 
-
 void 	user_who(CommandManager::Command & command, User & sender)
 {
 	User & target = server.getUser(command.args[0]);
