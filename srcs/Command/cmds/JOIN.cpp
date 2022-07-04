@@ -1,15 +1,15 @@
 # include "../CommandManager.hpp"
 
-/**
-* Checker si le channel est full avec channel.isFull() 
-* renvoyer la rpl ERR_CHANNELISFULL si c'est le cas
-*/
-
-void execute_join(CommandManager::Command & command, std::string channel_name,  std::string & cmd, size_t & pos)
+void execute_join(CommandManager::Command & command, std::string channel_name)
 {
 	User & sender = *command.sender;
 
 	Channel & channel = server.isChannel(channel_name) ?  server.getChannel(channel_name) : server.createChannel(channel_name, *command.sender);	
+	if(channel.isFull())
+	{
+		sender.send(ERR_CHANNELISFULL(sender.getName(), channel_name));
+		return ;
+	}
 	channel.addUser(*command.sender);
 	sender.setChannel(channel);
 	 std::string name_User;
@@ -30,7 +30,7 @@ void execute_join(CommandManager::Command & command, std::string channel_name,  
 	channel.send(":" + sender.getPrefix() + " JOIN :" + channel.getName());
 }
 
-void	join_channel(CommandManager::Command & command, User & sender)
+void	join_channel(CommandManager::Command & command)
 {	
 	size_t pos;
 	std::string cmd(command.args[0]);
@@ -38,13 +38,9 @@ void	join_channel(CommandManager::Command & command, User & sender)
 
 	while (cmd.size() > 0)
 	{
-		try {
-			pos = cmd.find(",");
-			channel_name = cmd.substr(0, pos == std::string::npos ? cmd.size() : pos);
-			execute_join(command, channel_name, cmd, pos);
-		} catch (Server::ChannelNotFoundException & e) {
-			sender.send(ERR_NOSUCHCHANNEL(sender.getName(), channel_name));
-		}
+		pos = cmd.find(",");
+		channel_name = cmd.substr(0, pos == std::string::npos ? cmd.size() : pos);
+		execute_join(command, channel_name);
 		cmd.erase(0, pos == std::string::npos ? cmd.size() : pos + 1);
 	}
 }
@@ -58,6 +54,6 @@ void joinCommand(CommandManager::Command & command)
 		sender.send(ERR_NEEDMOREPARAMS(sender.getName(), command.command));
         return ;
 	}
-	join_channel(command, sender);
+	join_channel(command);
 	return ;
 }
