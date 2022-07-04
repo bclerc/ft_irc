@@ -15,8 +15,6 @@ void CommandManager::_register_cmds()
     _cmd_registre["PRIVMSG"] = privmsgCommand;
     _cmd_registre["NOTICE"] = privmsgCommand;
     _cmd_registre["KICK"] = kickCommand;
-
-
 }
 
 void CommandManager::_execute(Command & command)
@@ -86,7 +84,7 @@ CommandManager::CommandManager(CommandManager & cpy)
 bool CommandManager::_ignore(std::string & request, const size_t & pos)
 {
     std::vector<string>::iterator it;
-    std::vector<string> cmd({"CAP", "WHOIS", "WHO"});
+    std::vector<string> cmd({"CAP", "WHOIS"});
 
     for (it = cmd.begin(); it != cmd.end(); it++)
     {

@@ -5,7 +5,7 @@ void execute_join(CommandManager::Command & command, std::string channel_name,  
 {
 	User & sender = *command.sender;
 
-	Channel & channel = server.isChannel(command.args[0]) ?  server.getChannel(command.args[0]) : server.createChannel(command.args[0], *command.sender);	
+	Channel & channel = server.isChannel(channel_name) ?  server.getChannel(channel_name) : server.createChannel(channel_name, *command.sender);	
 	channel.addUser(*command.sender);
 	sender.setChannel(channel);
 	 std::string name_User;

@@ -30,9 +30,11 @@ void execute_kick(CommandManager::Command & command, std::string user_name,  std
 		sender.send(ERR_USERNOTINCHANNEL(sender.getName(), command.args[0], command.args[1]));
 		return;
 	}
+	User & target = server.getUser(command.args[1]);
+
 	channel.send(":" + sender.getPrefix() + " KICK " + command.args[0] + " " + command.args[1] +  " " + command.trailer);
 	channel.removeUser(command.args[1]);
-	sender.removeChannel(&channel);
+	target.removeChannel(&channel);
 }
 
 void kick_user(CommandManager::Command & command, User & sender)
@@ -57,7 +59,6 @@ void kick_user(CommandManager::Command & command, User & sender)
 
 void kickCommand(CommandManager::Command & command)
 {
-	Channel & channel = server.getChannel(command.args[0]);
 	User & sender = *command.sender;
 
 	if (command.args.size() < 2)
