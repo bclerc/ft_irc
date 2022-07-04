@@ -1,10 +1,16 @@
 # include "../CommandManager.hpp"
 
+	/**
+	 * Checker si le channel est full avec channel.isFull() 
+	 * renvoyer la rpl ERR_CHANNELISFULL si c'est le cas
+	 */
+
 void joinCommand(CommandManager::Command & command)
 {
 	User & sender = *command.sender;
  	std::string name_user;
 	
+
 	if (command.size > 1)
 	{	
 		Channel & channel = server.isChannel(command.args[0]) ?  server.getChannel(command.args[0]) : server.createChannel(command.args[0], *command.sender);	

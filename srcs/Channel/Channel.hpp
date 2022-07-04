@@ -27,6 +27,7 @@ class Channel : virtual public ITarget {
         bool isOnChannel(User const & user) const;
         bool isOperator(User const & user)  const;
         bool isOperator(User const * user)  const;
+        bool isFull(void)                   const;
 
 
         const std::vector<User*> & getUsers() const;
@@ -35,6 +36,7 @@ class Channel : virtual public ITarget {
 
 		typedef typename std::vector<User*>::iterator iterator;
 
+        size_t                  _max_size;
         User         *          _owner;
         std::string             _name;
         std::vector<User*>       _users;

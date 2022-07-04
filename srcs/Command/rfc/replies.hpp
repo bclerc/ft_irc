@@ -37,6 +37,7 @@ string RPL_NOTONCHANNEL (string nick, string chan_name);
 string ERR_CANNOTSENDTOCHAN (string nick, string channel);
 string ERR_NOTONCHANNEL (string nick, string channel);
 string ERR_USERNOTINCHANNEL (string nick, string channel, string user);
+string ERR_CHANNELISFULL (string nick, string channel);
 
 
 

@@ -1,13 +1,13 @@
 #include "Channel.hpp"
 
 Channel::Channel(std::string const & name, User & owner)
-: _name(name), _owner(&owner)
+: _name(name), _owner(&owner), _max_size(20)
 {
 	setOperator(owner, true);
     return ;
 }
 
-Channel::Channel(void)
+Channel::Channel(void): _max_size(20)
 {
     return ;
 }
@@ -70,6 +70,7 @@ Channel & Channel::operator=(Channel const & rhs)
     _name = rhs._name;
     _users = rhs._users;
     _operator = rhs._operator;
+	_max_size = rhs._max_size;
     return *this;
 }
 
@@ -113,6 +114,11 @@ bool Channel::isOnChannel(User const & user) const
 			return true;
 	}
 	return false;
+}
+
+bool Channel::isFull(void) const
+{
+	return (_users.size() >= _max_size);
 }
 
 const std::string & Channel::getName(void) const

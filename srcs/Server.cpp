@@ -17,6 +17,8 @@ void Server::_accept_connection(fd_set & readfds)
 			_exit(1);
 		}
 		_users.push_back(new User(new_socket));
+		if (isFull())
+			_users.back()->kick("Server is full");
 	}
 }
 
@@ -101,8 +103,8 @@ void Server::_copy_fd(std::vector<User*> & clients, fd_set & readfds)
 	}
 }
 
-Server::Server(int port, std::string const & name, std::string const & password) : 
-			_server_port(port), _server_name(name), _server_password(password), _opt(0)
+Server::Server(int port, std::string const & name, std::string const & password, int const & slots) 
+			: _server_port(port), _server_name(name), _server_password(password), _opt(0), _slots(slots)
 {
 
 	if ((_master_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -144,6 +146,7 @@ Server & Server::operator=(Server const & rhs)
 	_address			= rhs._address;
 	_max_sd				= rhs._max_sd;
 	_users				= rhs._users;
+	_slots				= rhs._slots;
 	_opt				= rhs._opt;
 
 	return *this;
@@ -225,6 +228,12 @@ bool Server::isChannel(std::string const & name)
 
 	it = _channels.find(name);
 	return (it != _channels.end());
+}
+
+
+bool Server::isFull(void)
+{
+	return (_users.size() > _slots);
 }
 
 void	Server::kickAll(std::string const & reason)
