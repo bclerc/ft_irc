@@ -1,8 +1,5 @@
 # include "../CommandManager.hpp"
 
-
-// Je dois mettre ce commentaire pour reparer la betise de sam
-
 void user_mode(CommandManager::Command const & command, User & sender)
 {
 	User & target = server.getUser(command.args[0]);

@@ -1,9 +1,5 @@
 # include "replies.hpp"
 
-/**
-* dsfsdf lsdlfk ;aldjkf l;skfd  
-*/
-
 // RPL
 string RPL_WELCOME (string nick, string user, string host)
 { return ("001 "+ nick +" :Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host); }

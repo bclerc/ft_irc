@@ -1,9 +1,5 @@
 #include "../includes/Server.hpp"
 
-/**
-* @todo _accept_connection
-* Ajouter une limite de connection simultanee
-*/
 void Server::_accept_connection(fd_set & readfds)
 {
 	int		new_socket;
