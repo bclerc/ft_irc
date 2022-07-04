@@ -298,14 +298,15 @@ const std::map<std::string, Channel*> & Server::getChannelMap(void) const
 
 void	Server::shutdown(void) 
 {
-	log("\rShutdown IRC serv by SIGINT");
-	kickAll("Sopping server");
+	std::cout << "\r\n||| Shutdown IRC serv by SIGINT |||" << std::endl;
+	kickAll("Server is stopping ...");
 	send_all();
 	_remove_disconnect();
 	close(_master_socket);
 	_master_socket = -1;
 	_users.clear();
 	_channels.clear();
+	log("Bye");
 	exit(0);
 }
 

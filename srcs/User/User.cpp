@@ -173,7 +173,7 @@ const   int & User::getFd() const
  { return _fd; }
 
 const std::string User::getPrefix() const
-{ return (getName() + "!" + getUserName()+ "@"  + getServerName()); }
+{ return (isRegister() ? getName() + "!" + getUserName()+ "@"  + getServerName() : "*"); }
 
 const  std::string & User::getName() const
 { return _nick; }

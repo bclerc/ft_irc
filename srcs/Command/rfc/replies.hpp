@@ -39,7 +39,8 @@ string ERR_NOTONCHANNEL (string nick, string channel);
 string ERR_USERNOTINCHANNEL (string nick, string channel, string user);
 string ERR_CHANNELISFULL (string nick, string channel);
 
-
+string RPL_UMODEIS (string nick, string mode);
+string ERR_USERSDONTMATCH(string nick);
 
 
 #endif
