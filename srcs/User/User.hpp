@@ -37,6 +37,7 @@ class User : public ITarget {
 		void	setOperator(bool value);
 		void	removeChannel(Channel * channel);
 		void	kick (std::string const & reason);
+		void	kill (std::string const & reason);
 		void	send(std::string const & request);
 		void	sendToChannels(std::string const & request);
 		void	sendWithOut(std::string const & request, ITarget & out);

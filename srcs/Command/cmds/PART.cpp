@@ -1,6 +1,6 @@
 # include "../CommandManager.hpp"
 
-void execute_part(CommandManager::Command & command, std::string channel_name,  std::string & cmd, size_t & pos)
+void execute_part(CommandManager::Command & command, std::string channel_name)
 {
 	std::string	quitmsg = command.trailer.size() ? command.trailer : "Leaving";
 	User & sender = *command.sender;
@@ -27,7 +27,7 @@ void quit_user(CommandManager::Command & command, User & sender)
 		try {
 			pos = cmd.find(",");
 			channel_name = cmd.substr(0, pos == std::string::npos ? cmd.size() : pos);
-			execute_part(command, channel_name, cmd, pos);
+			execute_part(command, channel_name);
 		} catch (Server::ChannelNotFoundException & e) {
 			sender.send(ERR_NOSUCHCHANNEL(sender.getName(), channel_name));
 		}
