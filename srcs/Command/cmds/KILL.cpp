@@ -24,5 +24,6 @@ void killCommand(CommandManager::Command & command)
 		return ;
 	}
 	sender.send(":" + sender.getPrefix() + " KILL " + command.args[0] + " :" + command.trailer);
-	server.getUser(command.args[1]).kill(command.trailer);
+	sender.sendToChannels(":" + sender.getPrefix() + " KILL " + command.args[0] + " :" + command.trailer);
+	server.getUser(command.args[0]).kill(command.trailer);
 }
