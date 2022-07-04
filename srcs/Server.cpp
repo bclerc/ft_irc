@@ -1,9 +1,6 @@
 #include "../includes/Server.hpp"
 
-/**
-* @todo _accept_connection
-* Ajouter une limite de connection simultanee
-*/
+
 void Server::_accept_connection(fd_set & readfds)
 {
 	int		new_socket;
@@ -231,7 +228,6 @@ bool Server::isChannel(std::string const & name)
 	return (it != _channels.end());
 }
 
-
 bool Server::isFull(void)
 {
 	return (_users.size() > _slots);
@@ -249,7 +245,7 @@ Channel & Server::createChannel(std::string const & name, User & owner)
 
 	ret = _channels.insert(std::make_pair(name, new Channel(name, owner)));
 	if (!ret.second)
-		throw std::exception();											// Refaire une exeption
+		throw std::exception();
 	return (*(*ret.first).second);
 }
 

@@ -32,7 +32,7 @@ INCLUDES_FLAGS = -I $(INCLUDES_FOLDER)
 
 
 CC = clang++
-CFLAGS =  -fsanitize=address -g3
+CFLAGS = -g3
 
 all: $(EXEC_NAME_FT)
 
