@@ -1,6 +1,6 @@
 # include "../CommandManager.hpp"
 
-void kickCommand(CommandManager::Command & command)
+void execute_kick(CommandManager::Command & command, std::string user_name,  std::string & cmd, size_t & pos)
 {
 	User & sender = *command.sender;
 	Channel & channel = server.getChannel(command.args[0]);
@@ -30,8 +30,42 @@ void kickCommand(CommandManager::Command & command)
 		sender.send(ERR_USERNOTINCHANNEL(sender.getName(), command.args[0], command.args[1]));
 		return;
 	}
+
+	User & target = server.getUser(command.args[1]);
+
 	channel.send(":" + sender.getPrefix() + " KICK " + command.args[0] + " " + command.args[1] +  " " + command.trailer);
 	channel.removeUser(command.args[1]);
-	sender.removeChannel(&channel);
-//	sender.send(":" + sender.getPrefix() + " KICK " + command.args[0] + " " + command.args[1] +  " " + command.trailer);
+	target.removeChannel(&channel);
+}
+
+void kick_user(CommandManager::Command & command, User & sender)
+{
+	size_t pos;
+	std::string cmd(command.args[0]);
+	std::string	user_name;
+
+	while (cmd.size() > 0)
+	{
+		try {
+			pos = cmd.find(",");
+			user_name = cmd.substr(0, pos == std::string::npos ? cmd.size() : pos);
+			execute_kick(command, user_name, cmd, pos);
+		} 
+		catch (Server::ChannelNotFoundException & e) {
+			sender.send(ERR_USERNOTINCHANNEL(sender.getName(), command.args[0], command.args[1]));
+		}
+		cmd.erase(0, pos == std::string::npos ? cmd.size() : pos + 1);
+	}
+}
+
+void kickCommand(CommandManager::Command & command)
+{
+	User & sender = *command.sender;
+
+	if (command.args.size() < 2)
+	{
+		sender.send(ERR_NEEDMOREPARAMS(sender.getName(), command.command));
+		return;
+	}
+	kick_user(command, sender);
 }
