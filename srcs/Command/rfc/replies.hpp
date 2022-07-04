@@ -28,7 +28,7 @@ string ERR_NICKNAMEINUSE (string nick, string new_nick);
 string ERR_NICKCOLLISION (string nick, string new_nick);
 string ERR_NOSUCHNICK (string nick, string target);
 string ERR_NOPRIVILEGES (string nick);
-string ERR_UMODEUNKNOWNFLAG (string nick);
+string ERR_UMODEUNKNOWNFLAG (string nick, const char flag);
 string ERR_CHANOPRIVSNEEDED (string nick, string channel);
 string ERR_NOSUCHCHANNEL (string nick, string channel);
 string ERR_PASSWDMISMATCH (string nick);
