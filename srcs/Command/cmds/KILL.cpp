@@ -3,7 +3,7 @@
 void killCommand(CommandManager::Command & command)
 {
 	User & sender = *command.sender;
-	if (command.size < 2)
+	if (command.size < 1)
 	{
 		sender.send(ERR_NEEDMOREPARAMS(sender.getName(), command.command));
 		return ;
@@ -13,17 +13,12 @@ void killCommand(CommandManager::Command & command)
 		sender.send(ERR_NOSUCHNICK(sender.getName(), command.args[0]));
 		return ;
 	}
-	if (command.args[1].size() < 1)
-	{
-		sender.send(ERR_NEEDMOREPARAMS(sender.getName(), command.command));
-		return ;
-	}
 	if(!sender.isOperator())
 	{
 		sender.send(ERR_NOPRIVILEGES(sender.getName()));
 		return ;
 	}
-	sender.send(":" + sender.getPrefix() + " KILL " + command.args[0] + " :" + command.trailer);
-	sender.sendToChannels(":" + sender.getPrefix() + " KILL " + command.args[0] + " :" + command.trailer);
-	server.getUser(command.args[0]).kill(command.trailer);
+	User & target = server.getUser(command.args[0]);
+    target.send(":" + sender.getPrefix() + " kill :" + command.trailer);
+	target.kill(command.trailer);
 }

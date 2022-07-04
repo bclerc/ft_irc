@@ -2,13 +2,13 @@
 #include "User.hpp"
 
 User::User(int & fd)
-: _fd(fd), _nick("*"),  _status(UNREGISTER), _mode(0)
+: _fd(fd), _nick("*"),  _status(UNREGISTER), _operator(false)
 {
 	return ;
 }
 
 User::User(void)
-: _fd(-1), _nick("*"), _status(UNREGISTER), _mode(0)
+: _fd(-1), _nick("*"), _status(UNREGISTER), _operator(false)
 {
 	return ;
 }
@@ -64,26 +64,21 @@ void User::kick(std::string const & reason)
     {
         for (std::vector<Channel *>::iterator it = _current_channel.begin(); it != _current_channel.end(); it++)
         {
-            (*it)->sendWithOut(":" + getPrefix() + " QUIT :" + reason, *this);
             (*it)->removeUser(*this);
         }
     }
-    this->send(":" + getPrefix() + " QUIT :" + reason);
     setStatus(User::DISCONNECT);
 }
 
 void User::kill(std::string const & reason)
 {
-    _buffer.clear();
     if (isOnChannel())
     {
         for (std::vector<Channel *>::iterator it = _current_channel.begin(); it != _current_channel.end(); it++)
         {
-            (*it)->sendWithOut(":" + getPrefix() + " kill :" + reason, *this);
             (*it)->removeUser(*this);
         }
     }
-    this->send(":" + getPrefix() + " kill :" + reason);
     setStatus(User::DISCONNECT);
 }
 
