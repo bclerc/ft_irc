@@ -11,8 +11,17 @@ SOURCES_FILES = srcs/main.cpp \
 				srcs/Command/cmds/NICK.cpp \
 				srcs/Command/cmds/USER.cpp \
 				srcs/Command/cmds/QUIT.cpp \
+				srcs/Command/cmds/MODE.cpp \
 				srcs/Command/cmds/PING.cpp \
+				srcs/Command/cmds/JOIN.cpp \
+				srcs/Command/cmds/PART.cpp \
+				srcs/Command/cmds/KILL.cpp \
+				srcs/Command/cmds/WHO.cpp \
+				srcs/Command/cmds/OPER.cpp \
+				srcs/Command/cmds/PRIVMSG.cpp \
+				srcs/Command/cmds/KICK.cpp \
 				srcs/Command/rfc/replies.cpp \
+				srcs/Channel/Channel.cpp \
 				srcs/Server.cpp
 
 OBJECTS_FILES_FT = $(patsubst $(SOURCES_FOLDER)%.cpp, $(OBJECTS_FOLDER)%_ft.o, $(SOURCES_FILES))
@@ -23,7 +32,7 @@ INCLUDES_FLAGS = -I $(INCLUDES_FOLDER)
 
 
 CC = clang++
-CFLAGS =  -g3 -fsanitize=address #-Wall -Wextra -Werror
+CFLAGS =  -g3
 
 all: $(EXEC_NAME_FT)
 

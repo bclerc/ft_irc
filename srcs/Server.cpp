@@ -10,15 +10,15 @@ void Server::_accept_connection(fd_set & readfds)
 
 	if (FD_ISSET(_master_socket, &readfds))
 	{
-
 		log("Incoming connection");
 		if ((new_socket = accept(_master_socket, (struct sockaddr *)&_address, &_addrlen)) < 0)
 		{
 			perror("accept error");
 			_exit(1);
 		}
-		User new_user(new_socket);
-		_users.push_back(new_user);
+		_users.push_back(new User(new_socket));
+		if (isFull())
+			_users.back()->kick("Server is full");
 	}
 }
 
@@ -31,20 +31,20 @@ void Server::_get_requests(fd_set & readfds, CommandManager & commandManager)
 	for (iterator it = _users.begin(); it != _users.end(); it++)
 	{
 		std::memset(&buffer, 0x00, 1024);
-		sd = it->getFd();
+		sd = (*it)->getFd();
 		if (FD_ISSET(sd, &readfds))
 		{
 			if ((valread = read(sd, buffer, 1024)) == 0)
 			{
 				getpeername(sd, (struct sockaddr*)&_address, &_addrlen);
 				close(sd);
-				it->log("Disconnected");
-				it->setStatus(User::DISCONNECT);
+				(*it)->log("Disconnected");
+				(*it)->setStatus(User::DISCONNECT);
 			}
-			else if (it->isConnected())
+			else if ((*it)->isConnected())
 			{
 				buffer[valread] = '\0';
-				commandManager.execCommand(&(*it), buffer);
+				commandManager.execCommand(*it, buffer);
 			}
 		}
 	}
@@ -60,7 +60,7 @@ void Server::_run(fd_set & readfds)
 		FD_ZERO(&readfds);
 		FD_SET(_master_socket, &readfds);
 		_max_sd = _master_socket;
-		_copy_fd(_users, readfds);
+		_copy_fd(readfds);
 		activity = select(_max_sd + 1, &readfds, 0, 0, 0);
 		if (activity < 0)
 			perror("Select error");
@@ -71,19 +71,16 @@ void Server::_run(fd_set & readfds)
 	}
 }
 
-/**
-* @todo _remove_disconnect 
-* Confirmer au client la deconnection
-*/
 void Server::_remove_disconnect()
 {
 	iterator it = _users.begin();
 
 	while (it != _users.end())
 	{
-		if ((*it).getStatus() == User::DISCONNECT)
+		if ((*it)->getStatus() == User::DISCONNECT)
 		{
-			close((*it).getFd());
+			(*it)->log("Disconnected");
+			close((*it)->getFd());
 			_users.erase(it);
 			it = _users.begin();
 			continue;
@@ -92,14 +89,13 @@ void Server::_remove_disconnect()
 	}
 }
 
-void Server::_copy_fd(std::vector<User> & clients, fd_set & readfds)
+void Server::_copy_fd(fd_set & readfds)
 {
-	typedef std::vector<User>::iterator iterator;
 	int sd;
 
 	for (iterator it = _users.begin(); it != _users.end(); it++)
 	{
-		sd = it->getFd();
+		sd = (*it)->getFd();
 		if (sd > 0)
 			FD_SET(sd, &readfds);
 		if (sd > _max_sd)
@@ -107,8 +103,8 @@ void Server::_copy_fd(std::vector<User> & clients, fd_set & readfds)
 	}
 }
 
-Server::Server(int port, std::string const & name, std::string const & password) : 
-			_server_port(port), _server_name(name), _server_password(password), _opt(0)
+Server::Server(int port, std::string const & name, std::string const & password, int const & slots) 
+			: _server_port(port), _server_name(name), _server_password(password), _opt(0), _slots(slots)
 {
 
 	if ((_master_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -140,8 +136,7 @@ Server::Server(Server & cpy)
 }
 
 Server & Server::operator=(Server const & rhs)
-{
-	
+{	
 	_server_password	= rhs._server_password;
 	_master_socket 		= rhs._master_socket;
 	_server_port 		= rhs._server_port;
@@ -151,8 +146,9 @@ Server & Server::operator=(Server const & rhs)
 	_address			= rhs._address;
 	_max_sd				= rhs._max_sd;
 	_users				= rhs._users;
+	_slots				= rhs._slots;
 	_opt				= rhs._opt;
-	
+
 	return *this;
 }
 
@@ -185,40 +181,135 @@ void Server::send_all()
 {
 	for (iterator it = _users.begin(); it != _users.end(); it++)
 	{
-		if (it->getBuffer().size())
-			write(it->getFd(), it->getBuffer().c_str(), it->getBuffer().length());
-		it->getBuffer().clear();
+		if ((*it)->getBuffer().size())
+			write((*it)->getFd(), (*it)->getBuffer().c_str(), (*it)->getBuffer().length());
+		(*it)->getBuffer().clear();
 	}
 }
 
-const std::vector<User> & Server::getUsers() const { return (_users); }
-const std::string & Server::getPass() const { return (_server_password); }
+const std::string & Server::getPass() const
+{ return (_server_password); }
 
+const std::vector<User*> & Server::getUsers() const
+{ return (_users); }
 
-bool	Server::isUser(std::string const & name) const
+User & Server::getUser(std::string const & name)
 {
-	for (const_iterator it = _users.begin(); it != _users.end(); it++)
+	iterator it = _users.begin();
+
+	while (it != _users.end())
 	{
-		if ((*it).getNick() == name)
-			return true;
+		if ((*it)->getName() == name)
+			return (**it);
+		it++;
 	}
-	return false;
+	throw UserNotFoundException();
 }
+
+bool	Server::isUser(std::string const & name)
+{
+	try {
+		getUser(name);
+	}
+	catch(std::exception & e) {
+		return false;
+	}
+	return true;
+}
+
+bool	Server::isUser(ITarget const & target)
+{
+	return (target.getName()[0] != '#');
+}
+
+bool Server::isChannel(std::string const & name)
+{
+	channel_iterator it;
+
+	it = _channels.find(name);
+	return (it != _channels.end());
+}
+
+
+bool Server::isFull(void)
+{
+	return (_users.size() > _slots);
+}
+
+void	Server::kickAll(std::string const & reason)
+{
+    for (iterator it = _users.begin(); it != _users.end(); it++)
+		(*it)->kick(reason);
+}
+
+Channel & Server::createChannel(std::string const & name, User & owner)
+{
+	std::pair<channel_iterator, bool> ret;
+
+	ret = _channels.insert(std::make_pair(name, new Channel(name, owner)));
+	if (!ret.second)
+		throw std::exception();											// Refaire une exeption
+	return (*(*ret.first).second);
+}
+
+Channel & Server::getChannel(std::string const & name)
+{
+	channel_iterator it;
+
+	it = _channels.find(name);
+	if (it == _channels.end())
+		throw ChannelNotFoundException();
+	return (*it->second);
+}
+
+ITarget & Server::getTarget(std::string const & name)
+{
+	if ((const char)name[0] == '#')
+		return (getChannel(name));
+	return (getUser(name));
+}
+
+const std::string Server::getMotd(User const & user) const
+{
+	std::string	buffer;
+
+	buffer.append("372 " + user.getName() + ":              ______                                   \n");
+	buffer.append("372 " + user.getName() + ":             /\\  _  \\                                  \n");
+	buffer.append("372 " + user.getName() + ":             \\ \\ \\L\\ \\  _ __    __       __     ___    \n");
+	buffer.append("372 " + user.getName() + ":              \\ \\  __ \\/\\`'__\\/'__`\\   /'_ `\\  / __`\\  \n");
+	buffer.append("372 " + user.getName() + ":               \\ \\ \\/\\ \\ \\ \\//\\ \\L\\.\\_/\\ \\L\\ \\/\\ \\L\\ \\ \n");
+	buffer.append("372 " + user.getName() + ":                \\ \\_\\ \\_\\ \\_\\\\ \\__/.\\_\\ \\____ \\ \\____/ \n");
+	buffer.append("372 " + user.getName() + ":                 \\/_/\\/_/\\/_/ \\/__/\\/_/\\/___L\\ \\/___/  \n");
+	buffer.append("372 " + user.getName() + ":                                         /\\____/       \n");
+	buffer.append("372 " + user.getName() + ":                                         \\_/__/        \n");
+	buffer.append("372 " + user.getName() + ":                                                        \n");			
+	buffer.append("372 " + user.getName() + ":                      ______   ____    ____       \n");
+	buffer.append("372 " + user.getName() + ":                     /\\__  _\\ /\\  _`\\ /\\  _`\\     \n");
+	buffer.append("372 " + user.getName() + ":                     \\/_/\\ \\/ \\ \\ \\L\\ \\ \\ \\/\\_\\   \n");
+	buffer.append("372 " + user.getName() + ":                        \\ \\ \\  \\ \\ ,  /\\ \\ \\/_/_  \n");
+	buffer.append("372 " + user.getName() + ":                         \\_\\ \\__\\ \\ \\\\ \\\\ \\ \\L\\ \\ \n");
+	buffer.append("372 " + user.getName() + ":                         /\\_____\\\\ \\_\\ \\_\\ \\____/ \n");
+	buffer.append("372 " + user.getName() + ":                         \\/_____/ \\/_/\\/ /\\/___/  \n");
+	return (buffer);
+}
+
+const std::map<std::string, Channel*> & Server::getChannelMap(void) const
+{ return _channels; }
 
 void	Server::shutdown(void) 
 {
-	log("\nShutdown IRC serv by SIGINT");
+	std::cout << "\r\n||| Shutdown IRC serv by SIGINT |||" << std::endl;
+	kickAll("Server is stopping ...");
+	send_all();
+	_remove_disconnect();
 	close(_master_socket);
 	_master_socket = -1;
 	_users.clear();
+	_channels.clear();
+	log("Bye");
 	exit(0);
 }
 
-/**
-* @todo log
-* Afficher l'heure d'execution
-* Une function renvoi l'heure actuelle en format [d/m:h/m]
-*/
 void Server::log(std::string const message) const
 {
 	time_t rawtime;
@@ -234,3 +325,10 @@ void Server::log(std::string const message) const
 	}
 	std::cout << timer << "[Server][Info] " << message << std::endl;
 }
+
+
+const char * Server::UserNotFoundException::what() const throw()
+{ return ("User not found"); }
+
+const char * Server::ChannelNotFoundException::what() const throw()
+{ return ("Channel not found"); }

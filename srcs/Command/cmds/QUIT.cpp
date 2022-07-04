@@ -2,7 +2,6 @@
 
 void quitCommand(CommandManager::Command & command)
 {
-    command.sender->setStatus(User::DISCONNECT);
-    command.sender->send("bclerc!bclerc@localhost QUIT: " + command.trailer);
+    command.sender->kick(command.trailer);
 	return ;
 }

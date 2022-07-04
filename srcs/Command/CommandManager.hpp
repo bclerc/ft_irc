@@ -52,6 +52,14 @@ void    pingCommand(CommandManager::Command & command);
 void    passCommand(CommandManager::Command & command);
 void    userCommand(CommandManager::Command & command);
 void    quitCommand(CommandManager::Command & command);
+void    modeCommand(CommandManager::Command & command);
+void    joinCommand(CommandManager::Command & command);
+void    privmsgCommand(CommandManager::Command & command);
+void	whoCommand(CommandManager::Command & command);
+void	operCommand(CommandManager::Command & command);
+void 	partCommand(CommandManager::Command & command);
+void    kickCommand(CommandManager::Command & command);
+void    killCommand(CommandManager::Command & command);
 
 
 
