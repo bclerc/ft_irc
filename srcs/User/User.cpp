@@ -72,6 +72,21 @@ void User::kick(std::string const & reason)
     setStatus(User::DISCONNECT);
 }
 
+void User::kill(std::string const & reason)
+{
+    _buffer.clear();
+    if (isOnChannel())
+    {
+        for (std::vector<Channel *>::iterator it = _current_channel.begin(); it != _current_channel.end(); it++)
+        {
+            (*it)->sendWithOut(":" + getPrefix() + " kill :" + reason, *this);
+            (*it)->removeUser(*this);
+        }
+    }
+    this->send(":" + getPrefix() + " kill :" + reason);
+    setStatus(User::DISCONNECT);
+}
+
 void User::setNick(std::string const nick)
 {
 	if (isOnChannel())
