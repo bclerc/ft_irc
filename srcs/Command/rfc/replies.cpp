@@ -41,7 +41,7 @@ string RPL_ENDOFMOTD (string nick)
 
 
 // ERR
-string ERR_CLOSINGLINK(string nick, string user, string host, string reason)
+string ERR_CLOSINGLINK(string user, string host, string reason)
 { return ("ERROR :Closing link: (" + user + "@" + host + ") [" + reason + "]"); }
 
 string ERR_NEEDMOREPARAMS(string nick, string command)
@@ -59,7 +59,7 @@ string ERR_ERRONEUSNICKNAME (string nick, string new_nick)
 string ERR_NICKNAMEINUSE (string nick, string new_nick)
 { return ("433 "+ nick + " " + new_nick + " :Nickname is already in use"); }
 
-string ERR_NICKCOLLISION (string nick, string new_nick)
+string ERR_NICKCOLLISION (string nick)
 { return ("436 "+ nick + " " + nick + " :Nickname collision KILL");}
 
 string ERR_NOSUCHNICK (string nick, string target)
@@ -74,7 +74,7 @@ string ERR_CHANOPRIVSNEEDED (string nick, string channel)
 string ERR_NOSUCHCHANNEL (string nick, string channel)
 { return ("403 " + nick + " " + channel + " :No such channel"); }
 
-string ERR_UMODEUNKNOWNFLAG (string nick, const char flag)
+string ERR_UMODEUNKNOWNFLAG (string nick)
 { return ("501 " + nick + " :Unkown MODE flag"); }
 
 string ERR_PASSWDMISMATCH (string nick)

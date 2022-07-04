@@ -15,6 +15,7 @@ SOURCES_FILES = srcs/main.cpp \
 				srcs/Command/cmds/PING.cpp \
 				srcs/Command/cmds/JOIN.cpp \
 				srcs/Command/cmds/PART.cpp \
+				srcs/Command/cmds/KILL.cpp \
 				srcs/Command/cmds/WHO.cpp \
 				srcs/Command/cmds/OPER.cpp \
 				srcs/Command/cmds/PRIVMSG.cpp \

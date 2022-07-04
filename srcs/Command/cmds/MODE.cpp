@@ -74,34 +74,29 @@ void mode_channel(CommandManager::Command & command, User & sender)
 
 void mode_user(CommandManager::Command & command, User & sender)
 {
-	const char	*mode = command.args[1].c_str();
 
-	if (!server.isUser(command.args[0]))
-    {
-        sender.send(ERR_NOSUCHNICK(sender.getName(), command.args[0]));
-        return ;
-    }
-
-	User		&target = server.getUser(command.args[0]);
-	int			plus = 1;
-
-    for (int i = 0; mode[i]; i++)
-    {
-        switch (mode[i])
-        {
-            case '+':
-                plus = 1;
-                break ;
-            case '-':
-                plus = 0;
-                break ;
-            case 'o':
-                oper(sender, target, plus);
-                break;
-            default:
-                sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName(), mode[i]));
-        }
-    }
+	Channel & channel = server.getChannel(command.args[0]);
+	if (command.size < 3)
+	{
+		sender.send("324 " + sender.getName() + " " + channel.getName() + " +n");
+		return ;
+	}
+	User & target = command.size == 3 ? server.getUser(command.args[2]) : sender;
+	if (channel.isOperator(sender))
+	{
+		if (command.args[1] == "+o")
+			channel.setOperator(target, true);
+		else if (command.args[1] == "-o")
+			channel.setOperator(target, false);
+		else {
+			sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName()));
+			return ;
+		}
+		target.send(":" + sender.getName() + " MODE " + channel.getName() + " " + command.args[1] + " " + target.getName());
+		if (sender != target)
+			sender.send(":" + sender.getName() + " MODE " + channel.getName() + " " + command.args[1] + " " + target.getName());
+	} else
+		sender.send(ERR_CHANOPRIVSNEEDED(sender.getName(), channel.getName()));
 }
 
 void modeCommand(CommandManager::Command & command)

@@ -59,6 +59,8 @@ void	whoCommand(CommandManager::Command & command);
 void	operCommand(CommandManager::Command & command);
 void 	partCommand(CommandManager::Command & command);
 void    kickCommand(CommandManager::Command & command);
+void    killCommand(CommandManager::Command & command);
+
 
 
 #endif
