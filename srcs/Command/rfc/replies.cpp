@@ -53,8 +53,8 @@ string ERR_ALREADYREGISTRED (string nick)
 string ERR_NONICKNAMEGIVEN (string nick)
 { return ("431 "+ nick + " :No nickname given"); }
 
-string ERR_ERRONEUSNICKNAME (string nick, string new_snick)
-{ return ("462 "+ nick + " " + nick + " :Erroneus nickname" ); }
+string ERR_ERRONEUSNICKNAME (string nick, string new_nick)
+{ return ("462 "+ nick + " " + new_nick + " :Erroneus nickname" ); }
 
 string ERR_NICKNAMEINUSE (string nick, string new_nick)
 { return ("433 "+ nick + " " + new_nick + " :Nickname is already in use"); }
@@ -89,4 +89,8 @@ string ERR_NOTONCHANNEL (string nick, string channel)
 string ERR_USERNOTINCHANNEL (string nick, string channel, string user)
 { return ("441 " + nick + " " +user + " " + channel + " :They aren't on that channel"); }
 
+string ERR_CHANNELISFULL (string nick, string channel)
+{
+    return ("471 " + nick + " " + channel + " :Cannot join channel (Is full)");
+}
 

@@ -34,7 +34,7 @@ class Server {
 	public:
 
 		Server (void);
-		Server(int port, std::string const & name, std::string const & password);
+		Server(int port, std::string const & name, std::string const & password, int const & slots);
 		Server(Server & cpy);
 		~Server (void);
 
@@ -51,9 +51,11 @@ class Server {
 		const std::string			getMotd(User const & user) const;
 		const std::map<std::string, Channel*> & getChannelMap(void) const;
 
+		bool	isFull(void);
 		bool	isUser(std::string const & name);
 		bool	isUser(ITarget const & target);
 		bool	isChannel(std::string const & name);
+
 		
 		User & getUser(std::string const & name);
 
@@ -68,7 +70,7 @@ class Server {
 		std::string _server_name;
 		std::string _server_password;
 
-		int _master_socket, _new_socket, _activity, _opt, _max_sd;
+		int _master_socket, _new_socket, _activity, _opt, _max_sd, _slots;
 		socklen_t _addrlen;
 		struct sockaddr_in _address;
 

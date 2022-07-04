@@ -30,6 +30,7 @@ void execute_kick(CommandManager::Command & command, std::string user_name,  std
 		sender.send(ERR_USERNOTINCHANNEL(sender.getName(), command.args[0], command.args[1]));
 		return;
 	}
+
 	User & target = server.getUser(command.args[1]);
 
 	channel.send(":" + sender.getPrefix() + " KICK " + command.args[0] + " " + command.args[1] +  " " + command.trailer);

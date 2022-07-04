@@ -1,5 +1,9 @@
 # include "../CommandManager.hpp"
 
+/**
+* Checker si le channel est full avec channel.isFull() 
+* renvoyer la rpl ERR_CHANNELISFULL si c'est le cas
+*/
 
 void execute_join(CommandManager::Command & command, std::string channel_name,  std::string & cmd, size_t & pos)
 {
