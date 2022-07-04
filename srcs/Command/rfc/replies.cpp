@@ -1,11 +1,7 @@
 # include "replies.hpp"
 
 /**
-* @todo
-* Changer le caractere "*" par un userprefix
-* Un user prefix
-* et je ne sais d'autres reponses de la rfc
-* et peut-etre mettre les noms en minuscule 
+* dsfsdf lsdlfk ;aldjkf l;skfd  
 */
 
 // RPL
