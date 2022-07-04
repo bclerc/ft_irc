@@ -31,7 +31,7 @@ INCLUDES_FLAGS = -I $(INCLUDES_FOLDER)
 
 
 CC = clang++
-CFLAGS =  -g3 #-Wall -Wextra -Werror
+CFLAGS =  -g3
 
 all: $(EXEC_NAME_FT)
 
