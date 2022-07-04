@@ -1,4 +1,6 @@
+.devcontainer
 ircserv
+.gitignore
 .git
 .vscode
 .nfs*

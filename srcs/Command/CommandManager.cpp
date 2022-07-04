@@ -2,11 +2,20 @@
 
 void CommandManager::_register_cmds()
 {
+    _cmd_registre["WHO"] = whoCommand;
 	_cmd_registre["PASS"] = passCommand;
 	_cmd_registre["NICK"] = nickCommand;
     _cmd_registre["USER"] = userCommand;
 	_cmd_registre["PING"] = pingCommand;
+    _cmd_registre["MODE"] = modeCommand;
     _cmd_registre["QUIT"] = quitCommand;
+    _cmd_registre["JOIN"] = joinCommand;
+    _cmd_registre["PART"] = partCommand;
+	_cmd_registre["OPER"] = operCommand;
+    _cmd_registre["PRIVMSG"] = privmsgCommand;
+    _cmd_registre["NOTICE"] = privmsgCommand;
+    _cmd_registre["KICK"] = kickCommand;
+    _cmd_registre["kill"] = killCommand;
 }
 
 void CommandManager::_execute(Command & command)
@@ -16,9 +25,9 @@ void CommandManager::_execute(Command & command)
     if (cmd_it != _cmd_registre.end())
     {
         if (command.command != "PASS"
-            && command.sender->getStatus() == User::UNREGISTER)
+            && command.sender->getStatus() < User::UNREGISTER_PASS)
         {
-            command.sender->kick(ERR_CLOSINGLINK("", "", "No register"));
+            command.sender->kick("Not register");
             return ;
         }
         if (command.sender->getStatus() != User::DISCONNECT)
@@ -29,39 +38,33 @@ void CommandManager::_execute(Command & command)
     command.args.clear();
 }
 
-/**
-* @todo _build_args
-* Un meilleur parsing, plus "efficace" car la je pense que je peux faire mieux quand meme
-* 
-*/
 void CommandManager::_build_args(Command & command, std::string & request)
 {
     size_t pos;
-    bool   trailer;
+    bool   trailer = 0;
     int    size = 0;
     
     std::string tmp;
-
-    // I think this function is vraiment degueulasse.
-    while ((pos = request.find(" ")) != std::string::npos) 
-    {
-        tmp = request.substr(0, pos);
-        if (tmp[0] == ':')
-            trailer = true;
-        if (!size)
-            command.command = tmp;
-        else if (trailer)
-            command.trailer += tmp + " ";
-        else
-            command.args.push_back(tmp);
-        request.erase(0, pos + 1);
-        size++;
-    }
-    if (trailer)
-        command.trailer += request.substr(0, pos);
-    else
-        command.args.push_back(request.substr(0, pos));
-    command.size = size + 1;
+	command.trailer = "";
+    while (request.size() > 0)
+	{
+		pos = request.find(" ");
+		tmp = request.substr(0, pos == std::string::npos ? request.size() : pos);
+		if (tmp[0] == ':')
+		{
+			trailer = 1;
+			tmp.erase(0, 1);
+		}
+		if (!size)
+			command.command = tmp;
+		else if (trailer)
+			command.trailer += tmp + (pos == std::string::npos ? "" : " ");
+		else
+			command.args.push_back(tmp);
+		request.erase(0, pos == std::string::npos ? request.size() : pos + 1);
+		size++;
+	}
+	command.size = size;
     request.clear();
     return ;
 }
@@ -82,7 +85,7 @@ CommandManager::CommandManager(CommandManager & cpy)
 bool CommandManager::_ignore(std::string & request, const size_t & pos)
 {
     std::vector<string>::iterator it;
-    std::vector<string> cmd({"CAP", "WHOIS", "MODE"}); // MODE a faire
+    std::vector<string> cmd({"CAP", "WHOIS"});
 
     for (it = cmd.begin(); it != cmd.end(); it++)
     {
@@ -96,10 +99,6 @@ bool CommandManager::_ignore(std::string & request, const size_t & pos)
     return false;
 }
 
-/**
-* @todo execCommand
-* Reverifier pour le \r\n psk c'est louche la
-*/
 void CommandManager::execCommand(User * sender, char *request)
 {
     Command command;
