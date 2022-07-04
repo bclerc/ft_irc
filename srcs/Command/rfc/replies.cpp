@@ -70,8 +70,8 @@ string ERR_CHANOPRIVSNEEDED (string nick, string channel)
 string ERR_NOSUCHCHANNEL (string nick, string channel)
 { return ("403 " + nick + " " + channel + " :No such channel"); }
 
-string ERR_UMODEUNKNOWNFLAG (string nick)
-{ return ("501 " + nick + " :Unkown MODE flag"); }
+string ERR_UMODEUNKNOWNFLAG (string nick, const char flag)
+{ return ("501 " + nick + " :" + flag + " Unkown MODE flag"); }
 
 string ERR_PASSWDMISMATCH (string nick)
 { return ("464 " + nick + " :Password incorrect"); }
