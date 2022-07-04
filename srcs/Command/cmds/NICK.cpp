@@ -3,13 +3,14 @@
 
 int	check_nickname(std::string const & nick)
 {
-	const char special_char[10] = "-[]\\`^{}_";
+	const char special_char[11] = "-[]\\`^{}_ ";
 
+	if (nick.size() < 3 || nick.size() > 20)
+		return (0);
 	for (int i = 0; i < nick.size(); i++)
 	{
-		if (!std::isalnum(nick[i]))
-			return 0;
-		if (nick.find_first_of(special_char) != std::string::npos)
+		if (!std::isalnum(nick[i])
+				&& nick.find_first_of(special_char) == std::string::npos)
 			return 0;
 	}
 	return 1;

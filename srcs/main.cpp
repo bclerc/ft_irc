@@ -6,7 +6,7 @@
 /*   By: bclerc <bclerc@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 03:41:19 by bclerc            #+#    #+#             */
-/*   Updated: 2022/07/04 09:57:21 by bclerc           ###   ########.fr       */
+/*   Updated: 2022/07/04 09:58:24 by bclerc           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void signalhandler(int signum)
 int main(int argc, char **argv)
 {
 
-	if (argc < 2)
+	if (argc < 3)
 	{
 		std::cout << "Usage: ./ircserv <port> <password>" << std::endl;
 		return (1);
@@ -32,6 +32,5 @@ int main(int argc, char **argv)
 	server = Server(std::atoi(argv[1]), std::string("IrcServ"), std::string(argv[2]), 100);
 	signal(SIGINT, signalhandler);
 	server.start();
-
     return (0);
 }
