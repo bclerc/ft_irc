@@ -60,7 +60,7 @@ void Server::_run(fd_set & readfds)
 		FD_ZERO(&readfds);
 		FD_SET(_master_socket, &readfds);
 		_max_sd = _master_socket;
-		_copy_fd(_users, readfds);
+		_copy_fd(readfds);
 		activity = select(_max_sd + 1, &readfds, 0, 0, 0);
 		if (activity < 0)
 			perror("Select error");
@@ -89,7 +89,7 @@ void Server::_remove_disconnect()
 	}
 }
 
-void Server::_copy_fd(std::vector<User*> & clients, fd_set & readfds)
+void Server::_copy_fd(fd_set & readfds)
 {
 	int sd;
 

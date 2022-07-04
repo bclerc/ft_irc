@@ -1,6 +1,6 @@
 # include "../CommandManager.hpp"
 
-void execute_kick(CommandManager::Command & command, std::string user_name,  std::string & cmd, size_t & pos)
+void execute_kick(CommandManager::Command & command)
 {
 	User & sender = *command.sender;
 	Channel & channel = server.getChannel(command.args[0]);
@@ -49,7 +49,7 @@ void kick_user(CommandManager::Command & command, User & sender)
 		try {
 			pos = cmd.find(",");
 			user_name = cmd.substr(0, pos == std::string::npos ? cmd.size() : pos);
-			execute_kick(command, user_name, cmd, pos);
+			execute_kick(command);
 		} 
 		catch (Server::ChannelNotFoundException & e) {
 			sender.send(ERR_USERNOTINCHANNEL(sender.getName(), command.args[0], command.args[1]));

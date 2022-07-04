@@ -79,7 +79,7 @@ class Server {
 
 		void	_run(fd_set & readfds);
 		void 	_accept_connection(fd_set & readfds);
-		void	_copy_fd(std::vector<User*> & users, fd_set & readfds);
+		void	_copy_fd(fd_set & readfds);
 		void 	_get_requests(fd_set & readfds, CommandManager & commandManager);
 		void	_remove_disconnect();
 

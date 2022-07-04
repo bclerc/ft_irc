@@ -63,7 +63,7 @@ void mode_channel(CommandManager::Command & command, User & sender)
 					oper(sender, *target, channel, plus);
 					break;
 				default:
-					sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName(), mode[i]));
+					sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName()));
 			}
     	}
 
@@ -99,7 +99,7 @@ void mode_user(CommandManager::Command & command, User & sender)
                 oper(sender, target, plus);
                 break;
             default:
-                sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName(), mode[i]));
+                sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName()));
         }
     }
 }

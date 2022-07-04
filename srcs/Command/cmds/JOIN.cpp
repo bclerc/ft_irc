@@ -1,6 +1,6 @@
 # include "../CommandManager.hpp"
 
-void execute_join(CommandManager::Command & command, std::string channel_name,  std::string & cmd, size_t & pos)
+void execute_join(CommandManager::Command & command, std::string channel_name)
 {
 	User & sender = *command.sender;
 
@@ -30,7 +30,7 @@ void execute_join(CommandManager::Command & command, std::string channel_name,  
 	channel.send(":" + sender.getPrefix() + " JOIN :" + channel.getName());
 }
 
-void	join_channel(CommandManager::Command & command, User & sender)
+void	join_channel(CommandManager::Command & command)
 {	
 	size_t pos;
 	std::string cmd(command.args[0]);
@@ -40,7 +40,7 @@ void	join_channel(CommandManager::Command & command, User & sender)
 	{
 		pos = cmd.find(",");
 		channel_name = cmd.substr(0, pos == std::string::npos ? cmd.size() : pos);
-		execute_join(command, channel_name, cmd, pos);
+		execute_join(command, channel_name);
 		cmd.erase(0, pos == std::string::npos ? cmd.size() : pos + 1);
 	}
 }
@@ -54,6 +54,6 @@ void joinCommand(CommandManager::Command & command)
 		sender.send(ERR_NEEDMOREPARAMS(sender.getName(), command.command));
         return ;
 	}
-	join_channel(command, sender);
+	join_channel(command);
 	return ;
 }
