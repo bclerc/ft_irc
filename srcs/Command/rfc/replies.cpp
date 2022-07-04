@@ -94,3 +94,10 @@ string ERR_CHANNELISFULL (string nick, string channel)
     return ("471 " + nick + " " + channel + " :Cannot join channel (Is full)");
 }
 
+string ERR_USERSDONTMATCH(string nick)
+{
+	return ("502 " + nick + " :Cannot change mode for other users");
+}
+
+string RPL_UMODEIS (string nick, string mode)
+{ return ("221 " + nick + " :" + mode); }
