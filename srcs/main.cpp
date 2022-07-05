@@ -20,6 +20,5 @@ int main(int argc, char **argv)
 	server = Server(std::atoi(argv[1]), std::string("IrcServ"), std::string(argv[2]), 100);
 	signal(SIGINT, signalhandler);
 	server.start();
-
     return (0);
 }
