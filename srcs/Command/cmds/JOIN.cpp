@@ -32,6 +32,8 @@ void execute_join(CommandManager::Command & command, std::string channel_name)
 	}
 	sender.send(RPL_NAMREPLY(sender.getPrefix(), sender.getName(), channel.getName(), name_User));
 	sender.send(RPL_ENDOFNAMES(sender.getPrefix(), sender.getName(), channel.getName()));
+	if (channel.getTopic().size())
+		sender.send(RPL_TOPIC(sender.getName(), channel.getName(), channel.getTopic()));
 	channel.send(":" + sender.getPrefix() + " JOIN :" + channel.getName());
 }
 
