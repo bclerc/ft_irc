@@ -12,19 +12,18 @@ void CommandManager::_register_cmds()
     _cmd_registre["JOIN"] = joinCommand;
     _cmd_registre["PART"] = partCommand;
 	_cmd_registre["OPER"] = operCommand;
-    _cmd_registre["TOPIC"] = topicCommand;
     _cmd_registre["PRIVMSG"] = privmsgCommand;
     _cmd_registre["NOTICE"] = privmsgCommand;
-    _cmd_registre["KICK"] = kickCommand;
     _cmd_registre["INVITE"] = inviteCommand;
+    _cmd_registre["KICK"] = kickCommand;
     _cmd_registre["kill"] = killCommand;
+    _cmd_registre["TOPIC"] = topicCommand;
 
 }
 
 void CommandManager::_execute(Command & command)
 {
     iterator cmd_it = _cmd_registre.find(command.command);
-
     if (cmd_it != _cmd_registre.end())
     {
         if (command.command != "PASS"
@@ -114,7 +113,7 @@ void CommandManager::execCommand(User * sender)
     {
         if (_ignore(req, pos))
             continue;
-        line = req.substr(0, pos);
+        line = req.substr(0, pos - 1);
         sender->log(line);
         _build_args(command, line);
         _execute(command);

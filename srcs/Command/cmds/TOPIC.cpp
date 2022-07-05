@@ -4,7 +4,8 @@ void execute_topic(CommandManager::Command & command, User & sender)
 {
     Channel & channel = server.getChannel(command.args[0]);
     
-    if (command.args.size() > 1)
+    std::cout << "Size: " << command.size << std::endl;
+    if (command.size > 1)
     {
         if (channel.isOnChannel(sender))
         {
