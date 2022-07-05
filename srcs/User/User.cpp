@@ -65,6 +65,7 @@ void User::kick()
         for (std::vector<Channel *>::iterator it = _current_channel.begin(); it != _current_channel.end(); it++)
         {
             (*it)->removeUser(*this);
+            (*it)->removeInvited(*this);
         }
     }
     setStatus(User::DISCONNECT);
@@ -212,7 +213,6 @@ void	User::log(std::string const message) const
 
 User::~User(void)
 {
-    _buffer.clear();
     return ;
 }
 

@@ -14,16 +14,16 @@ void CommandManager::_register_cmds()
 	_cmd_registre["OPER"] = operCommand;
     _cmd_registre["PRIVMSG"] = privmsgCommand;
     _cmd_registre["NOTICE"] = privmsgCommand;
+    _cmd_registre["INVITE"] = inviteCommand;
     _cmd_registre["KICK"] = kickCommand;
     _cmd_registre["kill"] = killCommand;
     _cmd_registre["NAMES"] = namesCommand;
-
+    _cmd_registre["TOPIC"] = topicCommand;
 }
 
 void CommandManager::_execute(Command & command)
 {
     iterator cmd_it = _cmd_registre.find(command.command);
-
     if (cmd_it != _cmd_registre.end())
     {
         if (command.command != "PASS"
@@ -103,10 +103,10 @@ bool CommandManager::_ignore(std::string & request, const size_t & pos)
     return false;
 }
 
-void CommandManager::execCommand(User * sender, char *request)
+void CommandManager::execCommand(User * sender)
 {
     Command command;
-    std::string req(request);
+    std::string & req = sender->receive_buffer;
     std::string line;
     size_t pos;
 

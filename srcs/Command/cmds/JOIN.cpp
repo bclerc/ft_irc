@@ -10,6 +10,11 @@ void execute_join(CommandManager::Command & command, std::string channel_name)
 		sender.send(ERR_CHANNELISFULL(sender.getName(), channel_name));
 		return ;
 	}
+	if (channel.isInviteOnly() && !channel.isInvited(sender))
+	{
+		sender.send(ERR_INVITEONLYCHAN(sender.getName(), channel.getName()));
+		return ;
+	}
 	channel.addUser(*command.sender);
 	sender.setChannel(channel);
 	std::string name_User;

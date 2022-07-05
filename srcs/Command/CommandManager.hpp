@@ -33,7 +33,7 @@ class CommandManager {
         CommandManager(CommandManager & cpy);
         ~CommandManager (void);
 
-        void    execCommand(User * sender, char * request);
+        void    execCommand(User * sender);
 
     private:
 		std::map<std::string, CommandFunc>	_cmd_registre;
@@ -61,9 +61,7 @@ void 	partCommand(CommandManager::Command & command);
 void    kickCommand(CommandManager::Command & command);
 void    killCommand(CommandManager::Command & command);
 void    namesCommand(CommandManager::Command & command);
-
-
-
-
+void    inviteCommand(CommandManager::Command & command);
+void    topicCommand(CommandManager::Command & command);
 
 #endif

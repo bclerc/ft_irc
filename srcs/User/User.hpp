@@ -9,6 +9,7 @@ class Channel;
 class User : public ITarget {
 
 	public:
+		std::string receive_buffer;
 
 		enum Status {
 			UNREGISTER,
@@ -77,6 +78,7 @@ class User : public ITarget {
 		std::string _servername;
 		std::string _realname;
 		std::string _buffer;
+
 		
 		std::vector<Channel	*>	_current_channel;
 

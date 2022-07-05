@@ -16,6 +16,8 @@ string RPL_NAMREPLY (string prefix, string nick, string chan_name, string user);
 string RPL_ENDOFNAMES (string prefix, string nick, string chan_name);
 string RPL_MOTDSTART (string nick);
 string RPL_ENDOFMOTD (string nick);
+string RPL_TOPIC (string nick, string channel, string topic);
+string RPL_NOTOPIC (string nick, string channel);
 string RPL_KICK (string nick);
 
 // ERR
@@ -41,6 +43,6 @@ string ERR_CHANNELISFULL (string nick, string channel);
 
 string RPL_UMODEIS (string nick, string mode);
 string ERR_USERSDONTMATCH(string nick);
-
-
+string ERR_INVITEONLYCHAN(string nick, string channel);
+string ERR_USERONCHANNEL(string nick, string target, string channel);
 #endif
