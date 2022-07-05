@@ -22,6 +22,7 @@ SOURCES_FILES = srcs/main.cpp \
 				srcs/Command/cmds/NAMES.cpp \
 				srcs/Command/cmds/TOPIC.cpp \
 				srcs/Command/cmds/INVITE.cpp \
+				srcs/Command/cmds/LIST.cpp \
 				srcs/Command/rfc/replies.cpp \
 				srcs/Command/cmds/PRIVMSG.cpp \
 				srcs/Channel/Channel.cpp \

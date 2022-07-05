@@ -63,5 +63,7 @@ void    killCommand(CommandManager::Command & command);
 void    namesCommand(CommandManager::Command & command);
 void    inviteCommand(CommandManager::Command & command);
 void    topicCommand(CommandManager::Command & command);
+void 	listCommand(CommandManager::Command & command);
+
 
 #endif

@@ -20,6 +20,9 @@ string RPL_TOPIC (string nick, string channel, string topic);
 string RPL_UMODEIS (string nick, string mode);
 string RPL_NOTOPIC (string nick, string channel);
 string RPL_KICK (string nick);
+string RPL_LISTSTART (string prefix, string nick);
+string RPL_LIST (string prefix, string nick, string channel, string topic);
+string RPL_LISTEND (string prefix, string nick);
 
 // ERR
 string ERR_CLOSINGLINK(string nick, string user, string host, string reason);
