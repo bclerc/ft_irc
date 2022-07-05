@@ -7,7 +7,7 @@ int	check_nickname(std::string const & nick)
 
 	if (nick.size() < 3 || nick.size() > 20)
 		return (0);
-	for (int i = 0; i < nick.size(); i++)
+	for (unsigned int i = 0; i < nick.size(); i++)
 	{
 		if (!std::isalnum(nick[i])
 				&& nick.find_first_of(special_char) == std::string::npos)

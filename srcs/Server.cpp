@@ -14,7 +14,7 @@ void Server::_accept_connection(fd_set & readfds)
 		}
 		_users.push_back(new User(new_socket));
 		if (isFull())
-			_users.back()->kick("Server is full");
+			_users.back()->kick();
 	}
 }
 
@@ -102,7 +102,7 @@ void Server::_copy_fd(fd_set & readfds)
 }
 
 Server::Server(int port, std::string const & name, std::string const & password, int const & slots) 
-			: _status(1),_server_port(port), _server_name(name), _server_password(password), _opt(0), _slots(slots)
+			:_server_port(port), _server_name(name), _server_password(password),  _status(1),  _opt(0), _slots(slots)
 {
 
 	if ((_master_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -158,6 +158,8 @@ Server::~Server(void)
 
 void Server::start(void)
 {
+	string s_server_port;
+	std::ostringstream temp; 
 	fd_set	readfds;
 	if (bind(_master_socket, (struct  sockaddr *)& _address, sizeof(_address)) < 0)
 	{
@@ -165,7 +167,9 @@ void Server::start(void)
 		return ;
 	}
 	_addrlen = sizeof(_address);
-	log(std::string("Listening on port ") + std::to_string(_server_port));
+	temp << _server_port;
+	s_server_port = temp.str();
+	log(std::string("Listening on port ") + s_server_port);
 	if (listen(_master_socket, 5) < 0)
 	{
 		std::cout << "Listen error";
@@ -234,10 +238,10 @@ bool Server::isFull(void)
 	return (_users.size() > _slots);
 }
 
-void	Server::kickAll(std::string const & reason)
+void	Server::kickAll()
 {
     for (iterator it = _users.begin(); it != _users.end(); it++)
-		(*it)->kick(reason);
+		(*it)->kick();
 }
 
 Channel & Server::createChannel(std::string const & name, User & owner)
@@ -297,13 +301,13 @@ const std::map<std::string, Channel*> & Server::getChannelMap(void) const
 void	Server::shutdown(void) 
 {
 	std::cout << "\r\n||| Shutdown IRC serv by SIGINT |||" << std::endl;
-	kickAll("Server is stopping ...");
+	kickAll();
 	send_all();
 	_remove_disconnect();
 	close(_master_socket);
 	_master_socket = -1;
 	_users.clear();
-	for (const std::pair<const std::string, Channel *> channel : getChannelMap())
+	for (std::pair<std::string, Channel *> channel : getChannelMap())
 		delete (channel.second);
 	_channels.clear();
 	log("Bye");

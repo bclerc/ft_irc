@@ -43,7 +43,7 @@ class Channel : virtual public ITarget {
         const std::string & getTopic(void) const;
     private:
 
-		typedef typename std::vector<User*>::iterator iterator;
+		typedef std::vector<User*>::iterator iterator;
 
         bool                    _invite_only;
         size_t                  _max_size;

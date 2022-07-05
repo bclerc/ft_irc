@@ -17,8 +17,8 @@ void CommandManager::_register_cmds()
     _cmd_registre["INVITE"] = inviteCommand;
     _cmd_registre["KICK"] = kickCommand;
     _cmd_registre["kill"] = killCommand;
+    _cmd_registre["NAMES"] = namesCommand;
     _cmd_registre["TOPIC"] = topicCommand;
-
 }
 
 void CommandManager::_execute(Command & command)
@@ -29,7 +29,7 @@ void CommandManager::_execute(Command & command)
         if (command.command != "PASS"
             && command.sender->getStatus() < User::UNREGISTER_PASS)
         {
-            command.sender->kick("Not register");
+            command.sender->kick();
             return ;
         }
         if (command.sender->getStatus() != User::DISCONNECT)
@@ -87,7 +87,9 @@ CommandManager::CommandManager(CommandManager & cpy)
 bool CommandManager::_ignore(std::string & request, const size_t & pos)
 {
     std::vector<string>::iterator it;
-    std::vector<string> cmd({"CAP", "WHOIS"});
+    std::vector<string> cmd;
+	cmd.push_back("CAP");
+	cmd.push_back("WHOIS");
 
     for (it = cmd.begin(); it != cmd.end(); it++)
     {

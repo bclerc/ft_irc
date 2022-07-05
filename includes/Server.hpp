@@ -19,6 +19,8 @@
 # include <vector>
 # include <errno.h>
 # include <time.h> 
+# include <stdio.h>
+# include <stdlib.h>
 
 class User;
 class Channel;
@@ -44,7 +46,7 @@ class Server {
 		void    shutdown(void);
 		void	log (std::string const message) const;
 		void	send_all(void);
-		void	kickAll(std::string const & reason);
+		void	kickAll();
 		
 		const std::string 		&	getPass() const;
 		const std::vector<User*> &	getUsers() const;
@@ -70,7 +72,9 @@ class Server {
 		std::string _server_name;
 		std::string _server_password;
 
-		int _status, _master_socket, _new_socket, _activity, _opt, _max_sd, _slots;
+		int _status, _master_socket, _new_socket, _activity, _opt, _max_sd;
+		unsigned int _slots;
+
 		socklen_t _addrlen;
 		struct sockaddr_in _address;
 
