@@ -59,11 +59,12 @@ void Server::_run(fd_set & readfds)
 		_max_sd = _master_socket;
 		_copy_fd(readfds);
 		activity = select(_max_sd + 1, &readfds, 0, 0, 0);
-		if (activity < 0)
-			perror("Select error");
-		_accept_connection(readfds);
-		_get_requests(readfds, commandManager);
-		send_all();
+		if (activity > 0)
+		{
+			_accept_connection(readfds);
+			_get_requests(readfds, commandManager);
+			send_all();
+		}
 		_remove_disconnect();
 	}
 }
@@ -307,8 +308,8 @@ void	Server::shutdown(void)
 	close(_master_socket);
 	_master_socket = -1;
 	_users.clear();
-	for (std::pair<std::string, Channel *> channel : getChannelMap())
-		delete (channel.second);
+	for (channel_iterator channel = _channels.begin(); channel != _channels.end(); channel++)
+		delete (channel->second);
 	_channels.clear();
 	log("Bye");
 	_status = 0;
