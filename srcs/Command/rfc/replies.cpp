@@ -40,6 +40,16 @@ string RPL_NOTOPIC (string nick, string channel)
 string RPL_TOPIC (string nick, string channel, string topic)
 { return ("332 " + nick + " " + channel + " :" + topic); }
 
+string RPL_LISTSTART (string prefix, string nick)
+{ return (":" + prefix + " 321 " + nick + " Channel :Users Name"); }
+
+string RPL_LIST (string prefix, string nick, string channel, string topic)
+{ return (":" + prefix + " 322 " + nick + " " + channel + " :" + topic); }
+
+string RPL_LISTEND (string prefix, string nick)
+{ return (":" + prefix + " 323 " + nick + " :End of /LIST"); }
+
+
 // ERR
 string ERR_CLOSINGLINK(string user, string host, string reason)
 { return ("ERROR :Closing link: (" + user + "@" + host + ") [" + reason + "]"); }

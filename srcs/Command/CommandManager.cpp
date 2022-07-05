@@ -19,6 +19,8 @@ void CommandManager::_register_cmds()
     _cmd_registre["kill"] = killCommand;
     _cmd_registre["NAMES"] = namesCommand;
     _cmd_registre["TOPIC"] = topicCommand;
+    _cmd_registre["LIST"] = listCommand;
+
 }
 
 void CommandManager::_execute(Command & command)
