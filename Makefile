@@ -18,9 +18,10 @@ SOURCES_FILES = srcs/main.cpp \
 				srcs/Command/cmds/KILL.cpp \
 				srcs/Command/cmds/WHO.cpp \
 				srcs/Command/cmds/OPER.cpp \
-				srcs/Command/cmds/PRIVMSG.cpp \
 				srcs/Command/cmds/KICK.cpp \
+				srcs/Command/cmds/INVITE.cpp \
 				srcs/Command/rfc/replies.cpp \
+				srcs/Command/cmds/PRIVMSG.cpp \
 				srcs/Channel/Channel.cpp \
 				srcs/Server.cpp
 

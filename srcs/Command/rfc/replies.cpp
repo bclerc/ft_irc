@@ -31,6 +31,8 @@ string RPL_MOTDSTART (string nick)
 string RPL_ENDOFMOTD (string nick)
 { return ("376 " + nick + " :End of MOTD"); }
 
+string RPL_UMODEIS (string nick, string mode)
+{ return ("221 " + nick + " :" + mode); }
 
 // ERR
 string ERR_CLOSINGLINK(string user, string host, string reason)
@@ -83,14 +85,15 @@ string ERR_USERNOTINCHANNEL (string nick, string channel, string user)
 { return ("441 " + nick + " " +user + " " + channel + " :They aren't on that channel"); }
 
 string ERR_CHANNELISFULL (string nick, string channel)
-{
-    return ("471 " + nick + " " + channel + " :Cannot join channel (Is full)");
-}
+{    return ("471 " + nick + " " + channel + " :Cannot join channel (Is full)"); }
+
+string ERR_INVITEONLYCHAN(string nick, string channel)
+{ return ("473 " + nick + " " + channel + " :Cannot join channel (+i)"); }
 
 string ERR_USERSDONTMATCH(string nick)
-{
-	return ("502 " + nick + " :Cannot change mode for other users");
-}
+{	return ("502 " + nick + " :Cannot change mode for other users"); }
 
-string RPL_UMODEIS (string nick, string mode)
-{ return ("221 " + nick + " :" + mode); }
+string ERR_USERONCHANNEL(string nick, string target, string channel)
+{	return ("443 " + nick + " " + target + " " + channel + ":is already on channel"); }
+
+

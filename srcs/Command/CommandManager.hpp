@@ -60,7 +60,7 @@ void	operCommand(CommandManager::Command & command);
 void 	partCommand(CommandManager::Command & command);
 void    kickCommand(CommandManager::Command & command);
 void    killCommand(CommandManager::Command & command);
-
+void    inviteCommand(CommandManager::Command & command);
 
 
 #endif

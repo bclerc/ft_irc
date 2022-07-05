@@ -1,13 +1,13 @@
 #include "Channel.hpp"
 
 Channel::Channel(std::string const & name, User & owner)
-: _name(name), _owner(&owner), _max_size(20)
+: _name(name), _owner(&owner), _max_size(20), _invite_only(false)
 {
 	setOperator(owner, true);
     return ;
 }
 
-Channel::Channel(void): _max_size(20)
+Channel::Channel(void): _max_size(20), _invite_only(false)
 {
     return ;
 }
@@ -42,6 +42,18 @@ void Channel::removeUser(std::string user)
 		if ((*it)->getName() == user)
 		{
 			_users.erase(it);
+			return ;
+		}
+	}
+}
+
+void Channel::removeInvited(User & user)
+{
+	for (iterator it = _invited.begin(); it != _invited.end(); ++it)
+	{
+		if ((*it)->getName() == user.getName())
+		{
+			_invited.erase(it);
 			return ;
 		}
 	}
@@ -87,6 +99,16 @@ void Channel::sendWithOut(std::string const & message, ITarget & out)
 			(*it)->send(message);
 }
 
+void Channel::invite(User & user)
+{
+	_invited.push_back(&user);
+}
+
+void Channel::setInviteOnly(bool mode) 
+{
+	_invite_only = mode;
+}
+
 bool Channel::isOperator(User const & user) const
 {
 	return isOperator(&user);
@@ -116,9 +138,26 @@ bool Channel::isOnChannel(User const & user) const
 	return false;
 }
 
+bool Channel::isInvited(User const & user) const
+{
+	std::vector<User*>::const_iterator it = _invited.begin();
+
+	for (; it != _invited.end(); it++)
+	{
+		if (*it == &user)
+			return true;
+	}
+	return false;
+}
+
 bool Channel::isFull(void) const
 {
 	return (_users.size() >= _max_size);
+}
+
+bool Channel::isInviteOnly(void) const 
+{
+	return (_invite_only);
 }
 
 const std::string & Channel::getName(void) const

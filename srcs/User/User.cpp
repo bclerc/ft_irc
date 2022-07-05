@@ -65,6 +65,7 @@ void User::kick(std::string const & reason)
         for (std::vector<Channel *>::iterator it = _current_channel.begin(); it != _current_channel.end(); it++)
         {
             (*it)->removeUser(*this);
+            (*it)->removeInvited(*this);
         }
     }
     setStatus(User::DISCONNECT);
