@@ -78,6 +78,7 @@ void Server::_remove_disconnect()
 			(*it)->log("Disconnected");
 			close((*it)->getFd());
 			_users.erase(it);
+			delete *it;
 			it = _users.begin();
 			continue;
 		}
@@ -301,6 +302,8 @@ void	Server::shutdown(void)
 	close(_master_socket);
 	_master_socket = -1;
 	_users.clear();
+	for (const std::pair<const std::string, Channel *> channel : getChannelMap())
+		delete (channel.second);
 	_channels.clear();
 	log("Bye");
 	exit(0);
@@ -321,7 +324,6 @@ void Server::log(std::string const message) const
 	}
 	std::cout << timer << "[Server][Info] " << message << std::endl;
 }
-
 
 const char * Server::UserNotFoundException::what() const throw()
 { return ("User not found"); }
