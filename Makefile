@@ -35,7 +35,7 @@ INCLUDES_FLAGS = -I $(INCLUDES_FOLDER)
 
 
 CC = clang++
-CFLAGS =   -Wall -Wextra -Werror -fsanitize=address -g3 #-std=c++98
+CFLAGS =   -Wall -Wextra -Werror -g3 -std=c++98
 
 all: $(EXEC_NAME_FT)
 

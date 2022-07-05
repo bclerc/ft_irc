@@ -43,15 +43,12 @@ void channel_mode(CommandManager::Command const & command, User & sender)
 		sender.send("324 " + sender.getName() + " " + channel.getName() + " +n");
 		return ;
 	}
-	User & target = command.size == 2 ? server.getUser(command.args[2]) : sender;
+	User & target = command.size == 3 ? server.getUser(command.args[2]) : sender;
 	
 	if (channel.isOperator(sender))
 	{
 		for (int i = 0; (c = command.args[1][i]); i++)
 		{
-			if (c == '+' || c == '-')
-			{
-			}
 			switch (c) {
 				case '+':
 				case '-':
@@ -65,7 +62,7 @@ void channel_mode(CommandManager::Command const & command, User & sender)
 				case 'i':
 					channel.setInviteOnly(type);
 					mode+= c;
-					break ;
+					continue ;
 				default:
 					sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName(), c));
 			}
