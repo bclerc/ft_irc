@@ -2,6 +2,7 @@
 # define USER_HPP
 # include "../../includes/Server.hpp"
 # include <iostream>
+# include <sstream>
 
 class Channel;
 
@@ -36,13 +37,14 @@ class User : public ITarget {
 		void	setChannel(Channel * channel);
 		void	setOperator(bool value);
 		void	removeChannel(Channel * channel);
-		void	kick (std::string const & reason);
-		void	kill (std::string const & reason);
+		void	kick ();
+		void	kill ();
 		void	send(std::string const & request);
 		void	sendToChannels(std::string const & request);
 		void	sendWithOut(std::string const & request, ITarget & out);
 		void	log(std::string const message) const;
 		void	addChannelList(Channel &chanel);
+
 
 		const int			& getFd() const;
 		const Status		& getStatus() const;
@@ -60,8 +62,6 @@ class User : public ITarget {
 		bool isOperator(void)	const;
 		bool isOnChannel(void)	const;
 		bool isOnChannel(std::string const & Channel)	const;
-
-
 
 	private:
 		int _fd;

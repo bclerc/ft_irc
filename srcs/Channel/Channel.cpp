@@ -1,7 +1,7 @@
 #include "Channel.hpp"
 
 Channel::Channel(std::string const & name, User & owner)
-: _name(name), _owner(&owner), _max_size(20)
+: _max_size(20), _owner(&owner), _name(name)
 {
 	setOperator(owner, true);
     return ;

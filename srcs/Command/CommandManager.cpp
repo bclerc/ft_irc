@@ -27,7 +27,7 @@ void CommandManager::_execute(Command & command)
         if (command.command != "PASS"
             && command.sender->getStatus() < User::UNREGISTER_PASS)
         {
-            command.sender->kick("Not register");
+            command.sender->kick();
             return ;
         }
         if (command.sender->getStatus() != User::DISCONNECT)

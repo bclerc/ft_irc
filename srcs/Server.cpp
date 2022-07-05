@@ -14,7 +14,7 @@ void Server::_accept_connection(fd_set & readfds)
 		}
 		_users.push_back(new User(new_socket));
 		if (isFull())
-			_users.back()->kick("Server is full");
+			_users.back()->kick();
 	}
 }
 
@@ -156,6 +156,8 @@ Server::~Server(void)
 
 void Server::start(void)
 {
+	string s_server_port;
+	std::ostringstream temp; 
 	fd_set	readfds;
 	if (bind(_master_socket, (struct  sockaddr *)& _address, sizeof(_address)) < 0)
 	{
@@ -163,7 +165,9 @@ void Server::start(void)
 		_exit(1);
 	}
 	_addrlen = sizeof(_address);
-	log(std::string("Listening on port ") + std::to_string(_server_port));
+	temp << _server_port;
+	s_server_port = temp.str();
+	log(std::string("Listening on port ") + s_server_port);
 	if (listen(_master_socket, 5) < 0)
 	{
 		perror("Listen error");
@@ -233,10 +237,10 @@ bool Server::isFull(void)
 	return (_users.size() > _slots);
 }
 
-void	Server::kickAll(std::string const & reason)
+void	Server::kickAll()
 {
     for (iterator it = _users.begin(); it != _users.end(); it++)
-		(*it)->kick(reason);
+		(*it)->kick();
 }
 
 Channel & Server::createChannel(std::string const & name, User & owner)
@@ -296,13 +300,13 @@ const std::map<std::string, Channel*> & Server::getChannelMap(void) const
 void	Server::shutdown(void) 
 {
 	std::cout << "\r\n||| Shutdown IRC serv by SIGINT |||" << std::endl;
-	kickAll("Server is stopping ...");
+	kickAll();
 	send_all();
 	_remove_disconnect();
 	close(_master_socket);
 	_master_socket = -1;
 	_users.clear();
-	for (const std::pair<const std::string, Channel *> channel : getChannelMap())
+	for (std::pair<std::string, Channel *> channel : getChannelMap())
 		delete (channel.second);
 	_channels.clear();
 	log("Bye");

@@ -34,7 +34,7 @@ class Channel : virtual public ITarget {
         const std::string & getName(void) const;
     private:
 
-		typedef typename std::vector<User*>::iterator iterator;
+		typedef std::vector<User*>::iterator iterator;
 
         size_t                  _max_size;
         User         *          _owner;

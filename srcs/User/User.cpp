@@ -2,13 +2,13 @@
 #include "User.hpp"
 
 User::User(int & fd)
-: _fd(fd), _nick("*"),  _status(UNREGISTER), _operator(false)
+: _fd(fd),  _operator(false), _status(UNREGISTER), _nick("*")
 {
 	return ;
 }
 
 User::User(void)
-: _fd(-1), _nick("*"), _status(UNREGISTER), _operator(false)
+: _fd(-1), _operator(false), _status(UNREGISTER), _nick("*")
 {
 	return ;
 }
@@ -57,7 +57,7 @@ void   User::sendWithOut(std::string const & request, ITarget & out)
 	return ;
 }
 
-void User::kick(std::string const & reason)
+void User::kick()
 {
     _buffer.clear();
     if (isOnChannel())
@@ -70,7 +70,7 @@ void User::kick(std::string const & reason)
     setStatus(User::DISCONNECT);
 }
 
-void User::kill(std::string const & reason)
+void User::kill()
 {
     if (isOnChannel())
     {
@@ -203,7 +203,11 @@ bool User::isOnChannel(std::string const & channel) const
 
 void	User::log(std::string const message) const
 {
-	server.log("(" + std::to_string(_fd)+ ") " + _nick + ": "  + message);
+	string s_fd;
+	std::ostringstream temp; 
+	temp << _fd;
+	s_fd = temp.str();
+	server.log("(" + s_fd+ ") " + _nick + ": "  + message);
 }
 
 User::~User(void)

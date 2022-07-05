@@ -20,5 +20,5 @@ void killCommand(CommandManager::Command & command)
 	}
 	User & target = server.getUser(command.args[0]);
     target.send(":" + sender.getPrefix() + " kill :" + command.trailer);
-	target.kill(command.trailer);
+	target.kill();
 }
