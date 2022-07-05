@@ -102,7 +102,7 @@ void Server::_copy_fd(fd_set & readfds)
 }
 
 Server::Server(int port, std::string const & name, std::string const & password, int const & slots) 
-			: _status(1),_server_port(port), _server_name(name), _server_password(password), _opt(0), _slots(slots)
+			:_server_port(port), _server_name(name), _server_password(password),  _status(1),  _opt(0), _slots(slots)
 {
 
 	if ((_master_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)

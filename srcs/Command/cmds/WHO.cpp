@@ -16,7 +16,7 @@ void channel_who(CommandManager::Command & command, User & sender)
 
 	for (; it != channel.getUsers().end(); it++)
 		userlist += (*it)->getName() + " ";
-	for (User * user : server.getChannel(command.args[0]).getUsers())
+
 	sender.send("315 " + sender.getName() + " " + userlist + " :End of /WHO list.");
 }
 

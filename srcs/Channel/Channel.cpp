@@ -1,14 +1,14 @@
 #include "Channel.hpp"
 
 Channel::Channel(std::string const & name, User & owner)
-: _max_size(20), _owner(&owner), _name(name),  _invite_only(false)
+: _invite_only(false), _max_size(20), _owner(&owner), _name(name)
 
 {
 	setOperator(owner, true);
     return ;
 }
 
-Channel::Channel(void): _max_size(20), _invite_only(false)
+Channel::Channel(void): _invite_only(false), _max_size(20)
 {
     return ;
 }
