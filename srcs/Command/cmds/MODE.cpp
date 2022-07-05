@@ -1,8 +1,5 @@
 # include "../CommandManager.hpp"
 
-
-// Je dois mettre ce commentaire pour reparer la betise de sam
-
 void user_mode(CommandManager::Command const & command, User & sender)
 {
 	User & target = server.getUser(command.args[0]);
@@ -37,27 +34,45 @@ void user_mode(CommandManager::Command const & command, User & sender)
 void channel_mode(CommandManager::Command const & command, User & sender)
 {
 	Channel & channel = server.getChannel(command.args[0]);
+	std::string			mode;
+	int					type = 0;
+	char				c;
+
 	if (command.size < 3)
 	{
 		sender.send("324 " + sender.getName() + " " + channel.getName() + " +n");
 		return ;
 	}
 	User & target = command.size == 3 ? server.getUser(command.args[2]) : sender;
+	
 	if (channel.isOperator(sender))
 	{
-		if (command.args[1] == "+o")
-			channel.setOperator(target, true);
-		else if (command.args[1] == "-o")
-			channel.setOperator(target, false);
-		else {
-			sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName(), command.args[1].c_str()[0]));
-			return ;
+		for (int i = 0; (c = command.args[1][i]); i++)
+		{
+			switch (c) {
+				case '+':
+				case '-':
+					type = (c == '+');
+					mode =+c;
+					break ;
+				case 'o':
+					channel.setOperator(target, type);
+					mode+= c;
+					break;
+				case 'i':
+					channel.setInviteOnly(type);
+					mode+= c;
+					continue ;
+				default:
+					sender.send(ERR_UMODEUNKNOWNFLAG(sender.getName(), c));
+			}
 		}
-		target.send(":" + sender.getName() + " MODE " + channel.getName() + " " + command.args[1] + " " + target.getName());
+		target.send(":" + sender.getName() + " MODE " + channel.getName() + " " + mode + " " + target.getName());
 		if (sender != target)
-			sender.send(":" + sender.getName() + " MODE " + channel.getName() + " " + command.args[1] + " " + target.getName());
-	} else
+			sender.send(":" + sender.getName() + " MODE " + channel.getName() + " " + mode + " " + target.getName());
+	} else {
 		sender.send(ERR_CHANOPRIVSNEEDED(sender.getName(), channel.getName()));
+	}
 }
 
 void modeCommand(CommandManager::Command & command)

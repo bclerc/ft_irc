@@ -10,17 +10,20 @@ void 	user_who(CommandManager::Command & command, User & sender)
 
 void channel_who(CommandManager::Command & command, User & sender)
 {
+	Channel & channel = server.getChannel(command.args[0]);
 	std::string userlist;
+	std::vector<User *>::const_iterator it = channel.getUsers().begin();
 
-	for (User * user : server.getChannel(command.args[0]).getUsers())
-		userlist += user->getName() + " ";
+	for (; it != channel.getUsers().end(); it++)
+		userlist += (*it)->getName() + " ";
+
 	sender.send("315 " + sender.getName() + " " + userlist + " :End of /WHO list.");
 }
 
 void	whoCommand(CommandManager::Command & command)
 {
 	User & sender = *command.sender;
-	if (command.size < 1)
+	if (command.size < 2)
 	{
 		sender.send(ERR_NEEDMOREPARAMS(sender.getName(), command.command));
 		return ;

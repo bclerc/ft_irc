@@ -2,13 +2,13 @@
 #include "User.hpp"
 
 User::User(int & fd)
-: _fd(fd), _nick("*"),  _status(UNREGISTER), _mode(0)
+: _fd(fd),  _operator(false), _status(UNREGISTER), _nick("*")
 {
 	return ;
 }
 
 User::User(void)
-: _fd(-1), _nick("*"), _status(UNREGISTER), _mode(0)
+: _fd(-1), _operator(false), _status(UNREGISTER), _nick("*")
 {
 	return ;
 }
@@ -57,33 +57,29 @@ void   User::sendWithOut(std::string const & request, ITarget & out)
 	return ;
 }
 
-void User::kick(std::string const & reason)
+void User::kick()
 {
     _buffer.clear();
     if (isOnChannel())
     {
         for (std::vector<Channel *>::iterator it = _current_channel.begin(); it != _current_channel.end(); it++)
         {
-            (*it)->sendWithOut(":" + getPrefix() + " QUIT :" + reason, *this);
             (*it)->removeUser(*this);
+            (*it)->removeInvited(*this);
         }
     }
-    this->send(":" + getPrefix() + " QUIT :" + reason);
     setStatus(User::DISCONNECT);
 }
 
-void User::kill(std::string const & reason)
+void User::kill()
 {
-    _buffer.clear();
     if (isOnChannel())
     {
         for (std::vector<Channel *>::iterator it = _current_channel.begin(); it != _current_channel.end(); it++)
         {
-            (*it)->sendWithOut(":" + getPrefix() + " kill :" + reason, *this);
             (*it)->removeUser(*this);
         }
     }
-    this->send(":" + getPrefix() + " kill :" + reason);
     setStatus(User::DISCONNECT);
 }
 
@@ -208,13 +204,15 @@ bool User::isOnChannel(std::string const & channel) const
 
 void	User::log(std::string const message) const
 {
-	server.log("(" + std::to_string(_fd)+ ") " + _nick + ": "  + message);
+	string s_fd;
+	std::ostringstream temp; 
+	temp << _fd;
+	s_fd = temp.str();
+	server.log("(" + s_fd+ ") " + _nick + ": "  + message);
 }
 
 User::~User(void)
 {
-    _buffer.clear();
-    delete this;
     return ;
 }
 

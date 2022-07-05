@@ -2,6 +2,6 @@
 
 void quitCommand(CommandManager::Command & command)
 {
-    command.sender->kick(command.trailer);
+    command.sender->kick();
 	return ;
 }

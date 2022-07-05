@@ -1,9 +1,5 @@
 # include "replies.hpp"
 
-/**
-* dsfsdf lsdlfk ;aldjkf l;skfd  
-*/
-
 // RPL
 string RPL_WELCOME (string nick, string user, string host)
 { return ("001 "+ nick +" :Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host); }
@@ -35,6 +31,24 @@ string RPL_MOTDSTART (string nick)
 string RPL_ENDOFMOTD (string nick)
 { return ("376 " + nick + " :End of MOTD"); }
 
+string RPL_UMODEIS (string nick, string mode)
+{ return ("221 " + nick + " :" + mode); }
+
+string RPL_NOTOPIC (string nick, string channel)
+{ return ("331 " + nick + " " + channel + " :No topic is set"); }
+
+string RPL_TOPIC (string nick, string channel, string topic)
+{ return ("332 " + nick + " " + channel + " :" + topic); }
+
+string RPL_LISTSTART (string prefix, string nick)
+{ return (":" + prefix + " 321 " + nick + " Channel :Users Name"); }
+
+string RPL_LIST (string prefix, string nick, string channel, string topic)
+{ return (":" + prefix + " 322 " + nick + " " + channel + " :" + topic); }
+
+string RPL_LISTEND (string prefix, string nick)
+{ return (":" + prefix + " 323 " + nick + " :End of /LIST"); }
+
 
 // ERR
 string ERR_CLOSINGLINK(string user, string host, string reason)
@@ -65,13 +79,16 @@ string ERR_NOPRIVILEGES (string nick)
 { return ("481 " + nick + " :Permission Denied - You're not an IRC operator"); }
 
 string ERR_CHANOPRIVSNEEDED (string nick, string channel)
-{ return ("482 " + nick + " " + channel + " :Permission Denied - You're not an IRC operator"); }
+{ return ("482 " + nick + " " + channel + " :You're not channel operator"); }
 
 string ERR_NOSUCHCHANNEL (string nick, string channel)
 { return ("403 " + nick + " " + channel + " :No such channel"); }
 
 string ERR_UMODEUNKNOWNFLAG (string nick, const char flag)
-{ return ("501 " + nick + ":" + flag + " Unkown MODE flag"); }
+{ return ("501 " + nick + " :" + flag + " Unkown MODE flag"); }
+
+string ERR_UNKNOWNMODE (string nick, const char flag)
+{ return ("472 " + nick + " " + flag + ":is unknown mode char to me"); }
 
 string ERR_PASSWDMISMATCH (string nick)
 { return ("464 " + nick + " :Password incorrect"); }
@@ -86,14 +103,15 @@ string ERR_USERNOTINCHANNEL (string nick, string channel, string user)
 { return ("441 " + nick + " " +user + " " + channel + " :They aren't on that channel"); }
 
 string ERR_CHANNELISFULL (string nick, string channel)
-{
-    return ("471 " + nick + " " + channel + " :Cannot join channel (Is full)");
-}
+{    return ("471 " + nick + " " + channel + " :Cannot join channel (Is full)"); }
+
+string ERR_INVITEONLYCHAN(string nick, string channel)
+{ return ("473 " + nick + " " + channel + " :Cannot join channel (+i)"); }
 
 string ERR_USERSDONTMATCH(string nick)
-{
-	return ("502 " + nick + " :Cannot change mode for other users");
-}
+{	return ("502 " + nick + " :Cannot change mode for other users"); }
 
-string RPL_UMODEIS (string nick, string mode)
-{ return ("221 " + nick + " :" + mode); }
+string ERR_USERONCHANNEL(string nick, string target, string channel)
+{	return ("443 " + nick + " " + target + " " + channel + ":is already on channel"); }
+
+

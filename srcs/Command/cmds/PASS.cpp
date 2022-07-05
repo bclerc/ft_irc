@@ -15,7 +15,7 @@ void passCommand(CommandManager::Command & command)
     if (server.getPass() == command.args[0])
         command.sender->setStatus(User::UNREGISTER_PASS);
     else 
-        command.sender->kick("Bad password");
+        command.sender->kick();
  
     return ;
 }

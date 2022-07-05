@@ -10,9 +10,14 @@ void execute_join(CommandManager::Command & command, std::string channel_name)
 		sender.send(ERR_CHANNELISFULL(sender.getName(), channel_name));
 		return ;
 	}
+	if (channel.isInviteOnly() && !channel.isInvited(sender))
+	{
+		sender.send(ERR_INVITEONLYCHAN(sender.getName(), channel.getName()));
+		return ;
+	}
 	channel.addUser(*command.sender);
 	sender.setChannel(channel);
-	 std::string name_User;
+	std::string name_User;
 	const_iterator it_user = channel.getUsers().begin();
 	name_User += "";
 	while (it_user != channel.getUsers().end())
@@ -27,6 +32,8 @@ void execute_join(CommandManager::Command & command, std::string channel_name)
 	}
 	sender.send(RPL_NAMREPLY(sender.getPrefix(), sender.getName(), channel.getName(), name_User));
 	sender.send(RPL_ENDOFNAMES(sender.getPrefix(), sender.getName(), channel.getName()));
+	if (channel.getTopic().size())
+		sender.send(RPL_TOPIC(sender.getName(), channel.getName(), channel.getTopic()));
 	channel.send(":" + sender.getPrefix() + " JOIN :" + channel.getName());
 }
 

@@ -18,9 +18,13 @@ SOURCES_FILES = srcs/main.cpp \
 				srcs/Command/cmds/KILL.cpp \
 				srcs/Command/cmds/WHO.cpp \
 				srcs/Command/cmds/OPER.cpp \
-				srcs/Command/cmds/PRIVMSG.cpp \
 				srcs/Command/cmds/KICK.cpp \
+				srcs/Command/cmds/NAMES.cpp \
+				srcs/Command/cmds/TOPIC.cpp \
+				srcs/Command/cmds/INVITE.cpp \
+				srcs/Command/cmds/LIST.cpp \
 				srcs/Command/rfc/replies.cpp \
+				srcs/Command/cmds/PRIVMSG.cpp \
 				srcs/Channel/Channel.cpp \
 				srcs/Server.cpp
 
@@ -32,7 +36,7 @@ INCLUDES_FLAGS = -I $(INCLUDES_FOLDER)
 
 
 CC = clang++
-CFLAGS =  -g3
+CFLAGS =   -Wall -Wextra -Werror -g3 -std=c++98
 
 all: $(EXEC_NAME_FT)
 
