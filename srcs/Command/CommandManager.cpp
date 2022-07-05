@@ -16,6 +16,8 @@ void CommandManager::_register_cmds()
     _cmd_registre["NOTICE"] = privmsgCommand;
     _cmd_registre["KICK"] = kickCommand;
     _cmd_registre["kill"] = killCommand;
+    _cmd_registre["NAMES"] = namesCommand;
+
 }
 
 void CommandManager::_execute(Command & command)
