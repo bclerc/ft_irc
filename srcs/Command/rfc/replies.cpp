@@ -1,9 +1,5 @@
 # include "replies.hpp"
 
-/**
-* dsfsdf lsdlfk ;aldjkf l;skfd  
-*/
-
 // RPL
 string RPL_WELCOME (string nick, string user, string host)
 { return ("001 "+ nick +" :Welcome to the Internet Relay Network " + nick + "!" + user + "@" + host); }
@@ -71,6 +67,7 @@ string ERR_NOSUCHCHANNEL (string nick, string channel)
 { return ("403 " + nick + " " + channel + " :No such channel"); }
 
 string ERR_UMODEUNKNOWNFLAG (string nick, const char flag)
+
 { return ("501 " + nick + " :" + flag + " Unkown MODE flag"); }
 
 string ERR_PASSWDMISMATCH (string nick)

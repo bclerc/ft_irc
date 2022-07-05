@@ -1,6 +1,5 @@
 #include "../includes/Server.hpp"
 
-
 void Server::_accept_connection(fd_set & readfds)
 {
 	int		new_socket;
