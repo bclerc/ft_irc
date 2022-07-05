@@ -1,9 +1,5 @@
 #include "../includes/Server.hpp"
 
-/**
-* @todo _accept_connection
-* Ajouter une limite de connection simultanee
-*/
 void Server::_accept_connection(fd_set & readfds)
 {
 	int		new_socket;
@@ -13,8 +9,8 @@ void Server::_accept_connection(fd_set & readfds)
 		log("Incoming connection");
 		if ((new_socket = accept(_master_socket, (struct sockaddr *)&_address, &_addrlen)) < 0)
 		{
-			perror("accept error");
-			_exit(1);
+			std::cout << "accept error" << std::endl;
+			server.shutdown();
 		}
 		_users.push_back(new User(new_socket));
 		if (isFull())
@@ -43,8 +39,9 @@ void Server::_get_requests(fd_set & readfds, CommandManager & commandManager)
 			}
 			else if ((*it)->isConnected())
 			{
-				buffer[valread] = '\0';
-				commandManager.execCommand(*it, buffer);
+				buffer[valread] = 0;
+				(*it)->receive_buffer += buffer;
+				commandManager.execCommand(*it);
 			}
 		}
 	}
@@ -55,7 +52,7 @@ void Server::_run(fd_set & readfds)
 	CommandManager commandManager;
 	int activity;
 
-	while (1)
+	while (_status)
 	{
 		FD_ZERO(&readfds);
 		FD_SET(_master_socket, &readfds);
@@ -82,6 +79,7 @@ void Server::_remove_disconnect()
 			(*it)->log("Disconnected");
 			close((*it)->getFd());
 			_users.erase(it);
+			delete *it;
 			it = _users.begin();
 			continue;
 		}
@@ -104,18 +102,18 @@ void Server::_copy_fd(fd_set & readfds)
 }
 
 Server::Server(int port, std::string const & name, std::string const & password, int const & slots) 
-			: _server_port(port), _server_name(name), _server_password(password), _opt(0), _slots(slots)
+			: _status(1),_server_port(port), _server_name(name), _server_password(password), _opt(0), _slots(slots)
 {
 
 	if ((_master_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
 	{
-		perror("Error socket: ");
-		_exit(1);
+		std::cout << "Socket unexpected error" << std::endl;
+		return ;
 	}
 	if (setsockopt(_master_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&_opt, sizeof(_opt)) < 0)
 	{
-		perror("Error setsockopt: ");
-		_exit(1);
+		std::cout << "setsockopt unexpected error" << std::endl;
+		return ;
 	}
 	_address.sin_family = AF_INET;
 	_address.sin_addr.s_addr = INADDR_ANY;
@@ -145,6 +143,7 @@ Server & Server::operator=(Server const & rhs)
 	_addrlen			= rhs._addrlen;
 	_address			= rhs._address;
 	_max_sd				= rhs._max_sd;
+	_status				= rhs._status;
 	_users				= rhs._users;
 	_slots				= rhs._slots;
 	_opt				= rhs._opt;
@@ -162,15 +161,15 @@ void Server::start(void)
 	fd_set	readfds;
 	if (bind(_master_socket, (struct  sockaddr *)& _address, sizeof(_address)) < 0)
 	{
-		perror ("Bind error");
-		_exit(1);
+		std::cout << "Can't bind address" << std::endl;
+		return ;
 	}
 	_addrlen = sizeof(_address);
 	log(std::string("Listening on port ") + std::to_string(_server_port));
 	if (listen(_master_socket, 5) < 0)
 	{
-		perror("Listen error");
-		_exit(1);
+		std::cout << "Listen error";
+		return ;
 	}
 	log("Waiting connections");
 	_run(readfds);
@@ -230,7 +229,6 @@ bool Server::isChannel(std::string const & name)
 	return (it != _channels.end());
 }
 
-
 bool Server::isFull(void)
 {
 	return (_users.size() > _slots);
@@ -248,7 +246,7 @@ Channel & Server::createChannel(std::string const & name, User & owner)
 
 	ret = _channels.insert(std::make_pair(name, new Channel(name, owner)));
 	if (!ret.second)
-		throw std::exception();											// Refaire une exeption
+		throw std::exception();
 	return (*(*ret.first).second);
 }
 
@@ -305,9 +303,11 @@ void	Server::shutdown(void)
 	close(_master_socket);
 	_master_socket = -1;
 	_users.clear();
+	for (const std::pair<const std::string, Channel *> channel : getChannelMap())
+		delete (channel.second);
 	_channels.clear();
 	log("Bye");
-	exit(0);
+	_status = 0;
 }
 
 void Server::log(std::string const message) const
@@ -321,11 +321,10 @@ void Server::log(std::string const message) const
 	if (strftime(timer,18, "[%d/%m:%R]", timeinfo) == 0)
 	{
 		std::cout << "Error Time" << std::endl;
-		_exit(1);
+		return ;
 	}
 	std::cout << timer << "[Server][Info] " << message << std::endl;
 }
-
 
 const char * Server::UserNotFoundException::what() const throw()
 { return ("User not found"); }

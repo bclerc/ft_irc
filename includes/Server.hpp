@@ -70,7 +70,7 @@ class Server {
 		std::string _server_name;
 		std::string _server_password;
 
-		int _master_socket, _new_socket, _activity, _opt, _max_sd, _slots;
+		int _status, _master_socket, _new_socket, _activity, _opt, _max_sd, _slots;
 		socklen_t _addrlen;
 		struct sockaddr_in _address;
 

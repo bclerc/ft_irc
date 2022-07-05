@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: bclerc <bclerc@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/30 03:41:19 by bclerc            #+#    #+#             */
-/*   Updated: 2022/07/04 11:24:16 by bclerc           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../includes/Server.hpp"
 #include <signal.h>
@@ -23,7 +12,6 @@ void signalhandler(int signum)
 
 int main(int argc, char **argv)
 {
-
 	if (argc < 3)
 	{
 		std::cout << "Usage: ./ircserv <port> <password>" << std::endl;
