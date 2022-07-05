@@ -100,10 +100,10 @@ bool CommandManager::_ignore(std::string & request, const size_t & pos)
     return false;
 }
 
-void CommandManager::execCommand(User * sender, char *request)
+void CommandManager::execCommand(User * sender)
 {
     Command command;
-    std::string req(request);
+    std::string & req = sender->receive_buffer;
     std::string line;
     size_t pos;
 
@@ -112,7 +112,7 @@ void CommandManager::execCommand(User * sender, char *request)
     {
         if (_ignore(req, pos))
             continue;
-        line = req.substr(0, pos - 1);
+        line = req.substr(0, pos);
         sender->log(line);
         _build_args(command, line);
         _execute(command);

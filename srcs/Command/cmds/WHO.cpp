@@ -20,7 +20,7 @@ void channel_who(CommandManager::Command & command, User & sender)
 void	whoCommand(CommandManager::Command & command)
 {
 	User & sender = *command.sender;
-	if (command.size < 1)
+	if (command.size < 2)
 	{
 		sender.send(ERR_NEEDMOREPARAMS(sender.getName(), command.command));
 		return ;

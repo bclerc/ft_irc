@@ -39,8 +39,9 @@ void Server::_get_requests(fd_set & readfds, CommandManager & commandManager)
 			}
 			else if ((*it)->isConnected())
 			{
-				buffer[valread] = '\0';
-				commandManager.execCommand(*it, buffer);
+				buffer[valread] = 0;
+				(*it)->receive_buffer += buffer;
+				commandManager.execCommand(*it);
 			}
 		}
 	}

@@ -33,7 +33,7 @@ class CommandManager {
         CommandManager(CommandManager & cpy);
         ~CommandManager (void);
 
-        void    execCommand(User * sender, char * request);
+        void    execCommand(User * sender);
 
     private:
 		std::map<std::string, CommandFunc>	_cmd_registre;
