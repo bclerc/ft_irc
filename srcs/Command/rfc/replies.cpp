@@ -34,6 +34,15 @@ string RPL_ENDOFMOTD (string nick)
 string RPL_UMODEIS (string nick, string mode)
 { return ("221 " + nick + " :" + mode); }
 
+string RPL_NOTOPIC (string nick, string channel)
+{ return ("331 " + nick + " " + channel + " :No topic is set"); }
+
+string RPL_TOPIC (string nick, string channel, string topic)
+{ return ("332 " + nick + " " + channel + " :" + topic); }
+
+string RPL_UMODEIS (string nick, string mode)
+{ return ("221 " + nick + " :" + mode); }
+
 // ERR
 string ERR_CLOSINGLINK(string user, string host, string reason)
 { return ("ERROR :Closing link: (" + user + "@" + host + ") [" + reason + "]"); }

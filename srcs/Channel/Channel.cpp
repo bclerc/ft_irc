@@ -99,6 +99,11 @@ void Channel::sendWithOut(std::string const & message, ITarget & out)
 			(*it)->send(message);
 }
 
+void Channel::setTopic(std::string const & topic)
+{
+	_topic = topic;
+}
+
 void Channel::invite(User & user)
 {
 	_invited.push_back(&user);
@@ -163,6 +168,11 @@ bool Channel::isInviteOnly(void) const
 const std::string & Channel::getName(void) const
 {
 	return _name;
+}
+
+const std::string & Channel::getTopic(void) const
+{
+	return _topic;
 }
 
 const std::vector<User*> & Channel::getUsers() const

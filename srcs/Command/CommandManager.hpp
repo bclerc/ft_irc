@@ -61,6 +61,6 @@ void 	partCommand(CommandManager::Command & command);
 void    kickCommand(CommandManager::Command & command);
 void    killCommand(CommandManager::Command & command);
 void    inviteCommand(CommandManager::Command & command);
-
+void    topicCommand(CommandManager::Command & command);
 
 #endif
