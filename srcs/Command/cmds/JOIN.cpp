@@ -17,7 +17,7 @@ void execute_join(CommandManager::Command & command, std::string channel_name)
 	}
 	channel.addUser(*command.sender);
 	sender.setChannel(channel);
-	 std::string name_User;
+	std::string name_User;
 	const_iterator it_user = channel.getUsers().begin();
 	name_User += "";
 	while (it_user != channel.getUsers().end())
